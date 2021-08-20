@@ -14,78 +14,75 @@
 
 }
 .h12 {
-  background-color: gray;
+  background-color: #ddd;
   text-align:center;
+  padding: 5px;
 }
 </style>
 <div class="card-body">
-    <div class="form-row dont-break-inside">
-        <div class="col">
-            <div class="offset-0 col-md-6"style="white-space:nowrap;">
-                <h1>Usama Laboratory</h1>
-                <hr class="hr">
-                <img style="width: 5rem;" class="" src="{{ asset('images/logo_print.jpg') }}"/>
-                <span class="fas  fa-2x" >اسامہ لیبارٹری</span>
-                <div style="">
-                    <b style="position: absolute;top: 120px;margin-left: 140px;">PATHOLOGY</b>
-                </div>
+    <div class="card-body">
+        <div class="row dont-break-inside">
+            <div class="offset-0 col-md-6" style="display: flex; align-items: center;">
+                <img style="width: 9rem;" class="" src="{{ asset('images/logo_print.jpg') }}"/>
+                <span style="justify-content: center; display: flex;  flex-direction: column; padding-left: 15px;">
+                    <div style="margin-bottom: 4px; color: #283583;" class="fas  fa-3x" >اسامہ لیبارٹری</div>
+                    <div style="font-size:26px; margin-top:4px; line-height: 1.9rem; font-weight: bold">
+                        <span style=" font-size:38px;">Usama</span> PCR and<br /> Clinical Laboratory
+                    </div>
+                </span>
             </div>
-        </div>
-        <div class="col">
-            <div class="offset-2 col-md-6">
-                <h3 class="h12">Out-Patient</h3>
-                <div class="row">
-                    <b class="col-md-6">MR No.</b>
-                    <b class="text-capitalize col-md-6 m-0">PK0-20-24-4</b>
-                    <strong class="col-sm-6 text-nowrap">Patient Name</strong>
-                    <b class="text-capitalize col-md-6 m-0"><span>{{ $getpatient->Pname }}</span></b>
+            <div class="col-md-6 pr-5">
+                <div class="offset-4">
+                    <!--
+                    <h3 class="h12">Detail</h3>
+                    -->
+                    <div class="row">
+                        <b class="col-md-6">MR No.</b>
+                        <b class="text-capitalize col-md-6 m-0">PK0-20-24-4</b>
+                        <strong class="col-sm-6 text-nowrap">Patient Name</strong>
+                        <b class="text-capitalize col-md-6 m-0"><span>{{ $getpatient->Pname }}</span></b>
+                    </div>
                 </div>
-            </div>
-            <div class="offset-2 col-md-6">
-                <div class="row">
-                    <span class="col-md-6">Age/Gender</span>
-                    <p class="text-capitalize col-md-6 m-0 text-nowrap">{{ date('d-m-Y', strtotime($getpatient->dob)) }}/{{ $getpatient->gend }}</p>
+                <div class="offset-4">
+                    <div class="row">
+                        <span class="col-md-6">Age/Gender</span>
+                        <p class="text-capitalize col-md-6 m-0 text-nowrap">{{ date('d-m-Y', strtotime($getpatient->dob)) }}/{{ $getpatient->gend }}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="offset-2 col-md-6">
-            @if($testPerformedsId->referred != '')
-                <div class="row">
-                    <span class="col-md-6">Ordered By</span>
-                    <p class="col-md-6 m-0 text-nowrap">{{ $testPerformedsId->referred }}</p>
-                </div>
-            @else
-                <div class="row">
-                    <span class="col-md-6">Ordered By</span>
-                    <p class="col-md-6 m-0 text-nowrap">Self</p>
-                </div>
-            @endif
-         
+                <div class="offset-4">
 
-            </div>
-            <div class="offset-2 col-md-6">
-                <div class="row">
-                    <span class="col-md-6">Ordered On</span>
-                    <p class="col-md-6 m-0 text-nowrap">{{ date('d-m-Y H:m:s', strtotime($getpatient->start_time)) }}</p>
+                    @if($testPerformedsId->referred != '')
+                        <div class="row">
+                            <span class="col-md-6">Referred By</span>
+                            <p class="col-md-6 m-0 text-nowrap">{{ $testPerformedsId->referred }}</p>
+                        </div>
+                    @else
+                        <div class="row">
+                            <span class="col-md-6">Ordered By</span>
+                            <p class="col-md-6 m-0 text-nowrap">Self</p>
+                        </div>
+                    @endif
+            
                 </div>
-            </div>
-            <div class="offset-2 col-md-6">
-                <div class="row">
-                    <span class="col-md-6">Specimen</span>
-                    <p class="col-md-6 m-0 text-nowrap">{{$testPerformedsId->specimen}}</p>
+                <div class="offset-4">
+                    <div class="row">
+                        <span class="col-md-6">Ordered On</span>
+                        <p class="col-md-6 m-0 text-nowrap">{{ date('d-m-Y H:m:s', strtotime($getpatient->start_time)) }}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="offset-2 col-md-6">
-                <div class="row">
-                    <span class="col-md-6">Verified On</span>
-                    <p class="col-md-6 m-0 text-nowrap">{{ date('d-m-Y H:m:s', strtotime($getpatient->start_time)) }}</p>
+                <div class="offset-4">
+                    <div class="row">
+                        <span class="col-md-6">Specimen</span>
+                        <p class="col-md-6 m-0 text-nowrap">{{$testPerformedsId->specimen}}</p>
+                    </div>
                 </div>
+                <div class="offset-4">
+                    <div class="row">
+                        <span class="col-md-6">Verified On</span>
+                        <p class="col-md-6 m-0 text-nowrap">{{ date('d-m-Y H:m:s', strtotime($getpatient->start_time)) }}</p>
+                    </div>
+                </div>   
             </div>
-            <div class="offset-2 col-md-6">
-                <div class="row">
-                    <span class="col-md-6">Verified By</span>
-                    <p class="col-md-6 m-0 text-nowrap">{{ date('d-m-Y H:m:s', strtotime($getpatient->start_time)) }}</p>
-                </div>
-            </div>     
         </div>
     </div>
 </div>

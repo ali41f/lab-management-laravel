@@ -1,66 +1,62 @@
 @extends('layouts.admin')
-    @section('content')
-        <div style="margin-bottom: 10px;" class="row">
-            <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route("patient-create") }}">
-                Register New Patient
-                </a>
-            </div>
+@section('content')
+    <div style="margin-bottom: 10px;" class="row">
+        <div class="col-lg-12">
+            <a class="btn btn-success" href="{{ route("patient-create") }}">
+            Register New Patient
+            </a>
         </div>
-        <div class="card">
-            <div class="card-header">
-                List of All Patients
-            </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            List of All Patients
+        </div>
 
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="example"class=" table table-bordered table-striped table-hover datatable datatable-Event">
-                        <thead>
-                            <tr>
-                                <th width="">
-                                Check Box
-                                </th>
-                                <th>
-                                Id
-                                </th>
-                                <th>
-                                Patient Name
-                                </th>
-                                <th>
-                                Phone
-                                </th>
-                                <th>
-                                Email
-                                </th>
-                                <th>
-                                Start Time
-                                </th>   
-                                <th>
-                                Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($patients as $key => $patient)
-                                <tr data-entry-id="{{ $patient->id }}">
-                                    <td>
-                                    </td>
-                                    <td>
-                                    {{ $patient->id ?? '' }}
-                                    </td>
-                                    <td>
-                                    {{ $patient->Pname  ?? '' }}
-                                    </td>
-                                    <td>
-                                    {{ $patient->phone ?? '' }}
-                                    </td>
-                                    <td>
-                                    {{ $patient->email ?? '' }}
-                                    </td>
-                                    <td>
-                                    {{ date('d-m-Y H:m:s', strtotime($patient->start_time ?? '')) }}
-                                    </td>
-                                    <td>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="patientTable"class=" table table-bordered table-striped table-hover datatable datatable-Event">
+                    <thead>
+                        <tr>
+                            <th>
+                            MR Id
+                            </th>
+                            <th>
+                            Patient Name
+                            </th>
+                            <th>
+                            Phone
+                            </th>
+                            <th>
+                            Email
+                            </th>
+                            <th>
+                            Start Time
+                            </th>   
+                            <th>
+                            Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($patients as $key => $patient)
+                            <tr data-entry-id="{{ $patient->id }}">
+                                
+                                <td>
+                                {{ $patient->id ?? '' }}
+                                </td>
+                                <td>
+                                {{ $patient->Pname  ?? '' }}
+                                </td>
+                                <td>
+                                {{ $patient->phone ?? '' }}
+                                </td>
+                                <td>
+                                {{ $patient->email ?? '' }}
+                                </td>
+                                <td>
+                                {{ date('d-m-Y H:m:s', strtotime($patient->start_time ?? '')) }}
+                                </td>
+                                <td>
                                     <a class="btn btn-xs btn-primary" href="{{ route('patient-show', $patient->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
@@ -73,13 +69,12 @@
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
                     <tfoot>
                         <tr>
-                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -93,4 +88,44 @@
             </div>
         </div>
     </div>
+
+
+
+<script type="text/javascript">
+    
+    function searchTable()
+    {
+        console.log("search funtion");
+        // Setup - add a text input to each footer cell
+        $('#patientTable thead tr').clone(true).appendTo( '#patientTable thead' );
+
+        $('#patientTable thead tr:eq(1) th').each( function (i) {
+            if(i==1 || i==2 || i==3){
+              var title = $(this).text();
+              console.log(i);
+              $(this).html( '<input type="text" placeholder="Search" />' );
+              $( 'input', this ).on( 'keyup change', function () {
+                  if ( table.column(i).search() !== this.value ) {
+                    table.column(i).search( this.value ).draw();
+                  }
+              });
+            }else{
+              $(this).html( '' );
+            }
+        });
+
+        table = $('#patientTable').DataTable({
+            orderCellsTop: true,
+            fixedHeader: true
+        });
+        
+    }
+
+    $( document ).ready(function() {
+        searchTable()
+    });
+</script>
+
+
 @endsection
+

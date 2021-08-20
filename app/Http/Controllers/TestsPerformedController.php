@@ -42,13 +42,14 @@ class TestsPerformedController extends Controller
     public function store(Request $request)
     {
         //        dd($request->all());
+        
         $patient = Patient::findorfail($request->patient_id);
         if (!$patient)
             return abort(503, "Invalid request");
 
         //        dd($request->all());
         $specimen = "";
-        foreach ($request->available_test_id as $key => $available_test_id) {
+        foreach ($request->available_test_ids as $key => $available_test_id) {
             //this is to count that how much tests of same type are performed so values can be accessed by index
             if (isset(${"test" . $available_test_id})) {
                 ${"test" . $available_test_id}++;
@@ -56,7 +57,6 @@ class TestsPerformedController extends Controller
                 ${"test" . $available_test_id} = 0;
             }
             //            dd(isset(${"test".$available_test_id}),${"test".$available_test_id});
-
 
             $available_test = AvailableTest::findorfail($available_test_id);
             if (!$available_test)
@@ -119,18 +119,20 @@ class TestsPerformedController extends Controller
                     TestReport::create([
                         'test_performed_id' => $test_performed->id,
                         'test_report_item_id' => $value,
-                        'value' => $request->$field_name[${"test" . $available_test_id}],
+                        // 'value' => $request->$field_name[${"test" . $available_test_id}],
                     ]);
                 }
             } elseif ($available_test->type == 2) {
                 $field_name = "ckeditor";
                 TestperformedEditor::create([
                     'test_performed_id' => $test_performed->id,
-                    'editor' => $request->$field_name[${"test" . $available_test_id}]
+                    // 'editor' => $request->$field_name[${"test" . $available_test_id}]
                 ]);
             }
         }
+        
         return redirect()->route('tests-performed');
+        
     }
 
     public function edit($id)

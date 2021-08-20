@@ -111,39 +111,11 @@
     var table="";
     $('#duration').durationPicker();
     $('#duration2').durationPicker();
-    function searchTable()
-    {
-        console.log("search funtion");
-        // Setup - add a text input to each footer cell
-        $('#example thead tr').clone(true).appendTo( '#example thead' );
-
-        $('#example thead tr:eq(1) th').each( function (i) {
-            
-            if(i==1 || i==2 || i==3){
-              var title = $(this).text();
-              console.log(i);
-              $(this).html( '<input type="text" placeholder="Search" />' );
-              $( 'input', this ).on( 'keyup change', function () {
-                  if ( table.column(i).search() !== this.value ) {
-                    table.column(i).search( this.value ).draw();
-                  }
-              });
-            }else{
-              $(this).html( '' );
-            }
-        });
-
-        table = $('#example').DataTable({
-            orderCellsTop: true,
-            fixedHeader: true
-        });
-        
-    }
+    
 
     
     $(function() {
 
-        searchTable()
         let copyButtonTrans = '{{ trans('global.datatables.copy') }}'
         let csvButtonTrans = '{{ trans('global.datatables.csv') }}'
         let excelButtonTrans = '{{ trans('global.datatables.excel') }}'

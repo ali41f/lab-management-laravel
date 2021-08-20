@@ -7,7 +7,7 @@
             }
         }
     </style>
-    <div class="card">
+    <div class="card" style="background: white; font-size: 16px;">
 
         @include("admin.TestPerformed.partial_patient")
         @include("admin.TestPerformed.partial_report")

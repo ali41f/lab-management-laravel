@@ -14,7 +14,7 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover datatable datatable-Event">
+                    <table id="performedTable" class="table table-bordered table-striped table-hover datatable datatable-Event">
                     <thead>
                         <tr>
                             <th width="10">
@@ -57,7 +57,7 @@
                     <tbody>
                         @foreach($testPerformeds as $key => $testPerformed)
                             <tr data-entry-id="{{ $testPerformed->id }}">
-                                <td>
+                                <td id="{{$testPerformed->id}}">
 
                                 </td>
                                 <td>
@@ -71,7 +71,6 @@
                                 </td>
                                 <td>
                                 {{ $testPerformed->Pname }}
-
                                 </td>
                                 <td>
                                 {{ $testPerformed->fee }}
@@ -143,50 +142,100 @@
                         @endforeach
                     </tbody>
                 </table>
+                <form class="d-none" id="report" method="post" action="{{route("patient-view-multiple-report")}}">
+                    @csrf
+                    <div id="form_block">
+
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+
+
+
 @endsection
+
 @section('scripts')
-@parent
-<script>
-    $(function () {
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('event_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-  let deleteButton = {
-    text: deleteButtonTrans,
-    url: "{{ route('admin.events.massDestroy') }}",
-    className: 'btn-danger',
-    action: function (e, dt, node, config) {
-      var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
-          return $(entry).data('entry-id')
-      });
-      if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
-        return
-      }
-      if (confirm('{{ trans('global.areYouSure') }}')) {
-        $.ajax({
-          headers: {'x-csrf-token': _token},
-          method: 'POST',
-          url: config.url,
-          data: { ids: ids, _method: 'DELETE' }})
-          .done(function () { location.reload() })
-      }
-    }
-  }
-  dtButtons.push(deleteButton)
-@endcan
-  $.extend(true, $.fn.dataTable.defaults, {
-    order: [[ 1, 'desc' ]],
-    pageLength: 100,
-  });
-  $('.datatable-Event:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
-    });
-})
-</script>
+    @parent
+    <script>
+
+        function searchTable()
+        {
+            // Setup - add a text input to each footer cell
+            $('#performedTable thead tr').clone(true).appendTo( '#performedTable thead' );
+
+            $('#performedTable thead tr:eq(1) th').each( function (i) {
+                if(i==1 || i==2 || i==3 || i==4){
+                    var title = $(this).text();
+                    $(this).html( '<input type="text" style="width:100%;" placeholder="Search" />' );
+                    $( 'input', this ).on( 'keyup change', function () {
+                        if ( table.column(i).search() !== this.value ) {
+                            table.column(i).search( this.value ).draw();
+                        }
+                    });
+                }else{
+                $(this).html( '' );
+                }
+            });
+            
+        }
+
+        $(function () {
+            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons);
+                    
+            let reportBtn = {
+                text: "Report",
+                url: "{{ route('patient-view-multiple-report') }}",
+                className: 'btn-primary',
+                action: function (e, dt, node, config) {
+                    document.getElementById("form_block").innerHTML = "";
+                    var ids = $.map(dt.rows({selected: true}).nodes(), function (entry) {
+                        console.log(entry);
+                        $(document.getElementById("form_block")).append("<input type=\"text\" name=\"report_ids[]\" value=\"" + $(entry)[0].cells[0].id + "\">");
+                        return $(entry)[0].cells[0].id;
+                    });
+
+                    var pnames = $.map(dt.rows({selected: true}).nodes(), function (entry) {
+                        return $(entry)[0].cells[4].innerHTML.replace(/\s/g, '');
+                    });
+
+                    //checking if patient names are different. Leter check for MRID
+                    if(!pnames.every( (val, i, arr) => val === arr[0] )){
+                        alert('Different patients selected');
+                        return
+                    }
+
+
+                    if (ids.length === 0) {
+                        alert('No record selected');
+                        return
+                    }
+                    document.getElementById("report").submit();
+                }
+            };
+            dtButtons.push(reportBtn);
+            
+
+            $.extend(true, $.fn.dataTable.defaults, {
+                order: [[1, 'desc']],
+                pageLength: 100,
+            });
+
+            searchTable();
+
+            table = $('#performedTable').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+                buttons: dtButtons
+            });
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                $($.fn.dataTable.tables(true)).DataTable()
+                    .columns.adjust();
+            });
+        })
+
+    </script>
 @endsection

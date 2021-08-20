@@ -14,11 +14,9 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class=" table table-bordered table-striped table-hover datatable datatable-Event">
+                <table class="table table-bordered table-striped table-hover datatable datatable-Event">
                     <thead>
                     <tr>
-                        <th width="10">
-                        </th>
                         <th>
                             Id
                         </th>
@@ -49,9 +47,6 @@
                     @foreach($availableTests as $key => $availableTest)
                         <tr data-entry-id="{{ $availableTest->id }}">
                             <td>
-
-                            </td>
-                            <td>
                                 {{ $availableTest->id ?? '' }}
                             </td>
                             <td>
@@ -68,7 +63,21 @@
                                 {{ $availableTest->urgentFee ?? '' }}
                             </td>
                             <td>
-                            @if($availableTest->stander_timehour <= 0)
+                            @php
+                            $seconds = $availableTest->stander_timehour;
+                            $days = floor($seconds / (3600*24));
+                            $hours = floor(($seconds / 3600) - $days*24);
+                            $mins = floor($seconds / 60 % 60);
+                            $secs = floor($seconds % 60);
+
+                            echo $days ? $days . " days " : "";
+                            echo $hours ? $hours . " hours " : "";
+                            echo $mins ? $mins . " mins " : "";
+                            echo $secs ? $secs . " secs" : "";
+
+                            @endphp
+                            
+                            <!-- @if($availableTest->stander_timehour <= 0)
                                 {{ $availableTest->stander_timehour  }}-Second
                               @elseif($availableTest->stander_timehour <= 1)
                                 {{ $availableTest->stander_timehour  }}-Second
@@ -88,11 +97,23 @@
                                 {{ $availableTest->stander_timehour/86400  }}-Days
                               @else
                                 {{ $availableTest->stander_timehour/86400  }}-Day
-                            @endif 
+                            @endif  -->
                             </td>
 
                             <td>
-                            @if($availableTest->urgent_timehour <= 0)
+                                @php
+                                    $seconds =  $availableTest->urgent_timehour;
+                                    $days = floor($seconds / (3600*24));
+                                    $hours = floor(($seconds / 3600) - $days*24);
+                                    $mins = floor($seconds / 60 % 60);
+                                    $secs = floor($seconds % 60);
+
+                                    echo $days ? $days . " days " : "";
+                                    echo $hours ? $hours . " hours " : "";
+                                    echo $mins ? $mins . " mins " : "";
+                                    echo $secs ? $secs . " secs" : "";
+                                @endphp
+                            <!-- @if($availableTest->urgent_timehour <= 0)
                                 {{ $availableTest->urgent_timehour  }}-Second
                               @elseif($availableTest->urgent_timehour <= 1)
                                 {{ $availableTest->urgent_timehour  }}-Second
@@ -112,7 +133,7 @@
                                 {{ $availableTest->urgent_timehour/86400  }}-Days
                               @else
                                 {{ $availableTest->urgent_timehour/86400  }}-Day
-                            @endif 
+                            @endif  -->
                             </td>
                             <td> 
                                 <a class="btn btn-xs btn-primary" href="{{ route('availabel-tests-show', $availableTest->id) }}">
@@ -137,56 +158,47 @@
             </div>
         </div>
     </div>
-@endsection
-@section('scripts')
-    @parent
-    <script>
-        $(function () {
-            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-                    @can('event_delete')
-            let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-            let deleteButton = {
-                text: deleteButtonTrans,
-                url: "{{ route('admin.events.massDestroy') }}",
-                className: 'btn-danger',
-                action: function (e, dt, node, config) {
-                    var ids = $.map(dt.rows({selected: true}).nodes(), function (entry) {
-                        return $(entry).data('entry-id')
-                    });
 
-                    if (ids.length === 0) {
-                        alert('{{ trans('global.datatables.zero_selected') }}')
-                        return
-                    }
 
-                    if (confirm('{{ trans('global.areYouSure') }}')) {
-                        $.ajax({
-                            headers: {'x-csrf-token': _token},
-                            method: 'POST',
-                            url: config.url,
-                            data: {ids: ids, _method: 'DELETE'}
-                        })
-                            .done(function () {
-                                location.reload()
-                            })
+    <script type="text/javascript">
+
+        function searchTable()
+        {
+            console.log("search funtion");
+            // Setup - add a text input to each footer cell
+            $('.datatable thead tr').clone(true).appendTo( '.datatable thead' );
+
+            $('.datatable thead tr:eq(1) th').each( function (i) {
+                if(i==1 || i==2 || i==0){
+                var title = $(this).text();
+                $(this).html( '<input type="text" style="width:100%;" placeholder="Search" />' );
+                $( 'input', this ).on( 'keyup change', function () {
+                    if ( table.column(i).search() !== this.value ) {
+                        table.column(i).search( this.value ).draw();
                     }
+                });
+                }else{
+                $(this).html( '' );
                 }
-            };
-            dtButtons.push(deleteButton);
-            @endcan
-
-            $.extend(true, $.fn.dataTable.defaults, {
-                order: [[1, 'desc']],
-                pageLength: 100,
             });
-            $('.datatable-Event:not(.ajaxTable)').DataTable({buttons: dtButtons})
+            
+        }
+
+        $(function () {
+            
+            searchTable();
+
+            table = $('.datatable').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+            });
+
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 $($.fn.dataTable.tables(true)).DataTable()
                     .columns.adjust();
             });
         })
 
-
-
     </script>
+
 @endsection

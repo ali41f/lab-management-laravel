@@ -46,7 +46,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class=" table table-bordered table-striped table-hover datatable datatable-Event">
+                <table id="patientTable" class="table table-bordered table-striped table-hover datatable datatable-Event">
                     <thead>
                     <tr>
                         <th width="10">
@@ -163,37 +163,70 @@
 @section('scripts')
     @parent
     <script>
+
+        function searchTable()
+        {
+            console.log("search funtion");
+            // Setup - add a text input to each footer cell
+            $('#patientTable thead tr').clone(true).appendTo( '#patientTable thead' );
+
+            $('#patientTable thead tr:eq(1) th').each( function (i) {
+                if(i==1 || i==2 || i==3){
+                var title = $(this).text();
+                console.log(i);
+                $(this).html( '<input type="text" placeholder="Search" />' );
+                $( 'input', this ).on( 'keyup change', function () {
+                    if ( table.column(i).search() !== this.value ) {
+                        table.column(i).search( this.value ).draw();
+                    }
+                });
+                }else{
+                $(this).html( '' );
+                }
+            });
+            
+        }
+
         $(function () {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons);
-                    {{--@can('event_delete')--}}
-                    {{--  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';--}}
+                    
             let reportBtn = {
-                    text: "Report",
-                    url: "{{ route('patient-view-multiple-report') }}",
-                    className: 'btn-primary',
-                    action: function (e, dt, node, config) {
-                        document.getElementById("form_block").innerHTML = "";
-                        var ids = $.map(dt.rows({selected: true}).nodes(), function (entry) {
+                text: "Report",
+                url: "{{ route('patient-view-multiple-report') }}",
+                className: 'btn-primary',
+                action: function (e, dt, node, config) {
+                    document.getElementById("form_block").innerHTML = "";
+                    var ids = $.map(dt.rows({selected: true}).nodes(), function (entry) {
+                        console.log(entry)
+                        $(document.getElementById("form_block")).append("<input type=\"text\" name=\"report_ids[]\" value=\"" + $(entry)[0].cells[0].id + "\">");
+                        return $(entry)[0].cells[0].id;
+                    });
 
-                            $(document.getElementById("form_block")).append("<input type=\"text\" name=\"report_ids[]\" value=\"" + $(entry)[0].cells[0].id + "\">");
-                            return $(entry)[0].cells[0].id;
-                        });
+                    console.log(ids);
 
-                        if (ids.length === 0) {
-                            alert('No record selected');
-                            return
-                        }
-                        document.getElementById("report").submit();
+                    if (ids.length === 0) {
+                        alert('No record selected');
+                        return
                     }
-                };
+                    document.getElementById("report").submit();
+                }
+            };
             dtButtons.push(reportBtn);
-            {{--@endcan--}}
+            
 
             $.extend(true, $.fn.dataTable.defaults, {
                 order: [[1, 'desc']],
                 pageLength: 100,
             });
-            $('.datatable-Event:not(.ajaxTable)').DataTable({buttons: dtButtons});
+
+            searchTable();
+
+            table = $('#patientTable').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+                buttons: dtButtons
+            });
+
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 $($.fn.dataTable.tables(true)).DataTable()
                     .columns.adjust();

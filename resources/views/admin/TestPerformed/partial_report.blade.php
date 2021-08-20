@@ -1,24 +1,51 @@
+<style>
+@media print {
+    thead th{
+        background-color: #dddddd !important;
+        -webkit-print-color-adjust: exact;
+        border-bottom: 2px solid #333;
+    }
+}
+thead th{
+    background-color: #ddd;
+    -webkit-print-color-adjust: exact;
+}
+
+thead th:first-child{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+thead th:last-child{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.pl-20{
+    padding-left: 20px;
+}
+.testname{
+    text-align: center;
+}
+</style>
 <div class="card-body">
-    <div class="col-md-9"><h3>{{ $testPerformedsId->availableTest->category->Cname }}</h3></div>
-    <div class="col-md-9"><h4>{{ $testPerformedsId->availableTest->name }}</h4></div>
+    <div class="pl-20 testname"><h3>{{ $testPerformedsId->availableTest->name }}</h3></div>
+    <!-- <div class="pl-20"><h4>{{ $testPerformedsId->availableTest->category->Cname  }}</h4></div> -->
     <div class="card-body">
-        <hr>
         <div class="table-responsive dont-break-inside">
 
             @if($testPerformedsId->availableTest->type==1)
                 <table class="table table-borderless">
                     <thead>
                     <tr>
-                        <th style="background-color:gray;">Test</th>
-                        <th style="background-color:gray;">Unit</th>
-                        <th style="background-color:gray;">Result</th>
+                        <th>Test</th>
+                        <th>Unit</th>
+                        <th>Result</th>
 
                         @php $x=1; @endphp
                         @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('created_at')->take(2) as $old_test)
-                            <th style="background-color:gray;">History {{$x}}</th>
+                            <th>History {{$x}}</th>
                             @php $x++; @endphp
                         @endforeach
-                        <th style="background-color:gray;">REFERENCE RANGE</th>
+                        <th>REFERENCE RANGE</th>
                     </tr>
                     </thead>
                     <tbody>

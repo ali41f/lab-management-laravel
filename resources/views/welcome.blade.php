@@ -11,6 +11,9 @@
 
         <!-- Styles -->
         <style>
+            @media print {
+                body {-webkit-print-color-adjust: exact;}
+            }
             html, body {
                 background-color: #fff;
                 color: #636b6f;
@@ -18,6 +21,7 @@
                 font-weight: 200;
                 height: 100vh;
                 margin: 0;
+                
             }
 
             .full-height {
