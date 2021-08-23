@@ -58,6 +58,7 @@ class TestsPerformedController extends Controller
             }
             //            dd(isset(${"test".$available_test_id}),${"test".$available_test_id});
 
+
             $available_test = AvailableTest::findorfail($available_test_id);
             if (!$available_test)
                 return abort(503, "Invalid request");
@@ -70,10 +71,12 @@ class TestsPerformedController extends Controller
             }
 
             //fee
-            if (isset($request->fee_final[$key]) && $request->fee_final[$key])
-                $fee = $request->fee_final[$key];
+            //'ziyad'
+            if (isset($request->con_fee[$key]) && $request->con_fee[$key])
+                $fee = $request->con_fee[$key];
+                //'ziyad'
             else {
-                $fee = $request->type[$key] == "urgent" ? $available_test->urgentFee : $available_test->testFee;
+                $fee = $request->types[$key] == "urgent" ? $available_test->urgentFee : $available_test->testFee;
                 if ($patient->category && $patient->category->discount)
                     $fee = $fee - ($fee * $patient->category->discount / 100);
             }
@@ -86,7 +89,7 @@ class TestsPerformedController extends Controller
             $test_performed = new TestPerformed();
             $test_performed->available_test_id = $available_test_id;
             $test_performed->patient_id = $request->patient_id;
-            $test_performed->type = $request->type[$key];
+            $test_performed->type = $request->types[$key];
             $test_performed->specimen = $specimen;
             $test_performed->fee = $fee;
 
@@ -130,7 +133,6 @@ class TestsPerformedController extends Controller
                 ]);
             }
         }
-        
         return redirect()->route('tests-performed');
         
     }
