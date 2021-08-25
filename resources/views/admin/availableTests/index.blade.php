@@ -33,13 +33,13 @@
                             Urgent Fee
                         </th>
                         <th>
-                        Stander Completion Time
+                        Standard Time
                         </th>
                         <th>
-                        Urgent Completion Time
+                        Urgent Time
                         </th>
                         <th>
-                            Action
+                            Actions
                         </th>
                     </tr>
                     </thead>

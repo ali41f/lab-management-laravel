@@ -41,7 +41,7 @@ thead th:last-child{
                         <th>Result</th>
 
                         @php $x=1; @endphp
-                        @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('created_at')->take(2) as $old_test)
+                        @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
                             <th>History {{$x}}</th>
                             @php $x++; @endphp
                         @endforeach
@@ -54,7 +54,7 @@ thead th:last-child{
                             <td class="text-capitalize">{{$testReport->report_item->title}}</td>
                             <td class="">{{$testReport->report_item->unit}}</td>
                             <td>{{ $testReport->value }}</td>
-                            @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('created_at')->take(2) as $old_test)
+                            @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
                                 @php
                                     if(!$old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first())
                                     {

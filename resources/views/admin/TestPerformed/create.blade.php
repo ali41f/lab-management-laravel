@@ -2,19 +2,19 @@
 @section('content')
     <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
     <style>
-        hr {
-            border-top: 1px solid rgb(47 53 58);
-        }
+hr {
+    border-top: 1px solid rgb(47 53 58);
+}
 
-        .hr1 {
-            border-top: 1px dashed #777;
-        }
-        #parent {
+.hr1 {
+    border-top: 1px dashed #777;
+}
+.parent {
     display:flex;
     width: 1100px;
 }
 
-#parent input {
+.parent input {
   
     width:200px;
     /* margin:20px; */
@@ -23,14 +23,14 @@
 
 
 
-#parent p {
+.parent p {
     /* width:100%; */
     margin-top:10px;
     margin-left:10px;
 
 }
 
-#parent button {
+.parent button {
     width:100px;
     height:35px;
     /* margin-top:10px; */
@@ -43,6 +43,20 @@
     </style>
   
     <div class="card">
+    @if(count($errors) > 0)
+     <div class="alert alert-danger">
+      <ul>
+      @foreach($errors->all() as $error)
+       <li>{{$error}}</li>
+      @endforeach
+      </ul>
+     </div>
+     @endif
+     @if(\Session::has('success'))
+     <div class="alert alert-danger">
+      <p>{{ \Session::get('success') }}</p>
+     </div>
+     @endif
         <div class="card-header">
             Performed New Test
         </div>
@@ -94,7 +108,7 @@
                         <div class="col-md-3 col-6 mb-3">
                             <div class="form-group">
                                 <label for="available_test_id" class="required">Select Test Name</label>
-                                <select class="form-control select2  {{ $errors->has('available_tests') ? 'is-invalid' : '' }}" onchange="set_test_form(this)" name="available_test_id[]" id="available_test_id">
+                                <select class="form-control select2  {{ $errors->has('available_tests') ? 'is-invalid' : '' }}" onchange="set_test_form(this)" name="available_test_id[]" id="available_test_id" >
                                     @foreach($availableTests as $id => $availableTest)
                                         <option value="{{ $id }}">{{ $availableTest }}</option>
                                     @endforeach
@@ -159,15 +173,11 @@
                         </div>
 
                         <!--My code-->
-                    <div class="col-md-3 mb-3">
-                         <button type = "button" class="btn btn-success add_btn " id=""  onclick="testVariable()">Add</button> <br />
-                       <div class = "mt-4" id="all">
-                         
-                        </div>
-                       
-                        
-                      </div>
-                       <!--ends-->
+                        <div class="mb-3">
+                            <button type = "button" class="btn btn-success add_btn " id=""  onclick="testVariable()">Add</button> <br />
+                            <div class = "mt-4" id="all"></div>
+                       </div>
+                        <!--ends-->
 
                         <div class="col-md-12 test_form">
 
@@ -243,6 +253,7 @@
         var testHTML = document.getElementById("test_block").getElementsByClassName("test_form_div")[0].outerHTML;
 
         function set_test_form(select) {
+            console.log(eval("test" + select.value + "_urgent"))
             if (select.value) {
                 select.parentElement.parentElement.parentNode.getElementsByClassName("test_form")[0].innerHTML = eval("test" + select.value);
                 select.parentElement.parentElement.parentNode.getElementsByTagName("select")[2].getElementsByTagName("option")[1].innerText = "Urgent" + "(" + eval("test" + select.value + "_urgent") + ")";
@@ -253,7 +264,8 @@
                     st_num  = st.replace(/\D/g,''),
                     ur_num  = ur.replace(/\D/g,''),
                     add_btn = document.querySelector('.add_btn');
-                    
+                    console.log(st_num);
+                    console.log(ur_num);
                 add_btn.id=st_num
                 add_btn.classList.add(ur_num)
             } else {
@@ -321,7 +333,7 @@
 
         all.insertAdjacentHTML('beforeend',
         
-            '<div id="parent" class="ele'+random_num+'">'+
+            '<div class="ele'+random_num+' parent">'+
                 '<input    value="'+name_value+'" name="available_test_ids[]" style="display:none"  >'+'</input><br/>'+
                     '<p>Test Name </p>'+'<input readonly   value="'+text+'" class="name  form-control" id="'+name_value+'">'+'</input>'+
                         
@@ -338,6 +350,7 @@
             document.getElementById('fee_final').value=''
             document.getElementById("type").value='standard'
             document.getElementById('available_test_id').value=''
+            $("#available_test_id").val(null)
 
             let total_fees=document.getElementsByClassName('fees');
             for (let i = 0; i < total_fees.length; i++) {

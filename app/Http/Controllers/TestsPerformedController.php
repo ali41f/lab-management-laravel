@@ -32,7 +32,8 @@ class TestsPerformedController extends Controller
 
     public function create()
     {
-        $patientNames = Patient::all()->pluck('Pname', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $patientNames = Patient::with('category')->get()->pluck('Pname', 'id')->prepend(trans('global.pleaseSelect'), '');
+        
         $availableTests = AvailableTest::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
         $stat = Status::all()->pluck('Sname', 'id')->prepend(trans('global.pleaseSelect'), '');
         $allAvailableTests = AvailableTest::all();
@@ -42,6 +43,7 @@ class TestsPerformedController extends Controller
     public function store(Request $request)
     {
         //        dd($request->all());
+     
         
         $patient = Patient::findorfail($request->patient_id);
         if (!$patient)
@@ -49,6 +51,9 @@ class TestsPerformedController extends Controller
 
         //        dd($request->all());
         $specimen = "";
+        if(!$request->available_test_ids)
+          return back()->with('success','Test field is required');
+      
         foreach ($request->available_test_ids as $key => $available_test_id) {
             //this is to count that how much tests of same type are performed so values can be accessed by index
             if (isset(${"test" . $available_test_id})) {
