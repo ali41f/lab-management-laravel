@@ -32,8 +32,8 @@ class TestsPerformedController extends Controller
 
     public function create()
     {
-        $patientNames = Patient::with('category')->get()->pluck('Pname', 'id')->prepend(trans('global.pleaseSelect'), '');
-        
+        $patientNames = Patient::with('category')->get();
+        //dd($patientNames);
         $availableTests = AvailableTest::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
         $stat = Status::all()->pluck('Sname', 'id')->prepend(trans('global.pleaseSelect'), '');
         $allAvailableTests = AvailableTest::all();
@@ -108,11 +108,7 @@ class TestsPerformedController extends Controller
             } else {
                 $test_performed->referred = '';
             }
-            if (!empty($request->Sname_id[$key])) {
-                $test_performed->Sname_id = $request->Sname_id[$key];
-            } else {
-                $test_performed->Sname_id = '1';
-            }
+            $test_performed->Sname_id = '1';
 
             $test_performed->save();
             //dd($test_performed);
