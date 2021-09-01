@@ -150,7 +150,7 @@ hr {
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Concession</span>
                                 </div>
-                                <input oninput="updateFee()" type="number" class="form-control concession">
+                                <input oninput="updateConcession()" type="number" class="form-control concession">
                             </div>
                         </div>
 
@@ -193,6 +193,7 @@ hr {
 
     let arr = Array.from(Array(100).keys(), n => n + 1)
     let DiscountPercentage = 0;
+    let final_fee=0;
 
     function set_patient(){
         DiscountPercentage = Number($('#patient_id option:selected').attr('discount'))
@@ -297,15 +298,20 @@ hr {
     }
 
     function updateFee(){
-        let final_fee=0;
 
+        final_fee=0;
         let total_fees_test = document.getElementsByClassName('fees');
         for (let i = 0; i < total_fees_test.length; i++) {
-            let single_fee=Number(total_fees_test[i].value)
-            final_fee+=single_fee
+            final_fee+=Number(total_fees_test[i].value)
+        }
+
+        if(DiscountPercentage > 0){
+            $(".discountText").html("Discount of " + DiscountPercentage + "% for this patient");
+            $(".concession").val(Math.round((DiscountPercentage/100)*final_fee));
         }
 
         let concessionVal = $(".concession").val();
+
         //console.log(final_fee);
         if (final_fee === 0) {
             $(".total_price").html("");
@@ -314,9 +320,18 @@ hr {
         }else{
             $(".total_price").html("Total price: Rs "+(final_fee - concessionVal));
         }
+    }
 
-        if(DiscountPercentage > 0){
-            $(".discountText").html("Discount of " + DiscountPercentage + "% for this patient");
+    function updateConcession(){
+        let concessionVal = $(".concession").val();
+
+        //console.log(final_fee);
+        if (final_fee === 0) {
+            $(".total_price").html("");
+        }else if(final_fee <= concessionVal){
+            $(".total_price").html("Concession should be less than total fee");
+        }else{
+            $(".total_price").html("Total price: Rs "+(final_fee - concessionVal));
         }
     }
     
