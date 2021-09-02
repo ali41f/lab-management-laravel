@@ -2,13 +2,13 @@
 @section('content')
     <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
     <style>
-hr {
-    border-top: 1px solid rgb(47 53 58);
-}
+        hr {
+            border-top: 1px solid rgb(47 53 58);
+        }
 
-.hr1 {
-    border-top: 1px dashed #777;
-}
+        .hr1 {
+            border-top: 1px dashed #777;
+        }
  .parent {
     display:flex;
     width: 1100px;
@@ -18,7 +18,7 @@ hr {
   
     width:200px;
     margin-left:10px;
-} 
+}
 
 .total_price{
     font-size: 22px;
@@ -106,13 +106,12 @@ hr {
 
 
                 <div id="test_block">
-
                     <div class="form-row test_form_div">
 
                         <div class="col-md-3 col-6 mb-3">
                             <div class="form-group">
                                 <label for="available_test_id" class="required">Select Test Name</label>
-                                <select class="form-control select2  {{ $errors->has('available_tests') ? 'is-invalid' : '' }}" onchange="set_test_form(this)" name="available_test_id[]" id="available_test_id" >
+                                <select class="form-control select2  {{ $errors->has('available_tests') ? 'is-invalid' : '' }}" onchange="set_test_form(this)" name="available_test_id[]" id="available_test_id">
                                     @foreach($availableTests as $id => $availableTest)
                                         <option value="{{ $id }}">{{ $availableTest }}</option>
                                     @endforeach
@@ -128,7 +127,7 @@ hr {
                             </div>
                         </div>
 
-        
+
                         <div class="col-md-3 col-12 mb-3">
                             <div class="form-group">
                                 <label for="type" class="required">Test Type</label>
@@ -141,33 +140,32 @@ hr {
 
                         <div class="col-3 ml-2" style="padding-top: 28px;">
                             <button type = "button" class="btn btn-success add_btn " id="">Add Test</button> <br />
-                        </div>
-                        
+                      </div>
+
                         <div class="col-12 mt-2 mb-2" id="all"></div>
 
                         <div class="col-md-3 mb-2 mt-2">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
                                     <span class="input-group-text">Concession</span>
-                                </div>
+                                                </div>
                                 <input oninput="updateConcession()" type="number" class="form-control concession">
-                            </div>
-                        </div>
+                                            </div>
+                                </div>
 
                         <div class="total_price col-12"></div>
                         <div class="discountText col-12"></div>
-                       
+
+
+                        </div>
 
                     </div>
 
-                </div>
-       
                 <div class="row mt-3">
                     <div class="col-sm-12">
                         <button class="btn btn-primary btn-lg save_btn" type="submit">Save</button>
                     </div>
                 </div>
-
             </form>
         </div>
         <div class="alert alert-danger error_msg text-center" style="display: none"></div>
@@ -183,53 +181,53 @@ hr {
             @endforeach
         </div>
 
-        
+
     </div>
 
    
      
 
-<script>
+    <script>
 
-    let arr = Array.from(Array(100).keys(), n => n + 1)
-    let DiscountPercentage = 0;
-    let final_fee=0;
+        let arr = Array.from(Array(100).keys(), n => n + 1)
+        let DiscountPercentage = 0;
+        let final_fee=0;
 
     function set_patient(){
         DiscountPercentage = Number($('#patient_id option:selected').attr('discount'))
         updateFee()
     }
-    
+
     // upon selecting test
-    function set_test_form(select) {
+        function set_test_form(select) {
         //console.log(eval("test" + select.value + "_urgent"))
-        if (select.value) {
+            if (select.value) {
             //select.parentElement.parentElement.parentNode.getElementsByClassName("test_form")[0].innerHTML = eval("test" + select.value);
             document.getElementById("type").getElementsByTagName("option")[1].innerText = "Urgent" + "(" + eval("test" + select.value + "_urgent") + ")";
             document.getElementById("type").getElementsByTagName("option")[0].innerText = "Standard" + "(" + eval("test" + select.value + "_standard") + ")";
 
             let st      = document.getElementById("type").getElementsByTagName("option")[0].innerText,
                 ur      = document.getElementById("type").getElementsByTagName("option")[1].innerText,
-                st_num  = st.replace(/\D/g,''),
+                    st_num  = st.replace(/\D/g,''),
                 ur_num  = ur.replace(/\D/g,'');
-                
+                    
             $(".add_btn").attr("standardfee",st_num);
             $(".add_btn").attr("urgentfee",ur_num);
-        } else {
-            select.parentElement.parentElement.parentNode.getElementsByClassName("test_form")[0].innerHTML = "";
-            select.parentElement.parentElement.parentNode.getElementsByClassName("urgent_fee")[0].innerText = "";
-            select.parentElement.parentElement.parentNode.getElementsByClassName("standard_fee")[0].innerText = "";
+            } else {
+                select.parentElement.parentElement.parentNode.getElementsByClassName("test_form")[0].innerHTML = "";
+                select.parentElement.parentElement.parentNode.getElementsByClassName("urgent_fee")[0].innerText = "";
+                select.parentElement.parentElement.parentNode.getElementsByClassName("standard_fee")[0].innerText = "";
+            }
+
+
+            if (select.parentElement.parentElement.parentElement.getElementsByClassName("ckeditor")[0]) {
+                CKEDITOR.replace(select.parentElement.parentElement.parentElement.getElementsByClassName("ckeditor")[0], {
+                    width: '100%',
+                });
+            }
+
+
         }
-
-
-        if (select.parentElement.parentElement.parentElement.getElementsByClassName("ckeditor")[0]) {
-            CKEDITOR.replace(select.parentElement.parentElement.parentElement.getElementsByClassName("ckeditor")[0], {
-                width: '100%',
-            });
-        }
-
-
-    }
     
     //show input data
     let add_btn=document.querySelector('.add_btn');
@@ -247,7 +245,7 @@ hr {
 
         //console.log(arr);
 
-        if (!fee) {
+        if (! fee) {
             if (type == 'standard') {
                 let st = $(".add_btn").attr("standardfee");
                 fee=st
@@ -261,44 +259,44 @@ hr {
             error_ele.textContent='You should select test name'
             return
         }
-        
+
 
         all.insertAdjacentHTML('beforeend',
         
             '<div class="ele'+random_num+' parent">'+
-                '<input value="'+name_value+'" name="available_test_ids[]" style="display:none"  >'+'</input><br/>'+
+                '<input    value="'+name_value+'" name="available_test_ids[]" style="display:none"  >'+'</input><br/>'+
                 '<p>Test Name </p>'+'<input readonly   value="'+text+'" class="name  form-control">'+'</input>'+
-                    
-                '<p>Test Type</p>'+'<input readonly class="type form-control" name="types[]" value="'+type+'">'+'</input>'+
+                        
+                    '<p>Test Type</p>'+'<input readonly class="type form-control" name="types[]" value="'+type+'">'+'</input>'+
                 '<p>Test Fee </p>'+'<input readonly class="fees form-control" name="fees[]" id="fees_id'+random_num+'" value="'+fee+'">'+'</input>'+
-                
-                
-                '<small class="concession_error'+random_num+'" style="color:red">'+'</small>'+
-                '<button type="button"  class=" btn'+random_num+' btn btn-danger" id="'+random_num+'">Remove Test</button>'+
+                    
+                    
+                    '<small class="concession_error'+random_num+'" style="color:red">'+'</small>'+
+                    '<button type="button"  class=" btn'+random_num+' btn btn-danger" id="'+random_num+'">Remove Test</button>'+
                     
             '</div>'
         )
 
         //document.getElementById('fee_final').value=''
-        document.getElementById("type").value='standard'
-        document.getElementById('available_test_id').value=''
+            document.getElementById("type").value='standard'
+            document.getElementById('available_test_id').value=''
         $("#available_test_id").val(null)
-        
+
         updateFee();
 
         //delete record
         let delete_btn=document.querySelector('.btn'+random_num);
         delete_btn.onclick=function(e){
-            let id             = e.target.id,
+            let id                        = e.target.id,
                 test_elements  = document.getElementsByClassName('ele'+id)[0];
             
             test_elements.remove();
             updateFee();
         }
     }
-
+    
     function updateFee(){
-
+     
         final_fee=0;
         let total_fees_test = document.getElementsByClassName('fees');
         for (let i = 0; i < total_fees_test.length; i++) {
@@ -334,6 +332,6 @@ hr {
             $(".total_price").html("Total price: Rs "+(final_fee - concessionVal));
         }
     }
-    
+
 </script>
 @endsection

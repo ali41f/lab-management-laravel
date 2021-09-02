@@ -91,14 +91,15 @@
                         Looks good!
                     </div>
                 </div>
+
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
                         <label class="" for="patient_category_id">Select Patient Category</label>
-                 
+
                         <select class="form-control" name="patient_category_id" id="patient_category_id" >
                             @foreach($patientCategorys as $id => $patientCategory)
                                 <option value="{{ $id }}" {{ $patients->patient_category_id == $id ? 'selected' : '' }}>{{ $patientCategory }}</option>
-                             @endforeach
+                            @endforeach
                         </select>
                         @if($errors->has('patient_category_id'))
                             <div class="invalid-feedback">

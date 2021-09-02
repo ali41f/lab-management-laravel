@@ -27,20 +27,34 @@ class HomeController extends Controller
             ->join('test_performeds', 'test_reports.test_performed_id', '=', 'test_performeds.id')
             ->join('available_tests', 'test_performeds.available_test_id', '=', 'available_tests.id')
             ->join('patients', 'test_performeds.patient_id', '=', 'patients.id')
-            ->select('available_tests.name', 'patients.Pname', 'patients.phone','test_performeds.id',
-                'test_performeds.created_at', 'test_reports.value', 'test_report_items.firstCriticalValue', 'test_report_items.finalCriticalValue')
+            ->select('available_tests.name', 'patients.Pname', 'patients.phone', 'test_performeds.id',
+                'test_performeds.created_at', 'test_reports.value', 'test_reports.updated_at', 'test_report_items.firstCriticalValue', 'test_report_items.finalCriticalValue')
             ->get();
 
-        $ids_added_as_critical=array();
+//        dd($allPerformedToday);
+
+        $ids_added_as_critical = array();
         $criticalTestToday = array();
         foreach ($allPerformedToday as $performed) {
-            if (($performed->value <= $performed->firstCriticalValue || $performed->value >= $performed->finalCriticalValue) && $performed->created_at > Carbon::today()) {
-                if (!in_array($performed->id,$ids_added_as_critical)){
+//            dd($performed);
+//            if ($performed->value=="<130"){
+//                            dd(
+//                                ($performed->value <= $performed->firstCriticalValue || $performed->value >= $performed->finalCriticalValue),
+//                                ($performed->created_at > Carbon::today()->subHours(24) || $performed->updated_at > Carbon::today()->subHours(24)),
+//                            $performed->updated_at,Carbon::today()->subHours(24),$performed
+//                            );
+//            }
+
+            if (trim($performed->value, '1234567890.')=="" && ($performed->value <= $performed->firstCriticalValue || $performed->value >= $performed->finalCriticalValue) && ($performed->created_at > Carbon::today()->subHours(24) || $performed->updated_at > Carbon::today()->subHours(24))) {
+                if (!in_array($performed->id, $ids_added_as_critical)) {
                     array_push($ids_added_as_critical, $performed->id);
                     array_push($criticalTestToday, $performed);
                 }
             }
         }
+
+//        dd($ids_added_as_critical);
+
         $todayDelayeds = TestPerformed::where([
             ['created_at', '>=', $todayDate],
             ['Sname_id', '!=', '2'],

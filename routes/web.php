@@ -19,6 +19,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//Route::get("/testsms1",[Controllers\HomeController::class,'test_sms'])->name('test_sms');
 
 Auth::routes();
 
@@ -110,9 +111,10 @@ Route::group(['middleware' => ['auth','inventory']], function () {
 // these are route for sales
 
 Route::group(['middleware' => ['auth','admin']], function () {
- 
+
     Route::get('sales', [Controllers\SalesController::class,'index'])->name('sales');
 });
+
 // Route::get("create", [Controllers\PostController::class, "create"]);
 // Route::get('posts', [Controllers\PostController::class, "index"]);
 // Route::post('store', [Controllers\PostController::class, "store"]);

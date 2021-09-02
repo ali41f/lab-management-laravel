@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     {{--type--}}
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="">Test Type</label>
                         <br>
                         <div class="form-check form-check-inline my-1">
@@ -83,6 +83,14 @@
                         <div class="form-check form-check-inline my-1">
                             <input id="editor" class="form-check-input" type="radio" name="type" value="2" onchange="change_type(this);">
                             <label class="form-check-label" for="editor">Editor</label>
+                        </div>
+                        <div class="form-check form-check-inline my-1">
+                            <input id="coagulation" class="form-check-input" type="radio" name="type" value="3" onchange="change_type(this);">
+                            <label class="form-check-label" for="coagulation">Coagulation</label>
+                        </div>
+                        <div class="form-check form-check-inline my-1">
+                            <input id="widal" class="form-check-input" type="radio" name="type" value="4" onchange="change_type(this);">
+                            <label class="form-check-label text-capitalize" for="widal">widal</label>
                         </div>
                     </div>
 
@@ -227,7 +235,7 @@
 
         var result_section;
         function change_type(a) {
-            if (a.value=="2"){
+            if (a.value=="2" || a.value=="3" || a.value=="4"){
                 result_section=document.getElementById("result_section").innerHTML;
                 document.getElementById("result_section").innerHTML = "";
             }

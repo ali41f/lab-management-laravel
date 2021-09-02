@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TestperformedEditor;
+use App\Models\TestperformedWidal;
 use App\Models\TestReport;
 use App\Models\AvailableTest;
 use App\Models\Patient;
@@ -42,18 +43,16 @@ class TestsPerformedController extends Controller
 
     public function store(Request $request)
     {
-        //        dd($request->all());
-     
-        
+        //                dd($request->all());
         $patient = Patient::findorfail($request->patient_id);
         if (!$patient)
             return abort(503, "Invalid request");
 
-        //        dd($request->all());
+        //                dd($request->all());
         $specimen = "";
         if(!$request->available_test_ids)
           return back()->with('success','Test field is required');
-      
+
         foreach ($request->available_test_ids as $key => $available_test_id) {
             //this is to count that how much tests of same type are performed so values can be accessed by index
             if (isset(${"test" . $available_test_id})) {
@@ -79,7 +78,7 @@ class TestsPerformedController extends Controller
             //'ziyad'
             if (isset($request->con_fee[$key]) && $request->con_fee[$key])
                 $fee = $request->con_fee[$key];
-                //'ziyad'
+            //'ziyad'
             else {
                 $fee = $request->types[$key] == "urgent" ? $available_test->urgentFee : $available_test->testFee;
                 if ($patient->category && $patient->category->discount)
@@ -108,7 +107,7 @@ class TestsPerformedController extends Controller
             } else {
                 $test_performed->referred = '';
             }
-            $test_performed->Sname_id = '1';
+                $test_performed->Sname_id = '1';
 
             $test_performed->save();
             //dd($test_performed);
@@ -135,7 +134,6 @@ class TestsPerformedController extends Controller
             }
         }
         return redirect()->route('tests-performed');
-        
     }
 
     public function edit($id)
@@ -151,15 +149,12 @@ class TestsPerformedController extends Controller
 
     public function update($id, Request $request)
     {
-
         //        dd($request->all());
-
         $test_performed = TestPerformed::findOrFail($id);
         $available_test = AvailableTest::findorfail($request->available_test_id);
         $patient = Patient::findorfail($request->patient_id);
         if (!$patient || !$available_test || !$test_performed)
-            return abort(503, "Invalid request");
-
+            return abort(503, "Invalid Request");
         //fee
         $fee = $request->type == "urgent" ? $available_test->urgentFee : $available_test->testFee;
         if ($patient->category && $patient->category->discount)
@@ -174,7 +169,6 @@ class TestsPerformedController extends Controller
             "comments" => $request->comments,
         ]);
 
-
         if ($test_performed->availableTest->type == 1) {
             //test_report store
             $delete_items = $test_performed->testReport->pluck("id")->all();
@@ -182,18 +176,18 @@ class TestsPerformedController extends Controller
             $created = 0;
             foreach ($available_test->TestReportItems->pluck("id") as $value) {
                 $field_name = "testResult" . $value;
-                $test_report_new=new TestReport();
-                $test_report_new->test_performed_id=$test_performed->id;
-                $test_report_new->test_report_item_id=$value;
+                $test_report_new = new TestReport();
+                $test_report_new->test_performed_id = $test_performed->id;
+                $test_report_new->test_report_item_id = $value;
                 if (isset($request->$field_name))
-                    $test_report_new->value=$request->$field_name;
+                    $test_report_new->value = $request->$field_name;
                 $test_report_new->save();
 
-//                TestReport::create([
-//                    'test_performed_id' => $test_performed->id,
-//                    'test_report_item_id' => $value,
-//                    'value' => $request->$field_name,
-//                ]);
+                //                TestReport::create([
+                //                    'test_performed_id' => $test_performed->id,
+                //                    'test_report_item_id' => $value,
+                //                    'value' => $request->$field_name,
+                //                ]);
                 $created++;
             }
             if ($created) {
@@ -205,10 +199,54 @@ class TestsPerformedController extends Controller
             $test_performed->testPerformedEditor->update([
                 "editor" => $request->ckeditor
             ]);
+        } elseif ($test_performed->availableTest->type == 3) {
+            TestperformedWidal::where("test_performed_id", $test_performed->id)->delete();
+            $data = [];
+            $fields = ["pro_test_time", "pro_control_time", "aptt_test_time", "aptt_control_time"];
+            foreach ($fields as $field) {
+                if (isset($request->$field)) {
+                    $data[] = [
+                        'test_performed_id' => $test_performed->id,
+                        'type' => $field,
+                        'value' => $request->$field,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now()
+                    ];
+                }
+            }
+            TestperformedWidal::insert($data);
+//            dd($request->all());
+        } elseif ($test_performed->availableTest->type == 4) {
+            //dd($request->all());
+            $data = [];
+            $fields = ["to", "th", "ao", "ah", "bo", "bh"];
+            TestperformedWidal::where("test_performed_id", $test_performed->id)->delete();
+            foreach ($fields as $field) {
+                if (isset($request->$field)) {
+                    foreach ($request->$field as $value) {
+                        $data[] = [
+                            'test_performed_id' => $test_performed->id,
+                            'type' => $field . "_" . $value,
+                            'value' => 'true',
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
+                        ];
+                    }
+                }
+            }
+
+            if (isset($request->widal_result)) {
+                $data[] = [
+                    'test_performed_id' => $test_performed->id,
+                    'type' => 'widal_result',
+                    'value' => $request->widal_result,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ];
+            }
+            TestperformedWidal::insert($data);
         }
-
         return redirect()->route('tests-performed');
-
     }
 
     public function show($id)
@@ -222,7 +260,7 @@ class TestsPerformedController extends Controller
     {
         $testPerformedsId = TestPerformed::findOrFail($id);
         $availableTestId = $testPerformedsId->availableTest;
-        return view('admin.TestPerformed.showData', compact('testPerformedsId','availableTestId'));
+        return view('admin.TestPerformed.showData', compact('testPerformedsId', 'availableTestId'));
     }
 
     public function destroy($id)

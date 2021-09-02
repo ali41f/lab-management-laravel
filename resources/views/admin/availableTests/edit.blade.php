@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     {{--type--}}
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="">Test Type</label>
                         <br>
                         <div class="form-check form-check-inline my-1">
@@ -106,6 +106,14 @@
                         <div class="form-check form-check-inline my-1">
                             <input id="editor" class="form-check-input" type="radio" disabled name="type" value="2" {{$availableTest->type==2 ? "checked":""}}>
                             <label class="form-check-label" for="editor">Editor</label>
+                        </div>
+                        <div class="form-check form-check-inline my-1">
+                            <input id="coagulation" class="form-check-input" type="radio" disabled name="type" value="3" {{$availableTest->type==3 ? "checked":""}}>
+                            <label class="form-check-label text-capitalize" for="coagulation">coagulation</label>
+                        </div>
+                        <div class="form-check form-check-inline my-1">
+                            <input id="widal" class="form-check-input" type="radio" disabled name="type" value="4" {{$availableTest->type==4 ? "checked":""}}>
+                            <label class="form-check-label text-capitalize" for="widal">widal</label>
                         </div>
                     </div>
 

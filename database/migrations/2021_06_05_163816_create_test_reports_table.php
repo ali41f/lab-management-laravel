@@ -17,8 +17,7 @@ class CreateTestReportsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('test_performed_id');
             $table->unsignedBigInteger('test_report_item_id');
-            $table->integer('value')->nullable();
-
+            $table->string('value')->nullable();
             $table->foreign('test_performed_id')->references('id')->on('test_performeds')
             ->onDelete('cascade')
             ->onUpdate('cascade');

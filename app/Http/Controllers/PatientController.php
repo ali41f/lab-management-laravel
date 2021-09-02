@@ -59,7 +59,7 @@ class PatientController extends Controller
     public function update($id, Request $request)
    {
         $patient = Patient::findOrFail($id);
-        // $input = $request->all(); 
+        // $input = $request->all();
         // $patient->fill($input)->save();
         if (!empty($request->Pname)) {
             $patient->Pname = $request->Pname;

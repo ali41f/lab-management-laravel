@@ -14,7 +14,7 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped table-hover datatable datatable-Event">
+                <table class=" table table-bordered table-striped table-hover datatable datatable-Event">
                     <thead>
                     <tr>
                         <th>
@@ -76,7 +76,7 @@
                             echo $secs ? $secs . " secs" : "";
 
                             @endphp
-                            
+
                             <!-- @if($availableTest->stander_timehour <= 0)
                                 {{ $availableTest->stander_timehour  }}-Second
                               @elseif($availableTest->stander_timehour <= 1)
@@ -181,11 +181,11 @@
                 $(this).html( '' );
                 }
             });
-            
+
         }
 
         $(function () {
-            
+
             searchTable();
 
             table = $('.datatable').DataTable({
@@ -199,6 +199,7 @@
             });
         })
 
-    </script>
 
+
+    </script>
 @endsection

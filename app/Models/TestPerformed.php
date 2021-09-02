@@ -59,4 +59,8 @@ class TestPerformed extends Model
     {
         return static::max('id') + 1;
     }
+
+    public function widal(){
+        return $this->hasMany(TestperformedWidal::class);
+    }
 }

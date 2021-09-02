@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 use DB;
 class SalesController extends Controller
 {
-
-  
-
     public function index()
     {  
         $todayDate = Carbon::today();

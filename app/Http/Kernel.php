@@ -69,7 +69,6 @@ class Kernel extends HttpKernel
         //Auth Roles
         'admin' => AdminMiddleware::class,
         'manager' => ManagerMiddleware::class,
-        'receptionist' => ReceptionistMiddleware::class,
         'inventory' => InventoryMiddleware::class,
     ];
 }

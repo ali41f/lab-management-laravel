@@ -124,7 +124,6 @@ class AvailableTestController extends Controller
 
         $task->available_test_inventories()->whereNotIn("inventory_id", isset($request->inventory_ids) ? $request->inventory_ids : [])->delete();
 
-
         if (isset($request->inventory_ids)) {
             foreach ($request->inventory_ids as $key => $value) {
                 //agr inventory set ni ha to
