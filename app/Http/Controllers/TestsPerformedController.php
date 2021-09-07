@@ -43,15 +43,18 @@ class TestsPerformedController extends Controller
 
     public function store(Request $request)
     {
-        //                dd($request->all());
+        
         $patient = Patient::findorfail($request->patient_id);
         if (!$patient)
             return abort(503, "Invalid request");
-
-        //                dd($request->all());
+        
+        // dd($request->all());
         $specimen = "";
         if(!$request->available_test_ids)
           return back()->with('success','Test field is required');
+
+        $num_of_tests = count($request->available_test_ids);
+        $each_test_concession = (int) $request->concession / (int) $num_of_tests;
 
         foreach ($request->available_test_ids as $key => $available_test_id) {
             //this is to count that how much tests of same type are performed so values can be accessed by index
@@ -75,15 +78,13 @@ class TestsPerformedController extends Controller
             }
 
             //fee
-            //'ziyad'
-            if (isset($request->con_fee[$key]) && $request->con_fee[$key])
-                $fee = $request->con_fee[$key];
-            //'ziyad'
-            else {
-                $fee = $request->types[$key] == "urgent" ? $available_test->urgentFee : $available_test->testFee;
-                if ($patient->category && $patient->category->discount)
-                    $fee = $fee - ($fee * $patient->category->discount / 100);
-            }
+            if (isset($request->fees[$key]) && $request->fees[$key])
+                $fee = $request->fees[$key] - $each_test_concession;
+            // else {
+            //     $fee = $request->types[$key] == "urgent" ? $available_test->urgentFee : $available_test->testFee;
+            //     if ($patient->category && $patient->category->discount)
+            //         $fee = $fee - ($fee * $patient->category->discount / 100);
+            // }
 
             if ($specimen == "") {
                 $specimen = "S-" . Carbon::now()->format("y") . "-" . TestPerformed::next_id();

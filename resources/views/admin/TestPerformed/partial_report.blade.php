@@ -188,7 +188,7 @@
             @endif
             @if($testPerformedsId->comments != '')
                 <hr>
-                <div class="col-md-9"><h4>Dr Comments </h4></div>
+                <div class="col-md-9"><h4> </h4></div>
                 <div class="col-md-9"><h6>{{ $testPerformedsId->comments }}</h6></div>
             @endif
 

@@ -23,11 +23,11 @@
     <div class="card-body">
         <div class="row dont-break-inside">
             <div class="offset-0 col-md-6" style="display: flex; align-items: center;">
-                <img style="width: 9rem;" class="" src="{{ asset('images/logo_print.jpg') }}"/>
+                <img style="width: 7rem;" class="" src="{{ asset('images/logo_print.jpg') }}"/>
                 <span style="justify-content: center; display: flex;  flex-direction: column; padding-left: 15px;">
-                    <div style="margin-bottom: 4px; color: #283583;" class="fas  fa-3x" >اسامہ لیبارٹری</div>
-                    <div style="font-size:26px; margin-top:4px; line-height: 1.9rem; font-weight: bold">
-                        <span style=" font-size:38px;">Usama</span> PCR and<br /> Clinical Laboratory
+                    <!-- <div style="margin-bottom: 4px; color: #283583;" class="fas  fa-3x" >اسامہ لیبارٹری</div> -->
+                    <div style="font-size:24px; margin-top:4px; line-height: 1.9rem; font-weight: bold">
+                        <span style=" font-size:35px;">Usama</span> PCR and<br /> Clinical Laboratory
                     </div>
                 </span>
             </div>

@@ -149,7 +149,7 @@
                                                         <div class="input-group-prepend">
                                     <span class="input-group-text">Concession</span>
                                                 </div>
-                                <input oninput="updateConcession()" type="number" class="form-control concession">
+                                <input oninput="updateConcession()" name="concession" type="number" class="form-control concession">
                                             </div>
                                 </div>
 
