@@ -24,7 +24,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
-
     Route::get('/home', [Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/select', [Controllers\HomeController::class, 'postShow'])->name('select');
     Route::POST('/postData', [Controllers\HomeController::class, 'postData'])->name('postData');
@@ -84,7 +83,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::DELETE('patient-category-delete/{id}',[Controllers\PatientCategoryController::class,'destroy'])->name('patient-category-delete');
 });
 
-// thses are the route for CatagoryController
+// these are the route for CatagoryController
 Route::group(['middleware' => ['auth']], function () {
     Route::get('catagory-list', [Controllers\TestCatagoryController::class,'index'])->name('catagory-list');
     Route::get('category', [Controllers\TestCatagoryController::class,'index'])->name('category');
@@ -111,7 +110,6 @@ Route::group(['middleware' => ['auth','inventory']], function () {
 // these are route for sales
 
 Route::group(['middleware' => ['auth','admin']], function () {
-
     Route::get('sales', [Controllers\SalesController::class,'index'])->name('sales');
 });
 

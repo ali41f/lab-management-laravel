@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-
+    <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
     <style>
         hr {
             border-top: 1px solid rgb(47 53 58);
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     {{--type--}}
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-6">
                         <label for="">Test Type</label>
                         <br>
                         <div class="form-check form-check-inline my-1">
@@ -90,34 +90,44 @@
                         </div>
                         <div class="form-check form-check-inline my-1">
                             <input id="widal" class="form-check-input" type="radio" name="type" value="4" onchange="change_type(this);">
-                            <label class="form-check-label text-capitalize" for="widal">widal</label>
+                            <label class="form-check-label text-capitalize" for="widal">Widal</label>
+                        </div>
+                        <div class="form-check form-check-inline my-1">
+                            <input id="two-table" class="form-check-input" type="radio" name="type" value="5" onchange="change_type(this);">
+                            <label class="form-check-label text-capitalize" for="two-table">Two Table</label>
                         </div>
                     </div>
 
                 </div>
                 <hr class="hr1">
+                <div class="col-12" id="items_main_div">
+                    <div class="form-row" id="result_section">
+                        <div class="col-md-12 mb-12"><h4>Result Values</h4></div>
+                        <div class="col-md-12" id="report_item_form">
+                            <div class="form-row report_item_class">
 
-                <div class="form-row" id="result_section">
-                    <div class="col-md-12 mb-12"><h4>Result Values</h4></div>
-                    <div class="col-md-12" id="report_item_form">
-                        <div class="form-row report_item_class">
-                            <div class="col-md-4 mb-3">
-                                <div class="form-group">
-                                    <label class="" for="title">Title</label>
-                                    <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title[]" id="title" value="{{ old('title[]', '') }}">
-                                    @if($errors->has('title'))
-                                        <div class="invalid-feedback">
-                                            {{ $errors->first('title') }}
-                                        </div>
-                                    @endif
-                                    <span class="help-block"></span>
+                                <div class="col-md-4 mb-3">
+                                    <label for="">Order</label>
+                                    <input class="form-control {{ $errors->has('order') ? 'is-invalid' : '' }}" type="number" step="1" min="1" name="order[]" value="1">
                                 </div>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                            </div>
 
-                        <!-- <div class="col-md-4 mb-3">
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group">
+                                        <label class="">Title</label>
+                                        <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title[]" value="{{ old('title[]', '') }}">
+                                        @if($errors->has('title'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('title') }}
+                                            </div>
+                                        @endif
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+
+                            <!-- <div class="col-md-4 mb-3">
                                 <label for="validationCustom03">First Normal Range</label>
                                 <input class="form-control {{ $errors->has('initialNormalValue') ? 'is-invalid' : '' }}" type="number" name="initialNormalValue[]" id="initialNormalValue" value="{{ old('initialNormalValue[]', '') }}" step="1" required>
                             </div>
@@ -126,33 +136,34 @@
                                 <input class="form-control {{ $errors->has('finalNormalValue') ? 'is-invalid' : '' }}" type="number" name="finalNormalValue[]" id="finalNormalValue" value="{{ old('finalNormalValue[]', '') }}" step="1" required>
                             </div> -->
 
-                            <div class="col-md-4 mb-3">
-                                <label for="validationCustom05">Test Unit</label>
-                                <input class="form-control {{ $errors->has('units') ? 'is-invalid' : '' }}" type="text" name="units[]" id="units" value="{{ old('units[]', '') }}">
-                            </div>
+                                <div class="col-md-4 mb-3">
+                                    <label>Test Unit</label>
+                                    <input class="form-control {{ $errors->has('units') ? 'is-invalid' : '' }}" type="text" name="units[]" value="{{ old('units[]', '') }}">
+                                </div>
 
-                            <div class="col-md-2 mb-3">
-                                <label for="validationCustom05">First Critical Value</label>
-                                <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue[]" id="firstCriticalValue" value="{{ old('firstCriticalValue[]', '') }}" step="1">
-                            </div>
-                            <div class="col-md-2 mb-3">
-                                <label for="validationCustom05">Final Critical Value</label>
-                                <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue[]" id="finalCriticalValue" value="{{ old('finalCriticalValue[]', '') }}" step="1">
-                            </div>
-                            <div class="col-md-12 mb-0">
-                                <div class="form-group">
-                                    <label for="validationCustom05">Normal Range</label>
-                                    <textarea class="form-control {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" id="normalRange" name="normalRange[]" rows="0" placeholder="Enter Normal Range of Test As This Format 60-120"></textarea>
+                                <div class="col-md-2 mb-3">
+                                    <label>First Critical Value</label>
+                                    <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue[]" value="{{ old('firstCriticalValue[]', '') }}" step="1">
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label>Final Critical Value</label>
+                                    <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue[]" value="{{ old('finalCriticalValue[]', '') }}" step="1">
+                                </div>
+                                <div class="col-md-12 mb-0">
+                                    <div class="form-group">
+                                        <label>Normal Range</label>
+                                        <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange[]" rows="0" placeholder="Enter Normal Range of Test As This Format 60-120"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <hr class="hr1">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <hr class="hr1">
-                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 text-center">
-                        <button type="button" onclick="add_item()" class="btn btn-xs btn-success">Add Item</button>
-                        <button type="button" onclick="remove_item()" class="btn btn-xs btn-danger">Remove Item</button>
+                        <div class="col-md-12 text-center">
+                            <button type="button" onclick="add_item()" class="btn btn-xs btn-success">Add Item</button>
+                            <button type="button" onclick="remove_item()" class="btn btn-xs btn-danger">Remove Item</button>
+                        </div>
                     </div>
                 </div>
                 <hr>
@@ -161,8 +172,8 @@
                     <div class="col-md-12" id="inventory_item_form">
                         <div class="form-row inventory_item_class">
                             <div class="col-md-6 mb-6">
-                                <label for="inventory_id">Inventory Item</label>
-                                <select class="form-control  {{ $errors->has('inventory_id') ? 'is-invalid' : '' }}" name="inventory_ids[]" id="inventory_id">
+                                <label>Inventory Item</label>
+                                <select class="form-control  {{ $errors->has('inventory_id') ? 'is-invalid' : '' }}" name="inventory_ids[]">
                                     @foreach($inventoryes as $key=>$value)
                                         <option value="{{ $key }}">{{ $value }}</option>
                                     @endforeach
@@ -170,15 +181,9 @@
                             </div>
 
                             <div class="col-md-6 mb-6">
-                                <label for="inventory_quantity">Quantity</label>
-                                <input class="form-control {{ $errors->has('inventory_quantity') ? 'is-invalid' : '' }}" type="number" name="inventory_quantity[]" id="inventory_quantity" value="" step="1">
+                                <label>Quantity</label>
+                                <input class="form-control {{ $errors->has('inventory_quantity') ? 'is-invalid' : '' }}" type="number" name="inventory_quantity[]" value="" step="1">
                             </div>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-
-
                             <hr class="hr1">
 
                         </div>
@@ -194,23 +199,101 @@
             </form>
         </div>
     </div>
-    <script>
-        var items = 1, item_block = 0, inventories = 1, inventory_block = 0;
+    {{--    for js of type 5--}}
 
-        function add_item() {
-            if (!item_block) {
-                item_block = document.getElementById("report_item_form").innerHTML;
-            }
-            if (items >= 1) {
-                $("#report_item_form").append(item_block);
+        <div class="form-row d-none" id="result_section2">
+            <div class="col-md-12 mb-12"><h4>Result Values 2</h4></div>
+            <div class="col-md-12" id="report_item_form2">
+                <div class="form-row report_item_class2">
+
+                    <div class="col-md-4 mb-3">
+                        <label for="">Order</label>
+                        <input class="form-control {{ $errors->has('order') ? 'is-invalid' : '' }}" type="number" step="1" min="1" name="order2[]" value="1">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                            <label class="">Title</label>
+                            <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title2[]" value="{{ old('title2[]', '') }}">
+                            @if($errors->has('title'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('title') }}
+                                </div>
+                            @endif
+                            <span class="help-block"></span>
+                        </div>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+
+                <!-- <div class="col-md-4 mb-3">
+                                <label for="validationCustom03">First Normal Range</label>
+                                <input class="form-control {{ $errors->has('initialNormalValue') ? 'is-invalid' : '' }}" type="number" name="initialNormalValue2[]" id="initialNormalValue" value="{{ old('initialNormalValue2[]', '') }}" step="1" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="validationCustom04">Final Normal Range</label>
+                                <input class="form-control {{ $errors->has('finalNormalValue') ? 'is-invalid' : '' }}" type="number" name="finalNormalValue2[]" id="finalNormalValue" value="{{ old('finalNormalValue2[]', '') }}" step="1" required>
+                            </div> -->
+
+                    <div class="col-md-4 mb-3">
+                        <label>Test Unit</label>
+                        <input class="form-control {{ $errors->has('units') ? 'is-invalid' : '' }}" type="text" name="units2[]" value="{{ old('units2[]', '') }}">
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label>First Critical Value</label>
+                        <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue2[]" value="{{ old('firstCriticalValue2[]', '') }}" step="1">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label>Final Critical Value</label>
+                        <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue2[]" value="{{ old('finalCriticalValue2[]', '') }}" step="1">
+                    </div>
+                    <div class="col-md-12 mb-0">
+                        <div class="form-group">
+                            <label>Normal Range</label>
+                            <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange2[]" rows="0" placeholder="Enter Normal Range of Test As This Format 60-120"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <hr class="hr1">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="button" onclick="add_item('report_item_form2')" class="btn btn-xs btn-success">Add Item</button>
+                <button type="button" onclick="remove_item('report_item_class2')" class="btn btn-xs btn-danger">Remove Item</button>
+            </div>
+        </div>
+
+    <script>
+        var items = 1, items2 = 1, item_block = 0, inventories = 1, inventory_block = 0;
+        item_block = document.getElementById("report_item_form").innerHTML;
+        item_block2 = document.getElementById("report_item_form2").innerHTML;
+
+        function add_item(id = "report_item_form") {
+            if (id==="report_item_form" && items >= 1) {
+                $("#" + id).append(item_block);
                 items++;
+            }else if(id==="report_item_form2" && items2 >= 1){
+                $("#" + id).append(item_block2);
+                items2++;
             }
+            else {
+                console.log(id,items,items2);
+            }
+            editor_check();
         }
 
-        function remove_item() {
-            if (items > 1) {
-                var index_remove = document.getElementsByClassName("report_item_class").length - 1;
-                document.getElementsByClassName("report_item_class")[index_remove].outerHTML = "";
+        function remove_item(class_name = "report_item_class") {
+            var index_remove;
+            if (class_name === "report_item_class" && items > 1) {
+                index_remove = document.getElementsByClassName(class_name).length - 1;
+                document.getElementsByClassName(class_name)[index_remove].outerHTML = "";
+                items--;
+            }else if (class_name === "report_item_class2" && items2 > 1) {
+                index_remove = document.getElementsByClassName(class_name).length - 1;
+                document.getElementsByClassName(class_name)[index_remove].outerHTML = "";
                 items--;
             }
         }
@@ -233,15 +316,37 @@
             }
         }
 
-        var result_section;
+        var result_section = document.getElementById("result_section").innerHTML;
+        var result_section2 = document.getElementById("result_section2").innerHTML;
+
         function change_type(a) {
-            if (a.value=="2" || a.value=="3" || a.value=="4"){
-                result_section=document.getElementById("result_section").innerHTML;
+            if (a.value == "2" || a.value == "3" || a.value == "4") {
+                document.getElementById("result_section").innerHTML = "";
+            } else if (a.value == "1") {
+                document.getElementById("result_section").innerHTML = result_section;
+            } else if (a.value == "5") {
+                document.getElementById("result_section").innerHTML = result_section;
+                document.getElementById("result_section").insertAdjacentHTML( 'beforeend', result_section2);
+            }
+            else {
                 document.getElementById("result_section").innerHTML = "";
             }
-            else if(a.value=="1"){
-                document.getElementById("result_section").innerHTML=result_section;
+            editor_check();
+        }
+
+        editor_check();
+
+        function editor_check() {
+            if (document.getElementsByClassName("ckeditor").length) {
+                Array.from(document.getElementsByClassName("ckeditor")).forEach(function (currentValue, index, arr) {
+                    CKEDITOR.replace(currentValue, {
+                        width: '100%',
+                    });
+                    currentValue.classList.remove("ckeditor");
+                    // console.log(currentValue, index, arr);
+                });
             }
         }
+
     </script>
 @endsection

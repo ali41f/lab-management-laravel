@@ -13,14 +13,14 @@
     @endphp
     <div id="canvas_div_pdf">
     @foreach($tests as $testPerformedsId)
-        @php 
-            $i = $testPerformedsId->resultValueCount + $i;   
+        @php
+            $i = $testPerformedsId->resultValueCount + $i;
             $nextpage = ($testPerformedsId->category_id!=$previous_category_id && $previous_category_id!='' || $i > 6)
         @endphp
         <div style="{{$nextpage ? 'page-break-before: always':''}}" class="card {{ $nextpage ? 'beforeClass' : '' }}">
 
         <!-- <div style="page-break-after: always;" class="card {{($testPerformedsId->category_id!=$previous_category_id && $previous_category_id!="") ? "page-break-before":""}}"> -->
-            
+
             @if($iteration == 0)
                 @include("admin.TestPerformed.partial_patient")
             @endif
@@ -39,11 +39,11 @@
     <div style="background: white" class="col-md-12 mb-12 noprint text-center py-3">
         <button class="btn btn-primary" onclick="window.print()">Print Report</button>
     </div>
-    
+
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 
     <script>
-        
+
         // var element = document.getElementById('canvas_div_pdf');
         // var opt = {
         //     pagebreak: { before: '.beforeClass' },
@@ -59,14 +59,14 @@
         //         pdf.setFontSize(10);
         //         pdf.setTextColor(150);
         //         pdf.text('Page ' + i + ' of ' + totalPages, pdf.internal.pageSize.getWidth() - 30, pdf.internal.pageSize.getHeight() - 10);
-        //     } 
+        //     }
         // }).save('abc.pdf').then(function (pdf) {
         //     fetch('abc.pdf  ')
         //     .then(response => response.text())
         //     .then(text => console.log(text))
         // })
 
-        
+
 
     </script>
 

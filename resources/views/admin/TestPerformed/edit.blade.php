@@ -124,6 +124,47 @@
                                             </div>
                                         </div>
                                     @endforeach
+
+                                @elseif($test->type==5)
+{{--@dd($performed->testReport->pluck("test_report_item_id")->all())--}}
+                                    @if($performed->availableTest->id==$test->id)
+                                        @php  $foreach_variable=$test->TestReportItems->whereIn("id",$performed->testReport->pluck("test_report_item_id")->all()); @endphp
+                                    @else
+                                        @php  $foreach_variable=$test->TestReportItems->where("status","active"); @endphp
+                                    @endif
+{{--                                @dd($foreach_variable)--}}
+                                    @foreach($foreach_variable->where("table_num",1)->sortBy("item_index") as $report_item)
+                                        <div class="col-md-4 mb-3">
+                                            <div class="form-group">
+                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}} ({{$report_item->normalRange}}){{$report_item->unit}}</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{{$report_item->unit}}</span>
+                                                    </div>
+                                                    <input class="form-control" type="text" name="testResult{{$report_item->id}}" id="testResult{{$report_item->id}}" value="{{$performed->availableTest->id==$test->id ? $performed->testReport->where("test_report_item_id",$report_item->id)->first()->value:""}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+{{--                                @dd($performed,$performed->heading)--}}
+                                    <div class="col-12">
+                                        <input type="text" name="heading" value="{{$performed->heading->value}}" placeholder="Middle Heading of Tables" class="font-2xl form-control my-2 text-center">
+                                    </div>
+
+                                    @foreach($foreach_variable->where("table_num",2)->sortBy("item_index") as $report_item)
+                                        <div class="col-md-4 mb-3">
+                                            <div class="form-group">
+                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}} ({{$report_item->normalRange}}){{$report_item->unit}}</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{{$report_item->unit}}</span>
+                                                    </div>
+                                                    <input class="form-control" type="text" name="testResult{{$report_item->id}}" id="testResult{{$report_item->id}}" value="{{$performed->availableTest->id==$test->id ? $performed->testReport->where("test_report_item_id",$report_item->id)->first()->value:""}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
                                     {{--editor type--}}
                                 @elseif($test->type==2)
                                     <div class="col-md-12 mb-12">
@@ -169,7 +210,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{--                                widal--}}
+
+                                    {{-- widal--}}
                                 @elseif($test->type==4)
                                     {{--                                    @dd($performed->widal,$performed->widal->where("type","to_1")->first())--}}
                                     <div class="col-md-8 mb-8 offset-2">
@@ -184,56 +226,56 @@
                                             </tr>
                                             <tr>
                                                 <td>TO</td>
-                                                <td><input type="checkbox" name="to[]" value="1" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_1")->first() && $performed->widal->where("type", "to_1")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="to[]" value="2" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_2")->first() && $performed->widal->where("type", "to_2")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="to[]" value="3" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_3")->first() && $performed->widal->where("type", "to_3")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="to[]" value="4" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_4")->first() && $performed->widal->where("type", "to_4")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="to[]" value="5" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_5")->first() && $performed->widal->where("type", "to_5")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="to[]" value="1" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_1")->first() && $performed->widal->where("type", "to_1")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="to[]" value="2" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_2")->first() && $performed->widal->where("type", "to_2")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="to[]" value="3" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_3")->first() && $performed->widal->where("type", "to_3")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="to[]" value="4" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_4")->first() && $performed->widal->where("type", "to_4")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="to[]" value="5" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "to_5")->first() && $performed->widal->where("type", "to_5")->first()->value == "true") ? "checked" : ""; ?>></td>
                                             </tr>
                                             <tr>
                                                 <td>TH</td>
-                                                <td><input type="checkbox" name="th[]" value="1" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_1")->first() && $performed->widal->where("type", "th_1")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="th[]" value="2" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_2")->first() && $performed->widal->where("type", "th_2")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="th[]" value="3" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_3")->first() && $performed->widal->where("type", "th_3")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="th[]" value="4" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_4")->first() && $performed->widal->where("type", "th_4")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="th[]" value="5" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_5")->first() && $performed->widal->where("type", "th_5")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="th[]" value="1" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_1")->first() && $performed->widal->where("type", "th_1")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="th[]" value="2" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_2")->first() && $performed->widal->where("type", "th_2")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="th[]" value="3" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_3")->first() && $performed->widal->where("type", "th_3")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="th[]" value="4" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_4")->first() && $performed->widal->where("type", "th_4")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="th[]" value="5" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "th_5")->first() && $performed->widal->where("type", "th_5")->first()->value == "true") ? "checked" : ""; ?>></td>
                                             </tr>
                                             <tr>
                                                 <td>AO</td>
-                                                <td><input type="checkbox" name="ao[]" value="1" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_1")->first() && $performed->widal->where("type", "ao_1")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="ao[]" value="2" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_2")->first() && $performed->widal->where("type", "ao_2")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="ao[]" value="3" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_3")->first() && $performed->widal->where("type", "ao_3")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="ao[]" value="4" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_4")->first() && $performed->widal->where("type", "ao_4")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="ao[]" value="5" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_5")->first() && $performed->widal->where("type", "ao_5")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ao[]" value="1" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_1")->first() && $performed->widal->where("type", "ao_1")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ao[]" value="2" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_2")->first() && $performed->widal->where("type", "ao_2")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ao[]" value="3" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_3")->first() && $performed->widal->where("type", "ao_3")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ao[]" value="4" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_4")->first() && $performed->widal->where("type", "ao_4")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ao[]" value="5" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ao_5")->first() && $performed->widal->where("type", "ao_5")->first()->value == "true") ? "checked" : ""; ?>></td>
                                             </tr>
                                             <tr>
                                                 <td>AH</td>
-                                                <td><input type="checkbox" name="ah[]" value="1" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_1")->first() && $performed->widal->where("type", "ah_1")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="ah[]" value="2" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_2")->first() && $performed->widal->where("type", "ah_2")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="ah[]" value="3" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_3")->first() && $performed->widal->where("type", "ah_3")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="ah[]" value="4" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_4")->first() && $performed->widal->where("type", "ah_4")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="ah[]" value="5" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_5")->first() && $performed->widal->where("type", "ah_5")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ah[]" value="1" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_1")->first() && $performed->widal->where("type", "ah_1")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ah[]" value="2" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_2")->first() && $performed->widal->where("type", "ah_2")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ah[]" value="3" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_3")->first() && $performed->widal->where("type", "ah_3")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ah[]" value="4" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_4")->first() && $performed->widal->where("type", "ah_4")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="ah[]" value="5" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "ah_5")->first() && $performed->widal->where("type", "ah_5")->first()->value == "true") ? "checked" : ""; ?>></td>
                                             </tr>
                                             <tr>
                                                 <td>BO</td>
-                                                <td><input type="checkbox" name="bo[]" value="1" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_1")->first() && $performed->widal->where("type", "bo_1")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="bo[]" value="2" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_2")->first() && $performed->widal->where("type", "bo_2")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="bo[]" value="3" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_3")->first() && $performed->widal->where("type", "bo_3")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="bo[]" value="4" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_4")->first() && $performed->widal->where("type", "bo_4")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="bo[]" value="5" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_5")->first() && $performed->widal->where("type", "bo_5")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bo[]" value="1" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_1")->first() && $performed->widal->where("type", "bo_1")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bo[]" value="2" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_2")->first() && $performed->widal->where("type", "bo_2")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bo[]" value="3" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_3")->first() && $performed->widal->where("type", "bo_3")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bo[]" value="4" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_4")->first() && $performed->widal->where("type", "bo_4")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bo[]" value="5" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bo_5")->first() && $performed->widal->where("type", "bo_5")->first()->value == "true") ? "checked" : ""; ?>></td>
                                             </tr>
                                             <tr>
                                                 <td>BH</td>
-                                                <td><input type="checkbox" name="bh[]" value="1" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_1")->first() && $performed->widal->where("type", "bh_1")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="bh[]" value="2" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_2")->first() && $performed->widal->where("type", "bh_2")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="bh[]" value="3" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_3")->first() && $performed->widal->where("type", "bh_3")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="bh[]" value="4" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_4")->first() && $performed->widal->where("type", "bh_4")->first()->value == "true") ? "checked" : ""; ?>></td>
-                                                <td><input type="checkbox" name="bh[]" value="5" <?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_5")->first() && $performed->widal->where("type", "bh_5")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bh[]" value="1" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_1")->first() && $performed->widal->where("type", "bh_1")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bh[]" value="2" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_2")->first() && $performed->widal->where("type", "bh_2")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bh[]" value="3" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_3")->first() && $performed->widal->where("type", "bh_3")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bh[]" value="4" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_4")->first() && $performed->widal->where("type", "bh_4")->first()->value == "true") ? "checked" : ""; ?>></td>
+                                                <td><input type="checkbox" name="bh[]" value="5" <?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "bh_5")->first() && $performed->widal->where("type", "bh_5")->first()->value == "true") ? "checked" : ""; ?>></td>
                                             </tr>
                                         </table>
                                     </div>
                                     <div class="col-12 mt-2">
-                                        <input class="form-control" type="text" name="widal_result" placeholder="Result" value="<?php echo ($test->id==$performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "widal_result")->first()) ? $performed->widal->where("type", "widal_result")->first()->value : ""; ?>">
+                                        <input class="form-control" type="text" name="widal_result" placeholder="Result" value="<?php echo ($test->id == $performed->availableTest->id && isset($performed->widal) && $performed->widal->where("type", "widal_result")->first()) ? $performed->widal->where("type", "widal_result")->first()->value : ""; ?>">
                                     </div>
                                 @endif
 

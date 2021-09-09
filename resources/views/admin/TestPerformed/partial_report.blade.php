@@ -26,6 +26,10 @@
         padding-left: 20px;
     }
 
+    .table p{
+        margin-bottom: .1rem;
+    }
+
     .testname {
         text-align: center;
     }
@@ -41,7 +45,7 @@
     <div class="card-body">
         <div class="table-responsive dont-break-inside">
 
-            @if($testPerformedsId->availableTest->type==1)
+            @if($testPerformedsId->availableTest->type==1 || $testPerformedsId->availableTest->type==5)
                 <table class="table table-borderless">
                     <thead>
                     <tr>
@@ -57,15 +61,16 @@
                         <th>REFERENCE RANGE</th>
                     </tr>
                     </thead>
+                    {{--                    @dd($testPerformedsId->testReport)--}}
                     <tbody>
-                    @foreach($testPerformedsId->testReport as $testReport)
+                    @foreach($testPerformedsId->testReport->where("table_num",1)->sortBy("order") as $testReport)
                         <tr>
                             <td class="text-capitalize">{{$testReport->report_item->title}}</td>
                             <td class="">{{$testReport->report_item->unit}}</td>
                             <td>{{ $testReport->value }}</td>
                             @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
                                 @php
-                                    if(!$old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first())
+                                    if(!$old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first() || $old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first() == '')
                                     {
                                         $xyz = '';
                                     }else{
@@ -74,13 +79,53 @@
                                 @endphp
                                 <td>{{ $xyz }}</td>
                             @endforeach
-                            <td>({{$testReport->report_item->normalRange}}){{$testReport->report_item->unit}}</td>
-
-
+                            <td>@php echo $testReport->report_item->normalRange @endphp</td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+
+                @if($testPerformedsId->availableTest->type==5)
+                    <h4 class="text-capitalize text-center">{{$testPerformedsId->heading->value}}</h4>
+                    <table class="table table-borderless">
+                        <thead>
+                        <tr>
+                            <th>Test</th>
+                            <th>Unit</th>
+                            <th>Result</th>
+
+                            @php $x=1; @endphp
+                            @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
+                                <th>History {{$x}}</th>
+                                @php $x++; @endphp
+                            @endforeach
+                            <th>REFERENCE RANGE</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($testPerformedsId->testReport->where("table_num",2)->sortBy("order") as $testReport)
+                            <tr>
+                                <td class="text-capitalize">{{$testReport->report_item->title}}</td>
+                                <td class="">{{$testReport->report_item->unit}}</td>
+                                <td>{{ $testReport->value }}</td>
+                                @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
+                                    @php
+                                        if(!$old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first())
+                                        {
+                                            $xyz = '';
+                                        }else{
+                                            $xyz = $old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first()->value . " (". date('d-m-Y', strtotime($old_test->created_at)) .")";
+                                        }
+                                    @endphp
+                                    <td>{{ $xyz }}</td>
+                                @endforeach
+                                <td>@php echo $testReport->report_item->normalRange @endphp</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                @endif
+
 
             @elseif($testPerformedsId->availableTest->type==2)
                 @php echo $testPerformedsId->editor; @endphp

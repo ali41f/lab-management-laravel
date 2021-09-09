@@ -43,12 +43,12 @@ class TestsPerformedController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $patient = Patient::findorfail($request->patient_id);
         if (!$patient)
             return abort(503, "Invalid request");
-        
-        // dd($request->all());
+
+        //                dd($request->all());
         $specimen = "";
         if(!$request->available_test_ids)
           return back()->with('success','Test field is required');
@@ -113,7 +113,7 @@ class TestsPerformedController extends Controller
             $test_performed->save();
             //dd($test_performed);
 
-            if ($available_test->type == 1) {
+            if ($available_test->type == 1 || $available_test->type == 5) {
                 //test_report store
                 foreach ($available_test->TestReportItems->where("status", "active")->pluck("id") as $value) {
                     $field_name = "testResult" . $value;
@@ -124,6 +124,13 @@ class TestsPerformedController extends Controller
                         'test_performed_id' => $test_performed->id,
                         'test_report_item_id' => $value,
                         // 'value' => $request->$field_name[${"test" . $available_test_id}],
+                    ]);
+                }
+                if ($available_test->type==5){
+                    TestperformedWidal::create([
+                        "test_performed_id" => $test_performed->id,
+                        "type"=>"test_performed_heading",
+                        "value"=>""
                     ]);
                 }
             } elseif ($available_test->type == 2) {
@@ -170,7 +177,7 @@ class TestsPerformedController extends Controller
             "comments" => $request->comments,
         ]);
 
-        if ($test_performed->availableTest->type == 1) {
+        if ($test_performed->availableTest->type == 1 || $test_performed->availableTest->type == 5) {
             //test_report store
             $delete_items = $test_performed->testReport->pluck("id")->all();
 
@@ -196,6 +203,11 @@ class TestsPerformedController extends Controller
                     $item->delete();
                 });
             }
+//            for test type 5 two tables
+            if (isset($request->heading))
+            TestperformedWidal::where("test_performed_id",$test_performed->id)->where("type","test_performed_heading")->update([
+                "value"=>$request->heading
+            ]);
         } elseif ($test_performed->availableTest->type == 2) {
             $test_performed->testPerformedEditor->update([
                 "editor" => $request->ckeditor

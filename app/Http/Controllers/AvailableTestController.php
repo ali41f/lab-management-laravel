@@ -7,6 +7,8 @@ use App\Models\AvailableTest;
 use App\Models\TestPerformed;
 use App\Models\Inventory;
 use App\Models\AvailableTestInventory;
+use App\Models\TestperformedEditor;
+use App\Models\TestperformedWidal;
 use App\Models\TestReportItem;
 use Carbon\Carbon;
 use Session;
@@ -37,11 +39,14 @@ class AvailableTestController extends Controller
             'name' => 'required|unique:available_tests|min:5',
         ]);
 
-        $data = [];
+        $data_report_items = [];
         if (isset($request->title))
             foreach ($request->title as $key => $value) {
-                $data[] = new TestReportItem([
+                if ($value == null  || $value == "")
+                    continue;
+                $data_report_items[] = new TestReportItem([
                     "title" => $value,
+                    'item_index' => $request->order[$key],
                     'normalRange' => $request->normalRange[$key],
                     // 'finalNormalValue' => $request->finalNormalValue[$key],
                     'firstCriticalValue' => $request->firstCriticalValue[$key],
@@ -49,7 +54,24 @@ class AvailableTestController extends Controller
                     'unit' => $request->units[$key],
                 ]);
             }
-        $a = count($data);
+        //for type 5 (two tables)
+        if (isset($request->title2))
+            foreach ($request->title2 as $key => $value) {
+                if ($value == null  || $value == "")
+                    continue;
+                $data_report_items[] = new TestReportItem([
+                    "title" => $value,
+                    'item_index' => $request->order2[$key],
+                    "table_num"=>2,
+                    'normalRange' => $request->normalRange2[$key],
+                    // 'finalNormalValue' => $request->finalNormalValue[$key],
+                    'firstCriticalValue' => $request->firstCriticalValue2[$key],
+                    'finalCriticalValue' => $request->finalCriticalValue2[$key],
+                    'unit' => $request->units2[$key],
+                ]);
+            }
+
+        $a = count($data_report_items);
         $availableTestId = AvailableTest::create([
             'category_id' => $request->category_id,
             'name' => $request->name,
@@ -73,27 +95,23 @@ class AvailableTestController extends Controller
                 $availableTestId->available_test_inventories()->saveMany($data);
             }
         }
-
-        $data = [];
-        if (isset($request->title) && $request->title[0] !== null) {
-            foreach ($request->title as $key => $value) {
-                $data[] = new TestReportItem([
-                    "title" => $value,
-                    'normalRange' => $request->normalRange[$key],
-                    // 'finalNormalValue' => $request->finalNormalValue[$key],
-                    'firstCriticalValue' => $request->firstCriticalValue[$key],
-                    'finalCriticalValue' => $request->finalCriticalValue[$key],
-                    'unit' => $request->units[$key],
-                ]);
-            }
-            $a = count($data);
-
-            AvailableTest::where('id', $availableTestId)->update(array('resultValueCount' => $a));
-
-
-            if (!empty($data)) {
-                $availableTestId->TestReportItems()->saveMany($data);
-            }
+        //        $data = [];
+//        if (isset($request->heading)) {
+            //            foreach ($request->title as $key => $value) {
+            //                $data[] = new TestReportItem([
+            //                    "title" => $value,
+            //                    'normalRange' => $request->normalRange[$key],
+            //                    // 'finalNormalValue' => $request->finalNormalValue[$key],
+            //                    'firstCriticalValue' => $request->firstCriticalValue[$key],
+            //                    'finalCriticalValue' => $request->finalCriticalValue[$key],
+            //                    'unit' => $request->units[$key],
+            //                ]);
+            //            }
+            //            $a = count($data);
+            //            AvailableTest::where('id', $availableTestId)->update(array('resultValueCount' => $a));
+            if (!empty($data_report_items)) {
+                $availableTestId->TestReportItems()->saveMany($data_report_items);
+//            }
         }
         return redirect()->route('available-tests');
     }
@@ -109,7 +127,7 @@ class AvailableTestController extends Controller
     public function update($id, Request $request)
     {
         $task = AvailableTest::findOrFail($id);
-        $input = $request->all();
+//        $input = $request->all();
         $task->fill([
             'category_id' => $request->category_id,
             'name' => $request->name,
@@ -123,7 +141,6 @@ class AvailableTestController extends Controller
         $data = [];
 
         $task->available_test_inventories()->whereNotIn("inventory_id", isset($request->inventory_ids) ? $request->inventory_ids : [])->delete();
-
         if (isset($request->inventory_ids)) {
             foreach ($request->inventory_ids as $key => $value) {
                 //agr inventory set ni ha to
@@ -144,25 +161,82 @@ class AvailableTestController extends Controller
                 $task->available_test_inventories()->saveMany($data);
         }
 
+
+//        dd($task->TestReportItems,$request->all());
         //TestReportItems
-        $task->TestReportItems()->whereNotIn("status", ["inactive", "deleted"])->update([
-            "status" => "inactive"
-        ]);
-        $data = [];
+        $data_report_items = [];
         if (isset($request->title)) {
+            $task->TestReportItems()->where("table_num",1)->where("test_id",$task->id)->whereNotIn("title",$request->title)->whereNotIn("status", ["inactive", "deleted"])->update([
+                "status" => "inactive"
+            ]);
             foreach ($request->title as $key => $value) {
                 if ($value == null)
                     continue;
-                $data[] = new TestReportItem([
-                    "title" => $value,
-                    'normalRange' => $request->normalRange[$key],
-                    // 'finalNormalValue' => $request->finalNormalValue[$key],
-                    'firstCriticalValue' => $request->firstCriticalValue[$key],
-                    'finalCriticalValue' => $request->finalCriticalValue[$key],
-                    'unit' => $request->units[$key],
-                ]);
+                $title_exist=$task->TestReportItems()->where("table_num",1)->where("test_id",$task->id)->where("title",$value)->whereNotIn("status", ["inactive", "deleted"])->first();
+
+                if ($title_exist){
+                    $title_exist->update([
+                        'normalRange' => $request->normalRange[$key],
+                        'item_index' => $request->order[$key],
+                        "table_num"=>1,
+                        // 'finalNormalValue' => $request->finalNormalValue[$key],
+                        'firstCriticalValue' => $request->firstCriticalValue[$key],
+                        'finalCriticalValue' => $request->finalCriticalValue[$key],
+                        'unit' => $request->units[$key],
+                    ]);
+                    continue;
+                }
+                else{
+                    $data_report_items[] = new TestReportItem([
+                        "title" => $value,
+                        'item_index' => $request->order[$key],
+                        "table_num"=>1,
+                        'normalRange' => $request->normalRange[$key],
+                        // 'finalNormalValue' => $request->finalNormalValue[$key],
+                        'firstCriticalValue' => $request->firstCriticalValue[$key],
+                        'finalCriticalValue' => $request->finalCriticalValue[$key],
+                        'unit' => $request->units[$key],
+                    ]);
+                }
             }
-            $task->TestReportItems()->saveMany($data);
+
+        }
+        //fot type 5 test two tables
+        if (isset($request->title2)) {
+            $task->TestReportItems()->where("table_num",2)->where("test_id",$task->id)->whereNotIn("title",$request->title)->whereNotIn("status", ["inactive", "deleted"])->update([
+                "status" => "inactive"
+            ]);
+            foreach ($request->title2 as $key => $value) {
+                if ($value == null)
+                    continue;
+                $title_exist=$task->TestReportItems()->where("table_num",2)->where("test_id",$task->id)->where("title",$value)->whereNotIn("status", ["inactive", "deleted"])->first();
+
+                if ($title_exist){
+                    $title_exist->update([
+                        'normalRange' => $request->normalRange2[$key],
+                        'item_index' => $request->order2[$key],
+                        "table_num"=>1,
+                        'firstCriticalValue' => $request->firstCriticalValue2[$key],
+                        'finalCriticalValue' => $request->finalCriticalValue2[$key],
+                        'unit' => $request->units2[$key],
+                    ]);
+                    continue;
+                }
+                else{
+                    $data_report_items[] = new TestReportItem([
+                        "title" => $value,
+                        'item_index' => $request->order2[$key],
+                        "table_num"=>2,
+                        'normalRange' => $request->normalRange2[$key],
+                        'firstCriticalValue' => $request->firstCriticalValue2[$key],
+                        'finalCriticalValue' => $request->finalCriticalValue2[$key],
+                        'unit' => $request->units2[$key],
+                    ]);
+                }
+            }
+        }
+        if (count($data_report_items)){
+            $task->TestReportItems()->saveMany($data_report_items);
         }
         return redirect()->route('available-tests');
     }

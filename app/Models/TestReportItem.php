@@ -19,6 +19,8 @@ class TestReportItem extends Model
         'firstCriticalValue',
         'finalCriticalValue',
         'unit',
+        "item_index",
+        "table_num"
     ];
 
     public function TestReport(){

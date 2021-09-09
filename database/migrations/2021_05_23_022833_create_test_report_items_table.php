@@ -22,6 +22,8 @@ class CreateTestReportItemsTable extends Migration
             // $table->integer('finalNormalValue');
             $table->integer('firstCriticalValue');
             $table->integer('finalCriticalValue');
+            $table->integer('item_index')->default(1);
+            $table->integer('table_num')->default(1);
             $table->string('unit');
             $table->string('status')->default("active");
             $table->timestamps();

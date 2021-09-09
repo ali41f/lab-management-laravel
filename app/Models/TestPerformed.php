@@ -63,4 +63,8 @@ class TestPerformed extends Model
     public function widal(){
         return $this->hasMany(TestperformedWidal::class);
     }
+
+    public function heading(){
+        return $this->hasOne(TestperformedWidal::class)->where("type","test_performed_heading");
+    }
 }
