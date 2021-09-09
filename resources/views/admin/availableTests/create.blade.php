@@ -84,7 +84,7 @@
                             <input id="editor" class="form-check-input" type="radio" name="type" value="2" onchange="change_type(this);">
                             <label class="form-check-label" for="editor">Editor</label>
                         </div>
-                        <div class="form-check form-check-inline my-1">
+                        <div class="form-check form-check-inline my-1" style="display:none;">
                             <input id="coagulation" class="form-check-input" type="radio" name="type" value="3" onchange="change_type(this);">
                             <label class="form-check-label" for="coagulation">Coagulation</label>
                         </div>

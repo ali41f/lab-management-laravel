@@ -103,7 +103,7 @@
                         @foreach($allAvailableTests as $test)
                             <div class="form-row col-md-12" id="test{{$test->id}}" class="tests">
                                 <div class="col-12"><h4 class="text-capitalize">{{$test->name}}</h4></div>
-
+                                
                                 @if($test->type==1)
 
                                     @if($performed->availableTest->id==$test->id)
@@ -114,7 +114,7 @@
                                     @foreach($foreach_variable as $report_item)
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group">
-                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}} ({{$report_item->normalRange}}){{$report_item->unit}}</label>
+                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}}</label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">{{$report_item->unit}}</span>
@@ -136,7 +136,7 @@
                                     @foreach($foreach_variable->where("table_num",1)->sortBy("item_index") as $report_item)
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group">
-                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}} ({{$report_item->normalRange}}){{$report_item->unit}}</label>
+                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}}</label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">{{$report_item->unit}}</span>
@@ -146,15 +146,15 @@
                                             </div>
                                         </div>
                                     @endforeach
-{{--                                @dd($performed,$performed->heading)--}}
+                                    
                                     <div class="col-12">
-                                        <input type="text" name="heading" value="{{$performed->heading->value}}" placeholder="Middle Heading of Tables" class="font-2xl form-control my-2 text-center">
+                                        <input type="text" name="heading" value="{{($performed->heading && $performed->heading->value) ? $performed->heading->value : 'Microscopic Examination'}}" placeholder="Middle Heading of Tables" class="font-2xl form-control my-2 text-center">
                                     </div>
 
                                     @foreach($foreach_variable->where("table_num",2)->sortBy("item_index") as $report_item)
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group">
-                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}} ({{$report_item->normalRange}}){{$report_item->unit}}</label>
+                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}}</label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">{{$report_item->unit}}</span>
