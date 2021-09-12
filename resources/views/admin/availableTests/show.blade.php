@@ -49,7 +49,7 @@
                 <div class="row">
                     <div class="col">
                         <b><label>Normal Range</label></b>
-                        <p>({{ $TestReportItem->normalRange }}){{ $TestReportItem->unit ?? '' }}</p>
+                        <p>@php echo $TestReportItem->normalRange @endphp</p>
                     </div>
                     <div class="col">
                         <b><label>Critical Values</label></b>

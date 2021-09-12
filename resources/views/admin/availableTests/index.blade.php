@@ -27,6 +27,9 @@
                             Name
                         </th>
                         <th>
+                            Test Code
+                        </th>
+                        <th>
                             Test Fee
                         </th>
                         <th>
@@ -56,6 +59,9 @@
                                 {{ $availableTest->name ?? '' }}
                             </td>
                             <td>
+                                {{ $availableTest->testCode ?? '' }}
+                            </td>
+                            <td>
                                 {{ $availableTest->testFee ?? '' }}
                             </td>
 
@@ -63,77 +69,10 @@
                                 {{ $availableTest->urgentFee ?? '' }}
                             </td>
                             <td>
-                            @php
-                            $seconds = $availableTest->stander_timehour;
-                            $days = floor($seconds / (3600*24));
-                            $hours = floor(($seconds / 3600) - $days*24);
-                            $mins = floor($seconds / 60 % 60);
-                            $secs = floor($seconds % 60);
-
-                            echo $days ? $days . " days " : "";
-                            echo $hours ? $hours . " hours " : "";
-                            echo $mins ? $mins . " mins " : "";
-                            echo $secs ? $secs . " secs" : "";
-
-                            @endphp
-
-                            <!-- @if($availableTest->stander_timehour <= 0)
-                                {{ $availableTest->stander_timehour  }}-Second
-                              @elseif($availableTest->stander_timehour <= 1)
-                                {{ $availableTest->stander_timehour  }}-Second
-                              @elseif ($availableTest->stander_timehour <= 59 )
-                               {{ $availableTest->stander_timehour  }}-Seconds
-                               @elseif ($availableTest->stander_timehour <= 60)
-                                {{ $availableTest->stander_timehour/60  }}-Minute
-                              @elseif ($availableTest->stander_timehour > 60 && $availableTest->stander_timehour <= 3540)
-                                {{ $availableTest->stander_timehour/60  }}-Minutes
-                              @elseif ($availableTest->stander_timehour <= 3600)
-                                {{ $availableTest->stander_timehour/3600  }}-Hour
-                              @elseif ($availableTest->stander_timehour >= 3600 && $availableTest->stander_timehour <= 86399)
-                                {{ $availableTest->stander_timehour/3600  }}-Hours
-                              @elseif ($availableTest->stander_timehour <= 86400)
-                                {{ $availableTest->stander_timehour/86400  }}-Day
-                              @elseif ($availableTest->stander_timehour >= 86400)
-                                {{ $availableTest->stander_timehour/86400  }}-Days
-                              @else
-                                {{ $availableTest->stander_timehour/86400  }}-Day
-                            @endif  -->
+                            {{\Carbon\CarbonInterval::seconds($availableTest->stander_timehour)->cascade()->forHumans() }}
                             </td>
-
                             <td>
-                                @php
-                                    $seconds =  $availableTest->urgent_timehour;
-                                    $days = floor($seconds / (3600*24));
-                                    $hours = floor(($seconds / 3600) - $days*24);
-                                    $mins = floor($seconds / 60 % 60);
-                                    $secs = floor($seconds % 60);
-
-                                    echo $days ? $days . " days " : "";
-                                    echo $hours ? $hours . " hours " : "";
-                                    echo $mins ? $mins . " mins " : "";
-                                    echo $secs ? $secs . " secs" : "";
-                                @endphp
-                            <!-- @if($availableTest->urgent_timehour <= 0)
-                                {{ $availableTest->urgent_timehour  }}-Second
-                              @elseif($availableTest->urgent_timehour <= 1)
-                                {{ $availableTest->urgent_timehour  }}-Second
-                              @elseif ($availableTest->urgent_timehour <= 59 )
-                               {{ $availableTest->urgent_timehour  }}-Seconds
-                               @elseif ($availableTest->urgent_timehour <= 60)
-                                {{ $availableTest->urgent_timehour/60  }}-Minute
-                              @elseif ($availableTest->urgent_timehour > 60 && $availableTest->urgent_timehour <= 3540)
-                                {{ $availableTest->urgent_timehour/60  }}-Minutes
-                              @elseif ($availableTest->urgent_timehour <= 3600)
-                                {{ $availableTest->urgent_timehour/3600  }}-Hour
-                              @elseif ($availableTest->urgent_timehour >= 3600 && $availableTest->urgent_timehour <= 86399)
-                                {{ $availableTest->urgent_timehour/3600  }}-Hours
-                              @elseif ($availableTest->urgent_timehour <= 86400)
-                                {{ $availableTest->urgent_timehour/86400  }}-Day
-                              @elseif ($availableTest->urgent_timehour >= 86400)
-                                {{ $availableTest->urgent_timehour/86400  }}-Days
-                              @else
-                                {{ $availableTest->urgent_timehour/86400  }}-Day
-                            @endif  -->
+                            {{\Carbon\CarbonInterval::seconds($availableTest->urgent_timehour)->cascade()->forHumans() }}
                             </td>
                             <td> 
                                 <a class="btn btn-xs btn-primary" href="{{ route('availabel-tests-show', $availableTest->id) }}">
@@ -169,7 +108,7 @@
             $('.datatable thead tr').clone(true).appendTo( '.datatable thead' );
 
             $('.datatable thead tr:eq(1) th').each( function (i) {
-                if(i==1 || i==2 || i==0){
+                if(i==1 || i==2 || i==0 || i ==3){
                 var title = $(this).text();
                 $(this).html( '<input type="text" style="width:100%;" placeholder="Search" />' );
                 $( 'input', this ).on( 'keyup change', function () {

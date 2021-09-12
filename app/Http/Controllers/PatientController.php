@@ -76,11 +76,6 @@ class PatientController extends Controller
         } else {
             $patient->phone = '';
         }
-        if (!empty($request->start_time)) {
-            $patient->start_time = $request->start_time;
-        } else {
-            $patient->start_time = '';
-        }
         if (!empty($request->dob)) {
             $patient->dob = $request->dob;
         } else {
@@ -106,7 +101,7 @@ class PatientController extends Controller
         ->join('categories', '.available_tests.category_id', '=', 'categories.id')
         ->select('available_tests.name','available_tests.urgent_timehour','available_tests.stander_timehour',
         'test_performeds.created_at',"test_performeds.id",'categories.Cname',
-        'test_performeds.Sname_id','test_performeds.fee','test_performeds.created_at','test_performeds.type')
+        'test_performeds.status','test_performeds.fee','test_performeds.created_at','test_performeds.type')
         ->orderBy('id', 'DESC')
         ->get(); 
          $tests = $allTests->pluck('name');    

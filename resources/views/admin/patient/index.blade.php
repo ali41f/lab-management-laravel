@@ -30,7 +30,10 @@
                             Email
                             </th>
                             <th>
-                            Start Time
+                            Age
+                            </th>
+                            <th>
+                            Registration
                             </th>   
                             <th>
                             Action
@@ -52,6 +55,9 @@
                                 </td>
                                 <td>
                                 {{ $patient->email ?? '' }}
+                                </td>
+                                <td>
+                                {{ \Carbon\Carbon::parse($patient->dob)->diff(\Carbon\Carbon::now())->format('%y years old') }}
                                 </td>
                                 <td>
                                 {{ date('d-m-Y H:m:s', strtotime($patient->start_time ?? '')) }}
@@ -100,7 +106,7 @@
         $('#patientTable thead tr').clone(true).appendTo( '#patientTable thead' );
 
         $('#patientTable thead tr:eq(1) th').each( function (i) {
-            if(i==1 || i==2 || i==3){
+            if(i==1 || i==2 || i==3 || i == 0){
               var title = $(this).text();
               console.log(i);
               $(this).html( '<input type="text" placeholder="Search" />' );

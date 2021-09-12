@@ -113,9 +113,10 @@
                             <div class="form-group">
                                 <label for="available_test_id" class="required">Select Test Name</label>
                                 <select class="form-control select2  {{ $errors->has('available_tests') ? 'is-invalid' : '' }}" onchange="set_test_form(this)" name="available_test_id[]" id="available_test_id">
-                                    @foreach($availableTests as $id => $availableTest)
-                                        <option value="{{ $id }}">{{ $availableTest }}</option>
-                                    @endforeach
+                                <option selected> Please select</option>
+                                @foreach($availableTests as   $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}({{ $item->testCode}})</option>
+                                @endforeach
                                 </select>
                                 @if($errors->has('available_tests'))
                                     <div class="invalid-feedback">
@@ -188,7 +189,7 @@
         let arr = Array.from(Array(100).keys(), n => n + 1);
         let DiscountPercentage = 0;
         let final_fee = 0;
-
+        set_patient();
         function set_patient() {
             DiscountPercentage = Number($('#patient_id option:selected').attr('discount'))
             updateFee()

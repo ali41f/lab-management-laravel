@@ -38,7 +38,7 @@
                     -->
                     <div class="row">
                         <b class="col-md-6">MR No.</b>
-                        <b class="text-capitalize col-md-6 m-0">PK0-20-24-4</b>
+                        <b class="text-capitalize col-md-6 m-0">{{ $getpatient->id }}</b>
                         <strong class="col-sm-6 text-nowrap">Patient Name</strong>
                         <b class="text-capitalize col-md-6 m-0"><span>{{ $getpatient->Pname }}</span></b>
                     </div>
@@ -75,13 +75,7 @@
                         <span class="col-md-6">Specimen</span>
                         <p class="col-md-6 m-0 text-nowrap">{{$testPerformedsId->specimen}}</p>
                     </div>
-                </div>
-                <div class="offset-4">
-                    <div class="row">
-                        <span class="col-md-6">Verified On</span>
-                        <p class="col-md-6 m-0 text-nowrap">{{ date('d-m-Y H:m:s', strtotime($getpatient->start_time)) }}</p>
-                    </div>
-                </div>   
+                </div> 
             </div>
         </div>
     </div>

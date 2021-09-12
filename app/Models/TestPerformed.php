@@ -13,7 +13,7 @@ class TestPerformed extends Model
     protected $fillable = [
         'available_test_id',
         'patient_id',
-        'Sname_id',
+        'status',
         'fee',
         'type',
         'specimen',
@@ -21,45 +21,30 @@ class TestPerformed extends Model
         'referred',
 //        'testResult',
     ];
-
     public function patient()
     {
         return $this->belongsTo(Patient::class);
-
     }
-
     public function availableTest()
     {
         return $this->belongsTo(AvailableTest::class);
     }
-
     public function GetCategoryAttribute(){
         return $this->availableTest->category_id;
     }
-
     public function testPerformedEditor(){
         return $this->hasOne(TestperformedEditor::class);
     }
-
     public function GetEditorAttribute(){
         return $this->testPerformedEditor->editor;
     }
-
-    public function stat()
-    {
-        return $this->belongsTo(Status::class, 'Sname_id', 'id');
-
-    }
-
     public function testReport(){
         return $this->hasMany(TestReport::class);
     }
-
     public static function next_id()
     {
         return static::max('id') + 1;
     }
-
     public function widal(){
         return $this->hasMany(TestperformedWidal::class);
     }

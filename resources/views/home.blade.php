@@ -23,9 +23,7 @@
                             <div class="col-md-3 col-sm-6 py-2">
                                 <div class="card card-1 text-white h-100">
                                     <div style="background-color:rgb(50,150,255);" class="card-body card-1">
-
                                         <i class="mr-2 fa fa-user-md" style="font-size:48px;"></i>
-
                                         <h5 class="mb-3 d-inline-block">Weekly Verified Tests</h5>
                                         <h3 class="amount-position"> {{ $thisWeekPatient }}</h3>
                                     </div>
@@ -34,9 +32,7 @@
                             <div class="col-md-3 col-sm-6 py-2">
                                 <div class="card card-1 text-white h-100">
                                     <div style="background-color:rgb(200,150,255);" class="card-body card-1">
-
                                         <i class="mr-2 fa fa-stethoscope" style="font-size:48px;"></i>
-
                                         <h5 class="mb-3 d-inline-block">Monthly Verified Tests </h5>
                                         <h3 class="amount-position"> {{ $thisMongthPatient }}</h3>
                                     </div>
@@ -45,9 +41,7 @@
                             <div class="col-md-3 col-sm-6 py-2">
                                 <div class="card card-1 text-white h-100">
                                     <div style="background-color:rgb(200,50,90);;" class="card-body card-1">
-
                                         <i class="mr-2 fa fa-wheelchair" style="font-size:48px;color:white"></i>
-
                                         <h5 class="mb-3 d-inline-block">Critical Test Today</h5>
                                         <h3>{{ count($criticalTestToday) }}</h3>
                                     </div>
@@ -72,39 +66,27 @@
                                     <tbody>
                                     @foreach($testPerformeds as $key => $testPerformed)
                                         <tr>
-                                            <td>{{ $testPerformed->availableTest->name ?? '' }}</td>
-                                            <td>{{ $testPerformed->patient->Pname  ?? '' }}</td>
-
+                                            <td><a class="" href="{{ route('test-performed-edit', $testPerformed->id) }}">{{ $testPerformed->availableTest->name ?? '' }}</a></td>
+                                            <td><a class="" href="{{ route('patient-show', $testPerformed->patient->id) }}">{{ $testPerformed->patient->Pname  ?? '' }}</a></td>
                                             <td>
-                                                @if($testPerformed->type === "urgent")
-                                                    @if (\Carbon\Carbon::now()->timestamp < $testPerformed->availableTest->urgent_timehour + $testPerformed->created_at->timestamp && $testPerformed->Sname_id =='2')
-                                                        <button class="btn btn-xs btn-success">Verified</button>
-                                                    @elseif (\Carbon\Carbon::now()->timestamp < $testPerformed->availableTest->urgent_timehour + $testPerformed->created_at->timestamp )
-                                                        <button class="btn btn-xs btn-info">In Process</button>
-                                                    @elseif ($testPerformed->Sname_id =='2')
-                                                        <button class="btn btn-xs btn-success">Verified</button>
-                                                    @elseif (\Carbon\Carbon::now()->timestamp > $testPerformed->availableTest->urgent_timehour + $testPerformed->created_at->timestamp)
-                                                        <button class="btn btn-xs btn-danger">Delayed</button>
-                                                    @else
-                                                        <button class="btn btn-xs btn-info">Delayedddddd</button>
-                                                    @endif
-                                                @endif
-
-                                                @if($testPerformed->type === "standard")
-                                                    @if (\Carbon\Carbon::now()->timestamp < $testPerformed->availableTest->stander_timehour + $testPerformed->created_at->timestamp && $testPerformed->Sname_id =='2')
-                                                        <button class="btn btn-xs btn-success">Verified</button>
-                                                    @elseif (\Carbon\Carbon::now()->timestamp < $testPerformed->availableTest->stander_timehour + $testPerformed->created_at->timestamp )
-                                                        <button class="btn btn-xs btn-info">In Process</button>
-                                                    @elseif ($testPerformed->Sname_id =='2')
-                                                        <button class="btn btn-xs btn-success">Verified</button>
-                                                    @elseif (\Carbon\Carbon::now()->timestamp > $testPerformed->availableTest->stander_timehour + $testPerformed->created_at->timestamp)
-                                                        <button class="btn btn-xs btn-danger">Delayed</button>
-                                                    @else
-                                                        <button class="btn btn-xs btn-info">Delayed</button>
-                                                    @endif
+                                                @php
+                                                    if($testPerformed->type === "urgent") 
+                                                        $timehour = $testPerformed->availableTest->urgent_timehour;
+                                                    elseif($testPerformed->type === "standard")
+                                                        $timehour = $testPerformed->availableTest->stander_timehour;
+                                                @endphp
+                                                @if ($testPerformed->status =='verified')
+                                                    <button class="btn btn-xs btn-success">Verified</button>
+                                                @elseif ((\Carbon\Carbon::now()->timestamp > $timehour + $testPerformed->created_at->timestamp) && $testPerformed->status == "process")
+                                                    <button class="btn btn-xs btn-danger">Delayed</button>
+                                                @elseif ( $testPerformed->status == "process" )
+                                                    <button class="btn btn-xs btn-info">In Process</button>
+                                                @elseif ( $testPerformed->status == "cancelled" )
+                                                    <button class="btn btn-xs btn-info">Cancelled</button>
+                                                @else
+                                                    <button class="btn btn-xs btn-danger">No status</button>
                                                 @endif
                                             </td>
-
                                             <td>
                                                 <a class="btn btn-xs btn-info" href="{{ route('test-performed-edit', $testPerformed->id) }}">
                                                     {{ trans('global.edit') }}
@@ -133,7 +115,7 @@
                                         <tbody>
                                         @foreach($availableTestNameAndCountTests as $key => $availableTestNameAndCountTest)
                                             <tr>
-                                                <td>{{ $availableTestNameAndCountTest->name }}</td>
+                                                <td><a class="" href="{{ route('test-performed-edit', $availableTestNameAndCountTest->id) }}">{{ $availableTestNameAndCountTest->name }}</a></td>
                                                 <td>{{ $availableTestNameAndCountTest->test_performed_count }}</td>
                                             </tr>
                                         @endforeach
@@ -158,7 +140,7 @@
                                     <tbody>
                                     @foreach($criticalTestToday as $key => $criticalTestToda)
                                         <tr>
-                                            <td>{{ $criticalTestToda->name ?? '' }}</td>
+                                            <td>{{ $criticalTestToda->name ?? '' }}</a></td>
                                             <td>{{ $criticalTestToda->Pname  ?? '' }}</td>
                                             <td>{{ $criticalTestToda->phone  ?? '' }}</td>
                                             <td>{{ \Carbon\Carbon::parse($criticalTestToda->created_at)->isoFormat('MMM Do YYYY H:m:s')}}</td>
@@ -184,8 +166,8 @@
                                         @if($todayDelayed->type === "standard")
                                             @if(\Carbon\Carbon::now()->timestamp > $todayDelayed->availableTest->stander_timehour + $todayDelayed->created_at->timestamp)
                                                 <tr>
-                                                    <td>{{ $todayDelayed->availableTest->name ?? '' }}</td>
-                                                    <td>{{ $todayDelayed->patient->Pname  ?? '' }}</td>
+                                                    <td><a class="" href="{{ route('test-performed-edit', $todayDelayed->id) }}">{{ $todayDelayed->availableTest->name ?? '' }}</a></td>
+                                                    <td><a class="" href="{{ route('patient-show', $testPerformed->patient->id) }}">{{ $todayDelayed->patient->Pname  ?? '' }}</a></td>
                                                     <td>
                                                         {{ \Carbon\Carbon::parse($todayDelayed->created_at)->isoFormat('MMM Do YYYY H:m:s')}}
                                                     </td>
@@ -211,10 +193,10 @@
                                             @if(\Carbon\Carbon::now()->timestamp > $todayDelayed->availableTest->urgent_timehour + $todayDelayed->created_at->timestamp)
                                                 <tr>
                                                     <td>
-                                                        {{ $todayDelayed->availableTest->name ?? '' }}
+                                                    <a class="" href="{{ route('test-performed-edit', $todayDelayed->id) }}">{{ $todayDelayed->availableTest->name ?? '' }}</a>
                                                     </td>
                                                     <td>
-                                                        {{ $todayDelayed->patient->Pname  ?? '' }}
+                                                    <a class="" href="{{ route('patient-show', $testPerformed->patient->id) }}">{{ $todayDelayed->patient->Pname  ?? '' }}</a>
                                                     </td>
                                                     <td>
                                                         {{ \Carbon\Carbon::parse($todayDelayed->created_at)->isoFormat('MMM Do YYYY H:m:s')}}

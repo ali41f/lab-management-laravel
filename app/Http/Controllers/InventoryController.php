@@ -16,6 +16,12 @@ class InventoryController extends Controller
     }
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'inventoryName' => 'required|max:120', 
+            'inventoryUnit' => 'required',
+            'remainingItem' => 'required|max:9',
+
+            ]);
         $input = $request->all();
         Inventory::create($input);
         return redirect()->route('inventory-list');
@@ -27,6 +33,12 @@ class InventoryController extends Controller
     }
     public function update($id, Request $request)
     {
+        $this->validate($request,[
+            'inventoryName' => 'required|max:120', 
+            'inventoryUnit' => 'required',
+            'remainingItem' => 'required|max:9',
+
+            ]);
     $Inventoryes = Inventory::findOrFail($id);
     $input = $request->all();
     $Inventoryes->fill($input)->save();

@@ -54,22 +54,6 @@
       </div>
   
       <div class="form-row">
-        <div class="col-md-4 mb-3">
-          <div class="form-group">
-                <label class="" for="start_time">Resgistration Date</label>
-                <input class="form-control datetime" type="text" name="start_time" id="start_time" value="{{ date('Y:m:d:H:i:s') }}" require >
-                @if($errors->has('start_time'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('start_time') }}
-                    </div>
-                @endif
-                <span class="help-block"></span>
-          </div>
-          <div class="invalid-feedback">
-             Please provide a valid state.
-          </div>
-        </div>
-
       <div class="col-md-4 mb-3">
        <div class="form-group">
                 <label class="required" for="dob">Birthday</label>
@@ -105,8 +89,7 @@
           Please provide a valid state.
         </div>
       </div>
-    </div>
-    <div class="col-md-3 mb-3">
+      <div class="col-md-3 mt-4">
       <div class="form-group">
           <label for="gend" class= "col-md-4 col-form-label text-md-right">{{ __('Gender') }}</label>
           <div class="form-check form-check-inline" >
@@ -126,6 +109,7 @@
           <div class="invalid-feedback">
         </div>
       </div>
+    </div>
     </div>
     <button class="btn btn-primary" type="submit">Submit</button>
   </form>

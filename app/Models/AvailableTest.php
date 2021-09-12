@@ -18,7 +18,8 @@ class AvailableTest extends Model
         'stander_timehour',
         'urgent_timehour',
         'resultValueCount',
-        'type'
+        'type',
+        'testCode',
 //        'initialNormalValue',
 //        'finalNormalValue',
 //        'firstCriticalValue',

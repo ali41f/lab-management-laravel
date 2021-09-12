@@ -43,6 +43,39 @@
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
+                        <div class="form-group">
+                            <label class="" for="testCode">Test Code</label>
+                            <input class="form-control {{ $errors->has('testCode') ? 'is-invalid' : '' }}" type="text" name="testCode" id="testCode" value="{{ old('testCode', '') }}" required>
+                            @if($errors->has('testCode'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('testCode') }}
+                                </div>
+                            @endif
+                            <span class="help-block"></span>
+                        </div>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label for="validationCustomUsername">Standard Charges</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Rs</span>
+                            </div>
+                            <input class="form-control {{ $errors->has('testFee') ? 'is-invalid' : '' }}" type="number" name="testFee" id="testFee" value="{{ old('testFee', '') }}" step="1" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label for="urgentFee">Urgent Charges</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="urgentFee">Rs</span>
+                            </div>
+                            <input class="form-control {{ $errors->has('urgentFee') ? 'is-invalid' : '' }}" type="number" name="urgentFee" id="urgentFee" value="{{ old('urgentFee', '') }}" step="1" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
                         <label for="timehour">Standard Completed time</label>
                         <div class="input-group">
                             <input type="text" name="stander_timehour" class="form-control" id="duration">
@@ -52,24 +85,6 @@
                         <label for="urgent_timehour">Urgent Completed time</label>
                         <div class="input-group">
                             <input type="text" name="urgent_timehour" class="form-control" id="duration2">
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="validationCustomUsername">Standard Charges</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Rs</span>
-                            </div>
-                            <input class="form-control {{ $errors->has('testFee') ? 'is-invalid' : '' }}" type="number" name="testFee" id="testFee" value="{{ old('testFee', '') }}" step="1" required>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="urgentFee">Urgent Charges</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="urgentFee">Rs</span>
-                            </div>
-                            <input class="form-control {{ $errors->has('urgentFee') ? 'is-invalid' : '' }}" type="number" name="urgentFee" id="urgentFee" value="{{ old('urgentFee', '') }}" step="1" required>
                         </div>
                     </div>
                     {{--type--}}
@@ -143,11 +158,11 @@
 
                                 <div class="col-md-2 mb-3">
                                     <label>First Critical Value</label>
-                                    <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue[]" value="{{ old('firstCriticalValue[]', '') }}" step="1">
+                                    <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue[]" value="{{ old('firstCriticalValue[]', '') }}" step="1"required>
                                 </div>
                                 <div class="col-md-2 mb-3">
                                     <label>Final Critical Value</label>
-                                    <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue[]" value="{{ old('finalCriticalValue[]', '') }}" step="1">
+                                    <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue[]" value="{{ old('finalCriticalValue[]', '') }}" step="1"required>
                                 </div>
                                 <div class="col-md-12 mb-0">
                                     <div class="form-group">

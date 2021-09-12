@@ -80,7 +80,9 @@ class AvailableTestController extends Controller
             'stander_timehour' => $request->stander_timehour,
             'urgent_timehour' => $request->urgent_timehour,
             'resultValueCount' => $a,
-            'type' => $request->type
+            'type' => $request->type,
+            'testCode' => $request->testCode,
+
         ]);
         //available_test_inventories
         $data = [];
@@ -135,23 +137,26 @@ class AvailableTestController extends Controller
             'urgentFee' => $request->urgentFee,
             'stander_timehour' => $request->stander_timehour,
             'urgent_timehour' => $request->urgent_timehour,
+            'testCode' => $request->testCode,
+
+
         ])->save();
 
         //inventory
         $data = [];
 
-        $task->available_test_inventories()->whereNotIn("inventory_id", isset($request->inventory_ids) ? $request->inventory_ids : [])->delete();
+        $task->available_test_inventories()->delete();
         if (isset($request->inventory_ids)) {
             foreach ($request->inventory_ids as $key => $value) {
                 //agr inventory set ni ha to
                 if ($value == null)
                     continue;
-                if (in_array($value, $task->available_test_inventories()->pluck("inventory_id")->all())) {
-                    $task->available_test_inventories()->where("inventory_id", $value)->first()->update([
-                        "itemUsed" => $request->inventory_quantity[$key]
-                    ]);
-                    continue;
-                }
+                // if (in_array($value, $task->available_test_inventories()->pluck("inventory_id")->all())) {
+                //     $task->available_test_inventories()->where("inventory_id", $value)->first()->update([
+                //         "itemUsed" => $request->inventory_quantity[$key]
+                //     ]);
+                //     continue;
+                // }
                 $data[] = new AvailableTestInventory([
                     "inventory_id" => $value,
                     "itemUsed" => $request->inventory_quantity[$key]
@@ -203,7 +208,7 @@ class AvailableTestController extends Controller
         }
         //fot type 5 test two tables
         if (isset($request->title2)) {
-            $task->TestReportItems()->where("table_num",2)->where("test_id",$task->id)->whereNotIn("title",$request->title)->whereNotIn("status", ["inactive", "deleted"])->update([
+            $task->TestReportItems()->where("table_num",2)->where("test_id",$task->id)->whereNotIn("title",$request->title2)->whereNotIn("status", ["inactive", "deleted"])->update([
                 "status" => "inactive"
             ]);
             foreach ($request->title2 as $key => $value) {
@@ -215,7 +220,7 @@ class AvailableTestController extends Controller
                     $title_exist->update([
                         'normalRange' => $request->normalRange2[$key],
                         'item_index' => $request->order2[$key],
-                        "table_num"=>1,
+                        "table_num"=>2,
                         'firstCriticalValue' => $request->firstCriticalValue2[$key],
                         'finalCriticalValue' => $request->finalCriticalValue2[$key],
                         'unit' => $request->units2[$key],

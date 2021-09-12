@@ -17,6 +17,8 @@ class CreateAvailableTestsTable extends Migration
             $table->string('urgentFee');
             $table->integer('stander_timehour');
             $table->integer('urgent_timehour');
+            $table->string('testCode');
+
             $table->string('resultValueCount');
             $table->string('type')->default(1);
 

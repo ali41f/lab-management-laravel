@@ -12,7 +12,7 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="inputEmail4">Enter Patient Category</label>
-              <input class="form-control {{ $errors->has('Pcategory') ? 'is-invalid' : '' }}" type="text" name="Pcategory" id="Pname" value="{{ old('Pcategory', '') }}">
+              <input class="form-control {{ $errors->has('Pcategory') ? 'is-invalid' : '' }}" type="text" name="Pcategory" id="Pname" value="{{ old('Pcategory', '') }}"required>
             </div>
           <div class="form-group col-md-6">
             <label for="inputPassword4">Discount</label>

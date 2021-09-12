@@ -18,7 +18,7 @@ class CreateTestReportItemsTable extends Migration
             $table->unsignedBigInteger('test_id');
             // $table->integer('test_id');
             $table->string('title');
-            $table->string('normalRange');
+            $table->string('normalRange')->nullable();
             // $table->integer('finalNormalValue');
             $table->integer('firstCriticalValue');
             $table->integer('finalCriticalValue');

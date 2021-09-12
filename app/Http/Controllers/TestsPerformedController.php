@@ -21,24 +21,23 @@ class TestsPerformedController extends Controller
     public function index()
     {
         $testPerformeds = TestPerformed::join('patients', 'test_performeds.patient_id', '=', 'patients.id')
-            ->join('statuses', 'test_performeds.Sname_id', '=', 'statuses.id')
             ->join('available_tests', 'test_performeds.available_test_id', '=', 'available_tests.id')
             ->join('categories', '.available_tests.category_id', '=', 'categories.id')
             ->select('test_performeds.*', 'patients.Pname', 'patients.dob', 'available_tests.name', 'available_tests.stander_timehour', 'available_tests.urgent_timehour',
-                'available_tests.testFee', 'categories.Cname', 'statuses.Sname', 'test_performeds.created_at', 'test_performeds.specimen')
+                'available_tests.testFee', 'categories.Cname', 'test_performeds.created_at', 'test_performeds.specimen')
             ->orderBy('patient_id', 'DESC')
             ->get();
         return view('admin.TestPerformed.index', compact('testPerformeds'));
     }
 
     public function create()
-    {
+    { 
         $patientNames = Patient::with('category')->get();
+        $availableTests = AvailableTest::get(['name', 'testCode', 'id']);
         //dd($patientNames);
-        $availableTests = AvailableTest::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-        $stat = Status::all()->pluck('Sname', 'id')->prepend(trans('global.pleaseSelect'), '');
+        // $availableTests = AvailableTest::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
         $allAvailableTests = AvailableTest::all();
-        return view('admin.TestPerformed.create', compact('patientNames', 'availableTests', 'stat', "allAvailableTests"));
+        return view('admin.TestPerformed.create', compact('patientNames', 'availableTests', "allAvailableTests"));
     }
 
     public function store(Request $request)
@@ -108,7 +107,7 @@ class TestsPerformedController extends Controller
             } else {
                 $test_performed->referred = '';
             }
-                $test_performed->Sname_id = '1';
+                $test_performed->status = 'process';
 
             $test_performed->save();
             //dd($test_performed);
@@ -149,10 +148,9 @@ class TestsPerformedController extends Controller
         $performed = TestPerformed::findOrFail($id);
         $getNameFromAvailbles = AvailableTest::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
         $patientNames = Patient::all()->pluck('Pname', 'id')->prepend(trans('global.pleaseSelect'), '');
-        $books = Status::pluck('Sname', 'id')->prepend(trans('global.pleaseSelect'), '');
         $allAvailableTests = AvailableTest::all();
 
-        return view('admin.TestPerformed.edit', compact("allAvailableTests", 'performed', 'getNameFromAvailbles', 'patientNames', 'books'));
+        return view('admin.TestPerformed.edit', compact("allAvailableTests", 'performed', 'getNameFromAvailbles', 'patientNames'));
     }
 
     public function update($id, Request $request)
@@ -171,7 +169,7 @@ class TestsPerformedController extends Controller
         $test_performed->update([
             'available_test_id' => $request->available_test_id,
             'patient_id' => $request->patient_id,
-            'Sname_id' => $request->Sname_id,
+            'status' => $request->status,
             'type' => $request->type,
             "fee" => $fee,
             "comments" => $request->comments,
@@ -182,7 +180,7 @@ class TestsPerformedController extends Controller
             $delete_items = $test_performed->testReport->pluck("id")->all();
 
             $created = 0;
-            foreach ($available_test->TestReportItems->pluck("id") as $value) {
+            foreach ($available_test->TestReportItems->where("status", "active")->pluck("id") as $value) {
                 $field_name = "testResult" . $value;
                 $test_report_new = new TestReport();
                 $test_report_new->test_performed_id = $test_performed->id;

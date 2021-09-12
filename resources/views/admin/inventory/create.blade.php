@@ -10,7 +10,7 @@
             <div class="form-row">
               <div class="form-group col-md-4">
                 <label for="inventoryName">Enter Inventory Name</label>
-                <input class="form-control {{ $errors->has('inventoryName') ? 'is-invalid' : '' }}" type="text" name="inventoryName" id="inventoryName" value="{{ old('inventoryName', '') }}">
+                <input class="form-control {{ $errors->has('inventoryName') ? 'is-invalid' : '' }}" type="text" name="inventoryName" id="inventoryName" value="{{ old('inventoryName', '') }}"required>
               </div>
               <div class="form-group col-md-4 ">
                <label for="inventoryUnit">Inventory Units</label>

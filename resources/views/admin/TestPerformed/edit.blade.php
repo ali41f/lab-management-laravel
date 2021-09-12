@@ -68,19 +68,17 @@
                             Looks good!
                         </div>
                     </div>
-
                     <div class="col-md-3 mb-3">
                         <div class="form-group">
-                            <label class="required" for="Sname_id ">Select Status</label>
-                            <select class="form-control" name="Sname_id" id="Sname_id" required>
-
-                                @foreach($books as $id => $book)
-                                    <option value="{{ $id }}" {{ $performed->Sname_id == $id ? 'selected' : '' }}>{{ $book }}</option>
-                                @endforeach
+                            <label class="required" for="status ">Select Status</label>
+                            <select class="form-control" name="status" id="status" required>
+                                    <option value="process">In Process</option>
+                                    <option value="verified">Verified</option>
+                                    <option value="cancelled">Cancelled</option>
                             </select>
-                            @if($errors->has('Sname_id '))
+                            @if($errors->has('status'))
                                 <div class="invalid-feedback">
-                                    {{ $errors->first('Sname_id ') }}
+                                    {{ $errors->first('status') }}
                                 </div>
                             @endif
                             <span class="help-block"></span>

@@ -57,6 +57,21 @@
                             Looks good!
                         </div>
                     </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="form-group">
+                            <label for="testCode">Test Code</label>
+                            <input class="form-control {{ $errors->has('testCode') ? 'is-invalid' : '' }}" type="text" name="testCode" id="testCode" value="{{ old('testCode', $availableTest->testCode) }}" required>
+                            @if($errors->has('testCode'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('testCode') }}
+                                </div>
+                            @endif
+                            <span class="help-block"></span>
+                        </div>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
 
                     <div class="col-md-3 mb-3">
                         <label for="timehour">Standard Completion time</label>
@@ -725,10 +740,10 @@
         }
 
         function add_item(id = "report_item_form") {
-            if (id === "report_item_form" && items >= 1) {
+            if (id === "report_item_form" && items >= 0) {
                 $("#" + id).append(item_block);
                 items++;
-            } else if (id === "report_item_form2" && items2 >= 1) {
+            } else if (id === "report_item_form2" && items2 >= 0) {
                 $("#" + id).append(item_block2);
                 items2++;
             } else {
@@ -739,11 +754,12 @@
 
         function remove_item(class_name = "report_item_class") {
             var index_remove;
-            if (class_name === "report_item_class" && items > 1) {
+            console.log(items);
+            if (class_name === "report_item_class" && items >= 1) {
                 index_remove = document.getElementsByClassName(class_name).length - 1;
                 document.getElementsByClassName(class_name)[index_remove].outerHTML = "";
                 items--;
-            } else if (class_name === "report_item_class2" && items2 > 1) {
+            } else if (class_name === "report_item_class2" && items2 >=  1) {
                 index_remove = document.getElementsByClassName(class_name).length - 1;
                 document.getElementsByClassName(class_name)[index_remove].outerHTML = "";
                 items--;

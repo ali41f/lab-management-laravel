@@ -95,36 +95,25 @@
                             <td>
                             {{ $test->fee}}
                             </td>
-
                             <td>
-                                    @if($test->type === "urgent")
-                                        @if (\Carbon\Carbon::now()->timestamp < $test->urgent_timehour + $test->created_at->timestamp && $test->Sname_id =='2')
-                                            <button class="btn btn-xs btn-success">Verified</button>
-                                        @elseif (\Carbon\Carbon::now()->timestamp < $test->urgent_timehour + $test->created_at->timestamp )
-                                            <button class="btn btn-xs btn-info">In Process</button>
-                                        @elseif ($test->Sname_id =='2')
-                                            <button class="btn btn-xs btn-success">Verified</button>
-                                        @elseif (\Carbon\Carbon::now()->timestamp > $test->urgent_timehour + $test->created_at->timestamp)
-                                            <button class="btn btn-xs btn-danger">Delayed</button>
-                                        @else
-                                            <button class="btn btn-xs btn-info">Delayedddddd</button>
-                                        @endif
-                                    @endif
-
-                                    @if($test->type === "standard")
-                                        @if (\Carbon\Carbon::now()->timestamp < $test->stander_timehour + $test->created_at->timestamp && $test->Sname_id =='2')
-                                            <button class="btn btn-xs btn-success">Verified</button>
-                                        @elseif (\Carbon\Carbon::now()->timestamp < $test->stander_timehour + $test->created_at->timestamp )
-                                            <button class="btn btn-xs btn-info">In Process</button>
-                                        @elseif ($test->Sname_id =='2')
-                                            <button class="btn btn-xs btn-success">Verified</button>
-                                        @elseif (\Carbon\Carbon::now()->timestamp > $test->stander_timehour + $test->created_at->timestamp)
-                                            <button class="btn btn-xs btn-danger">Delayed</button>
-                                        @else
-                                            <button class="btn btn-xs btn-info">Delayed</button>
-                                        @endif
-                                    @endif 
-                                </td>
+                                @php
+                                    if($test->type === "urgent") 
+                                        $timehour = $test->urgent_timehour;
+                                        elseif($test->type === "standard")
+                                        $timehour = $test->stander_timehour;
+                                @endphp
+                                @if ($test->status =='verified')
+                                    <button class="btn btn-xs btn-success">Verified</button>
+                                    @elseif ((\Carbon\Carbon::now()->timestamp > $timehour + $test->created_at->timestamp) && $test->status == "process")
+                                    <button class="btn btn-xs btn-danger">Delayed</button>
+                                    @elseif ( $test->status == "process" )
+                                    <button class="btn btn-xs btn-info">In Process</button>
+                                    @elseif ( $test->status == "cancelled" )
+                                    <button class="btn btn-xs btn-info">Cancelled</button>
+                                    @else
+                                    <button class="btn btn-xs btn-danger">No status</button>
+                                @endif
+                            </td>
                             <td>
                                 <a class="btn btn-xs btn-primary" href="{{ route('test-performed-show', $test->id) }}">
                                     Report
@@ -132,10 +121,11 @@
                                 <a class="btn btn-xs btn-primary" href="{{ route('test-performed-table', $test->id) }}">
                                         {{ trans('global.view') }}
                                 </a>
-
+                                @if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
                                 <a class="btn btn-xs btn-info" href="{{ route('test-performed-edit', $test->id) }}">
                                     {{ trans('global.edit') }}
                                 </a>
+                                @endif
 
                                 <form method="POST" action="{{ route("performed-test-delete", [$test->id]) }}" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                     <input type="hidden" name="_method" value="DELETE">

@@ -22,12 +22,14 @@ Route::get('/', function () {
 //Route::get("/testsms1",[Controllers\HomeController::class,'test_sms'])->name('test_sms');
 
 Auth::routes();
-
+Route::get('registerinlab', [Controllers\Auth\RegisterController::class,'showRegistrationForm'])->name('register');
+Route::post('registerinlab', [Controllers\Auth\RegisterController::class,'register']);
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', [Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/select', [Controllers\HomeController::class, 'postShow'])->name('select');
     Route::POST('/postData', [Controllers\HomeController::class, 'postData'])->name('postData');
 });
+
 
 //these route belongs to AvailAbleTest
 Route::group(['middleware' => ['auth','inventory']], function () {

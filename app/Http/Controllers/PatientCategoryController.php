@@ -20,7 +20,7 @@ class PatientCategoryController extends Controller
     {
         $this->validate($request,[
             'Pcategory' => 'required|max:120', 
-            'discount' => 'required',
+            'discount' => 'required|max:2',
             ]);
         $patientCategoryes = PatientCategory::create($request->all());
         return redirect()->route('patient-category');
@@ -39,6 +39,10 @@ class PatientCategoryController extends Controller
     }
     public function update($id, Request $request)
     {
+        $this->validate($request,[
+            'Pcategory' => 'required|max:120', 
+            'discount' => 'required|max:2',
+            ]);
         $patientCategory = PatientCategory::findOrFail($id);
         $input = $request->all(); 
         $patientCategory->fill($input)->save();
