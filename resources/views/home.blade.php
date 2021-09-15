@@ -105,7 +105,7 @@
                             <div class="col-md-6 col-sm-12">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped table-hover datatable datatable-Event">
-                                        <h2>Top Tests Today </h2>
+                                        <h2>Top Tests</h2>
                                         <thead>
                                         <tr>
                                             <th>Test Name</th>

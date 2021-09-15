@@ -72,7 +72,7 @@
                             <label class="required" for="patient_id">Select Patient Name</label>
                             <select onchange="set_patient()" data-placeholder="Select Patient" class="form-control select2 {{ $errors->has('patients') ? 'is-invalid' : '' }}" name="patient_id" id="patient_id" required>
                                 @foreach($patientNames as $patientName)
-                                    <option discount="{{ $patientName->category->discount }}" value="{{ $patientName->id }}">{{ $patientName->Pname }} ({{ $patientName->id }})</option>
+                                    <option patientName="{{$patientName->Pname}}" discount="{{ $patientName->category->discount }}" value="{{ $patientName->id }}">{{ $patientName->Pname }} ({{ $patientName->id }})</option>
                                 @endforeach
                             </select>
                             @if($errors->has('user'))
@@ -168,6 +168,7 @@
                     </div>
                 </div>
             </form>
+        
         </div>
         <div class="alert alert-danger error_msg text-center" style="display: none"></div>
 
@@ -188,10 +189,53 @@
         let arr = Array.from(Array(100).keys(), n => n + 1);
         let DiscountPercentage = 0;
         let final_fee = 0;
+
         set_patient();
+        make_receipt();
+
         function set_patient() {
             DiscountPercentage = Number($('#patient_id option:selected').attr('discount'))
             updateFee()
+        }
+        
+
+        function make_receipt(){
+
+            $( ".save_btn" ).click(function() {
+                let Receipt_styles = "<style>"
+                Receipt_styles+=".receipt_con{font-family: Arial; width:300px; padding: 10px; background-color: #eee;}"
+                Receipt_styles+=".receipt_con h2{text-align: center;}"
+                Receipt_styles+=".receipt_con table{text-align: left; width: 100%}"
+                Receipt_styles+="</style>"
+
+                let d = Date.now();
+                d = new Date(d);
+                d = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+(d.getHours() > 12 ? d.getHours() - 12 : d.getHours())+':'+d.getMinutes()+' '+(d.getHours() >= 12 ? "PM" : "AM");
+
+                let Receipt_html = Receipt_styles+"<div class='receipt_con'><h2>Usama Laboratory</h2>";
+                Receipt_html+="<table><tr><td>Patient name</td><td>"+$('#patient_id option:selected').attr('patientName').trim()+"</td></tr>"
+                Receipt_html+="<tr><td>MR ID</td><td>"+$("#patient_id").val()+"</td></tr>"
+                Receipt_html+="<tr><td>Time</td><td>"+d+"</td></tr></table><br />"
+                Receipt_html+="<table><tr><th>Test</th><th>Fee</th></tr>"
+
+                $( ".parent" ).each(function() {
+                    Receipt_html=Receipt_html+"<tr><td>"+$( this ).find(".name").val()+"</td><td>Rs "+$( this ).find(".fees").val()+"</td></tr>";
+                });
+                Receipt_html+="<tr><td> </td><td> </td></tr>"
+
+                Receipt_html+="<tr><td> </td><td> </td></tr>"
+                let concessionVal = $(".concession").val();
+                if(Number(concessionVal) > 0){
+                    Receipt_html+="<tr><td>Discount</td><td>Rs "+Number(concessionVal)+"</td></tr>"
+                }
+                Receipt_html+="<tr><td><strong>Total</strong></td><td>Rs "+$(".finalfee").html()+"</td></tr>"
+                Receipt_html+="</table>";
+                Receipt_html+="</div>";
+                console.log(Receipt_html);
+                var newWin = open('','Print Receipt','width=300');
+                newWin.document.write(Receipt_html);
+                newWin.print()
+            });
         }
 
         // upon selecting test
@@ -261,7 +305,7 @@
 
                 '<div class="ele' + random_num + ' parent">' +
                 '<input value="' + name_value + '" name="available_test_ids[]" style="display:none"  >' + '</input><br/>' +
-                '<p>Test Name </p>' + '<input readonly   value="' + text + '" class="name  form-control">' + '</input>' +
+                '<p>Test Name </p>' + '<input readonly   value="' + text + '" class="name form-control">' + '</input>' +
 
                 '<p>Test Type</p>' + '<input readonly class="type form-control" name="types[]" value="' + type + '">' + '</input>' +
                 '<p>Test Fee </p>' + '<input readonly class="fees form-control" name="fees[]" id="fees_id' + random_num + '" value="' + fee + '">' + '</input>' +
@@ -312,7 +356,7 @@
             } else if (final_fee <= concessionVal) {
                 $(".total_price").html("Concession should be less than total fee");
             } else {
-                $(".total_price").html("Total price: Rs " + (final_fee - concessionVal));
+                $(".total_price").html("Total price: Rs <span class='finalfee'>" + (final_fee - concessionVal) + "</span>");
             }
         }
 
@@ -324,7 +368,7 @@
             } else if (final_fee <= concessionVal) {
                 $(".total_price").html("Concession should be less than total fee");
             } else {
-                $(".total_price").html("Total price: Rs " + (final_fee - concessionVal));
+                $(".total_price").html("Total price: Rs <span class='finalfee'>" + (final_fee - concessionVal) + "</span>");
             }
         }
 

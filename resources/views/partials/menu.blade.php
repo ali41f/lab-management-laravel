@@ -12,13 +12,13 @@
             <li class="nav-item">
                 <a href="{{ route("tests-performed") }}" class="nav-link">
                  <span class="nav-icon"><i class="fas fa-file-medical-alt"></i></span>
-                    <strong>Tests Performed</strong>
+                    <strong>Reception</strong>
                 </a>
                 <a style="margin-left:15px" href="{{ route("create") }}" class="nav-link">
-                    - Perform New Test
+                    <i class="fa fa-circle" aria-hidden="true"></i> New Test
                 </a>
                 <a style="margin-left:15px" href="{{ route("tests-performed") }}" class="nav-link">
-                    - List of Tests
+                    <i class="fa fa-circle" aria-hidden="true"></i> List of Tests
                 </a>
             </li>
             @if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
