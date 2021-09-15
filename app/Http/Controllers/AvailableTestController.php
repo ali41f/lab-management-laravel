@@ -192,7 +192,7 @@ class AvailableTestController extends Controller
                     continue;
                 }
                 else{
-                    $data_report_items[] = new TestReportItem([
+                     $data_report_items[] = new TestReportItem([
                         "title" => $value,
                         'item_index' => $request->order[$key],
                         "table_num"=>1,

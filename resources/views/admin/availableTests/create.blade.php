@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
     <style>
         hr {
             border-top: 1px solid rgb(47 53 58);
@@ -78,13 +78,13 @@
                     <div class="col-md-3 mb-3">
                         <label for="timehour">Standard Completed time</label>
                         <div class="input-group">
-                            <input type="text" name="stander_timehour" class="form-control" id="duration">
+                            <input type="text" name="stander_timehour" class="form-control" id="duration"required>
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="urgent_timehour">Urgent Completed time</label>
                         <div class="input-group">
-                            <input type="text" name="urgent_timehour" class="form-control" id="duration2">
+                            <input type="text" name="urgent_timehour" class="form-control" id="duration2"required>
                         </div>
                     </div>
                     {{--type--}}
@@ -99,10 +99,7 @@
                             <input id="editor" class="form-check-input" type="radio" name="type" value="2" onchange="change_type(this);">
                             <label class="form-check-label" for="editor">Editor</label>
                         </div>
-                        <div class="form-check form-check-inline my-1" style="display:none;">
-                            <input id="coagulation" class="form-check-input" type="radio" name="type" value="3" onchange="change_type(this);">
-                            <label class="form-check-label" for="coagulation">Coagulation</label>
-                        </div>
+
                         <div class="form-check form-check-inline my-1">
                             <input id="widal" class="form-check-input" type="radio" name="type" value="4" onchange="change_type(this);">
                             <label class="form-check-label text-capitalize" for="widal">Widal</label>
@@ -123,13 +120,13 @@
 
                                 <div class="col-md-4 mb-3">
                                     <label for="">Order</label>
-                                    <input class="form-control {{ $errors->has('order') ? 'is-invalid' : '' }}" type="number" step="1" min="1" name="order[]" value="1">
+                                    <input class="form-control {{ $errors->has('order') ? 'is-invalid' : '' }}" type="number" step="1" min="1" name="order[]" value="1"required>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
                                     <div class="form-group">
                                         <label class="">Title</label>
-                                        <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title[]" value="{{ old('title[]', '') }}">
+                                        <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title[]" value="{{ old('title[]', '') }}"required>
                                         @if($errors->has('title'))
                                             <div class="invalid-feedback">
                                                 {{ $errors->first('title') }}
@@ -142,18 +139,9 @@
                                     </div>
                                 </div>
 
-                            <!-- <div class="col-md-4 mb-3">
-                                <label for="validationCustom03">First Normal Range</label>
-                                <input class="form-control {{ $errors->has('initialNormalValue') ? 'is-invalid' : '' }}" type="number" name="initialNormalValue[]" id="initialNormalValue" value="{{ old('initialNormalValue[]', '') }}" step="1" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="validationCustom04">Final Normal Range</label>
-                                <input class="form-control {{ $errors->has('finalNormalValue') ? 'is-invalid' : '' }}" type="number" name="finalNormalValue[]" id="finalNormalValue" value="{{ old('finalNormalValue[]', '') }}" step="1" required>
-                            </div> -->
-
                                 <div class="col-md-4 mb-3">
                                     <label>Test Unit</label>
-                                    <input class="form-control {{ $errors->has('units') ? 'is-invalid' : '' }}" type="text" name="units[]" value="{{ old('units[]', '') }}">
+                                    <input class="form-control {{ $errors->has('units') ? 'is-invalid' : '' }}" type="text" name="units[]" value="{{ old('units[]', '') }}"required>
                                 </div>
 
                                 <div class="col-md-2 mb-3">
@@ -223,13 +211,13 @@
 
                     <div class="col-md-4 mb-3">
                         <label for="">Order</label>
-                        <input class="form-control {{ $errors->has('order') ? 'is-invalid' : '' }}" type="number" step="1" min="1" name="order2[]" value="1">
+                        <input class="form-control {{ $errors->has('order') ? 'is-invalid' : '' }}" type="number" step="1" min="1" name="order2[]" value="1"required>
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <div class="form-group">
                             <label class="">Title</label>
-                            <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title2[]" value="{{ old('title2[]', '') }}">
+                            <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title2[]" value="{{ old('title2[]', '') }}"required>
                             @if($errors->has('title'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('title') }}
@@ -242,27 +230,19 @@
                         </div>
                     </div>
 
-                <!-- <div class="col-md-4 mb-3">
-                                <label for="validationCustom03">First Normal Range</label>
-                                <input class="form-control {{ $errors->has('initialNormalValue') ? 'is-invalid' : '' }}" type="number" name="initialNormalValue2[]" id="initialNormalValue" value="{{ old('initialNormalValue2[]', '') }}" step="1" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="validationCustom04">Final Normal Range</label>
-                                <input class="form-control {{ $errors->has('finalNormalValue') ? 'is-invalid' : '' }}" type="number" name="finalNormalValue2[]" id="finalNormalValue" value="{{ old('finalNormalValue2[]', '') }}" step="1" required>
-                            </div> -->
 
                     <div class="col-md-4 mb-3">
                         <label>Test Unit</label>
-                        <input class="form-control {{ $errors->has('units') ? 'is-invalid' : '' }}" type="text" name="units2[]" value="{{ old('units2[]', '') }}">
+                        <input class="form-control {{ $errors->has('units') ? 'is-invalid' : '' }}" type="text" name="units2[]" value="{{ old('units2[]', '') }}"required>
                     </div>
 
                     <div class="col-md-2 mb-3">
                         <label>First Critical Value</label>
-                        <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue2[]" value="{{ old('firstCriticalValue2[]', '') }}" step="1">
+                        <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue2[]" value="{{ old('firstCriticalValue2[]', '') }}" step="1"required>
                     </div>
                     <div class="col-md-2 mb-3">
                         <label>Final Critical Value</label>
-                        <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue2[]" value="{{ old('finalCriticalValue2[]', '') }}" step="1">
+                        <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue2[]" value="{{ old('finalCriticalValue2[]', '') }}" step="1"required>
                     </div>
                     <div class="col-md-12 mb-0">
                         <div class="form-group">

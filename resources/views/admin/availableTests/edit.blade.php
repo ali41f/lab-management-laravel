@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
     <style>
         hr {
             border-top: 1px solid rgb(47 53 58);
@@ -124,10 +124,7 @@
                             <input id="editor" class="form-check-input" type="radio" disabled name="type" value="2" {{$availableTest->type==2 ? "checked":""}}>
                             <label class="form-check-label" for="editor">Editor</label>
                         </div>
-                        <div class="form-check form-check-inline my-1">
-                            <input id="coagulation" class="form-check-input" type="radio" disabled name="type" value="3" {{$availableTest->type==3 ? "checked":""}}>
-                            <label class="form-check-label text-capitalize" for="coagulation">coagulation</label>
-                        </div>
+
                         <div class="form-check form-check-inline my-1">
                             <input id="widal" class="form-check-input" type="radio" disabled name="type" value="4" {{$availableTest->type==4 ? "checked":""}}>
                             <label class="form-check-label text-capitalize" for="widal">Widal</label>

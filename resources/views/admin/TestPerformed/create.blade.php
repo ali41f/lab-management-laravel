@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 @section('content')
-    <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
     <style>
         hr {
             border-top: 1px solid rgb(47 53 58);
