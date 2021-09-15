@@ -15,10 +15,10 @@
                     <strong>Reception</strong>
                 </a>
                 <a style="margin-left:15px" href="{{ route("create") }}" class="nav-link">
-                    <i class="fa fa-circle" aria-hidden="true"></i> New Test
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> New Test
                 </a>
                 <a style="margin-left:15px" href="{{ route("tests-performed") }}" class="nav-link">
-                    <i class="fa fa-circle" aria-hidden="true"></i> List of Tests
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> All Tests
                 </a>
             </li>
             @if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
@@ -29,13 +29,13 @@
                     <strong>Available Tests</strong>
                 </a>
                 <a style="margin-left:15px" href="{{ route("available-test-create") }}" class="nav-link">                 
-                    - Add New Test
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> Add New Test
                 </a>
                 <a style="margin-left:15px" href="{{ route("available-tests") }}" class="nav-link">
-                    - List Of Available Tests
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> All Available Tests
                 </a>
                 <a style="margin-left:15px" href="{{ route("category") }}" class="nav-link">                   
-                    - Test Categories
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> Test Categories
                 </a>
                 <a type="hidden" style="" href="{{ route("catagory-list") }}" class="">                   
                     
@@ -48,13 +48,13 @@
                     <strong>Patients</strong>
                 </a>
                 <a style="margin-left:15px" href="{{ route("patient-create") }}" class="nav-link">
-                    - Add New Patient
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> New Patient
                 </a>
                 <a style="margin-left:15px" href="{{ route("patient-list") }}" class="nav-link"> 
-                    - List of patients
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> All patients
                 </a>
                 <a style="margin-left:15px" href="{{ route("patient-category") }}" class="nav-link">                
-                    - Patient Categories
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> Patient Categories
                 </a>
             </li>
             @if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
@@ -65,10 +65,10 @@
                     <strong> Inventory</strong>
                 </a>
                 <a style="margin-left:15px" href="{{ route("inventory-create") }}" class="nav-link">
-                    - Add new Item
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> Add new Item
                 </a>
                 <a style="margin-left:15px" href="{{ route("inventory-list") }}" class="nav-link"> 
-                    - List of products
+                    <i class="fa fa-circle-thin" aria-hidden="true"></i> All Items
                 </a>
             </li>
             @endif

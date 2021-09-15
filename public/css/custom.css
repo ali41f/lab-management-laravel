@@ -2,6 +2,9 @@
 textarea {
     min-height: 60px;
 }
+.nav-link i{
+    margin-right: 3px;
+}
 
 .datatable {
     width: 100% !important;
