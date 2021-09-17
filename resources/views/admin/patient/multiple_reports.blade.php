@@ -10,10 +10,14 @@
     @php $previous_category_id="";
     $i = 0;
     $iteration = 0;
+    $verified = true;
     @endphp
     <div id="canvas_div_pdf">
     @foreach($tests as $testPerformedsId)
         @php
+            if($testPerformedsId->status != "verified"){
+                $verified = false;
+            }
             $i = $testPerformedsId->resultValueCount + $i;
             $nextpage = ($testPerformedsId->category_id!=$previous_category_id && $previous_category_id!='' || $i > 6)
         @endphp
@@ -36,10 +40,11 @@
     @endforeach
     </div>
 
+    @if($verified)
     <div style="background: white" class="col-md-12 mb-12 noprint text-center py-3">
         <button class="btn btn-primary" onclick="window.print()">Print Report</button>
     </div>
-
+    @endif
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 
     <script>
