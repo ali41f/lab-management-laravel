@@ -32,12 +32,6 @@
                             Patient Name
                             </th>
                             <th>
-                            Test Fee
-                            </th>
-                            <th>
-                            Type
-                            </th>
-                            <th>
                             Specimen
                             </th>
                             <th>
@@ -71,13 +65,6 @@
                                 </td>
                                 <td>
                                 {{ $testPerformed->Pname }}
-                                </td>
-                                <td>
-                                {{ $testPerformed->fee }}
-
-                                </td>
-                                <td class="text-capitalize">
-                                    {{ $testPerformed->type }}
                                 </td>
                                 <td>
                                     {{ $testPerformed->specimen }}
