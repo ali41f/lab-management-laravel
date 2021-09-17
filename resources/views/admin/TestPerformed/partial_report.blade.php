@@ -12,6 +12,13 @@
         -webkit-print-color-adjust: exact;
     }
 
+    .table td {
+        padding: .75rem;
+        vertical-align: top;
+        border-top: 1px solid #c8ced3;
+        border-bottom: 1px solid #c8ced3;
+    }
+
     thead th:first-child {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
@@ -46,7 +53,7 @@
         <div class="table-responsive dont-break-inside">
 
             @if($testPerformedsId->availableTest->type==1 || $testPerformedsId->availableTest->type==5)
-                <table class="table table-borderless">
+                <table class="table">
                     <thead>
                     <tr>
                         <th>Test</th>
@@ -61,7 +68,7 @@
                         <th>REFERENCE RANGE</th>
                     </tr>
                     </thead>
-                    {{--                    @dd($testPerformedsId->testReport)--}}
+                   
                     <tbody>
                     @foreach($testPerformedsId->testReport->where("table_num",1)->sortBy("order") as $testReport)
                         <tr>
@@ -227,14 +234,12 @@
                         </tr>
                     </table>
                 </div>
-                <div class="col-12 mt-2">
-                    <p class="text-capitalize"><b>Result : </b> {{(isset($testPerformedsId->widal) && $testPerformedsId->widal->where("type", "widal_result")->first()) ? $testPerformedsId->widal->where("type", "widal_result")->first()->value : ""}}</p>
+                <div class="col-12 mt-3">
+                    <p class="text-capitalize" style="text-align: center;"><b>Result : </b> {{(isset($testPerformedsId->widal) && $testPerformedsId->widal->where("type", "widal_result")->first()) ? $testPerformedsId->widal->where("type", "widal_result")->first()->value : ""}}</p>
                 </div>
             @endif
             @if($testPerformedsId->comments != '')
-                <hr>
-                <div class="col-md-9"><h4> </h4></div>
-                <div class="col-md-9"><h6>{{ $testPerformedsId->comments }}</h6></div>
+                <div class="col-md-12 mt-4"><h6 style="text-align: center;">{{ $testPerformedsId->comments }}</h6></div>
             @endif
 
         </div>

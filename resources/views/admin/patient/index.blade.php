@@ -70,11 +70,13 @@
                                     <a class="btn btn-xs btn-info" href="{{ route('patient-edit', $patient->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
+                                    @if(Auth::user()->role != 'receptionist')
                                     <form  method="POST" action="{{ route("patient-delete", [$patient->id]) }}" onsubmit="return confirm('{{ trans('Are You Sure to Deleted  ?') }}');"  style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

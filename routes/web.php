@@ -21,9 +21,13 @@ Route::get('/', function () {
 
 //Route::get("/testsms1",[Controllers\HomeController::class,'test_sms'])->name('test_sms');
 
-Auth::routes();
+//Auth::routes();
+Auth::routes([
+    "register" => false
+]);
 Route::get('registerinlab', [Controllers\Auth\RegisterController::class,'showRegistrationForm'])->name('register');
 Route::post('registerinlab', [Controllers\Auth\RegisterController::class,'register']);
+
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', [Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/select', [Controllers\HomeController::class, 'postShow'])->name('select');

@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
 
-class InventoryMiddleware
+class TechnicianMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,7 +16,7 @@ class InventoryMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager' || Auth::user()->role == 'technician'){
+        if(auth::check() && Auth::user()->role == 'technician'){
             return $next($request);
          }
          else {

@@ -25,20 +25,9 @@
                 @csrf
                 <div class="form-row">
 
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label class="required" for="patient_id">Select Patient Name</label>
-                            <select class="form-control" name="patient_id" id="patient_id" required>
-                                @foreach($patientNames as $id => $patientName)
-                                    <option value="{{ $id }}" {{ $performed->patient_id == $id ? 'selected' : '' }}>{{ $patientName }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('patient_id '))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('patient_id ') }}
-                                </div>
-                            @endif
-                            <span class="help-block"></span>
+                            <strong>Patient: </strong>{{$performed->patient->Pname}} ({{$performed->patient->id}})
                         </div>
                         <div class="valid-feedback">
                             Looks good!
@@ -47,12 +36,12 @@
                 </div>
 
                 <hr/>
-
+               
                 <div class="form-row">
                     <div class="col-md-3 mb-3">
                         <div class="form-group">
-                            <label class="required" for="available_test_id">Select Name</label>
-                            <select onchange="set_test_form()" class="form-control" name="available_test_id" id="available_test_id" required>
+                            <label for="available_test_id"><h4>{{$performed->availableTest->name}}</h4></label>
+                            <select onchange="set_test_form()" class="form-control d-none" name="available_test_id" id="available_test_id" required>
                                 @foreach($getNameFromAvailbles as $id => $getNameFromAvailble)
                                     <option value="{{ $id }}" {{ $performed->available_test_id   == $id ? 'selected' : '' }}>{{ $getNameFromAvailble }}</option>
                                 @endforeach
@@ -72,9 +61,16 @@
                         <div class="form-group">
                             <label class="required" for="status ">Select Status</label>
                             <select class="form-control" name="status" id="status" required>
-                                    <option value="process">In Process</option>
-                                    <option value="verified">Verified</option>
-                                    <option value="cancelled">Cancelled</option>
+                                
+                                @if($performed->status  == 'verified' && Auth::user()->role == 'technician')
+                                    <option selected value="verified">Verified</option>
+                                @else
+                                    <option {{$performed->status == "process" ? "selected" : "" }} value="process">In Process</option>
+                                    <option {{$performed->status == "verified" ? "selected" : "" }} value="verified">Verified</option>
+                                    <option {{$performed->status == "cancelled" ? "selected" : "" }} value="cancelled">Cancelled</option>
+                                @endif
+                                
+                                    
                             </select>
                             @if($errors->has('status'))
                                 <div class="invalid-feedback">
@@ -85,7 +81,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-3 mb-3 d-none">
                         <div class="form-group">
                             <p class="required">Test Type</p>
                             <label for="urgent">Urgent</label>
@@ -100,7 +96,6 @@
 
                         @foreach($allAvailableTests as $test)
                             <div class="form-row col-md-12" id="test{{$test->id}}" class="tests">
-                                <div class="col-12"><h4 class="text-capitalize">{{$test->name}}</h4></div>
                                 
                                 @if($test->type==1)
 

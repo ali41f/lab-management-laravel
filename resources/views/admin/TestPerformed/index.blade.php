@@ -114,18 +114,19 @@
                                     <a class="btn btn-xs btn-primary" href="{{ route('test-performed-table', $testPerformed->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
-                                    @if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
+                                    @if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager' || Auth::user()->role == 'technician')
 
                                     <a class="btn btn-xs btn-info" href="{{ route('test-performed-edit', $testPerformed->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
                                     @endif
-
+                                    @if(Auth::user()->role != 'receptionist')
                                     <form  method="POST" action="{{ route("performed-test-delete", [$testPerformed->id]) }}" onsubmit="return confirm('{{ trans('global.areYouSure') }}');"  style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
+                                    @endif
                                 </td>
 
                             </tr>

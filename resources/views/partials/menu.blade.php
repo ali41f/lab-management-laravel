@@ -41,7 +41,7 @@
                     
                 </a>
             </li>
-    @endif
+            @endif
             <li class="nav-item">
                 <a href="{{ route('patient-list') }}" class="nav-link">
                  <span class="nav-icon mr-1"><i class="fas fa-procedures" style='font-size:16px;margin-right:5px;'></i></span>                 
@@ -57,7 +57,7 @@
                     <i class="fa fa-circle-thin" aria-hidden="true"></i> Patient Categories
                 </a>
             </li>
-            @if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
+            @if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager' || Auth::user()->role == 'technician')
 
             <li class="nav-item">
                 <a href="{{ route('inventory-list') }}" class="nav-link">

@@ -156,7 +156,7 @@
 
                         <div class="total_price col-12"></div>
                         <div class="discountText col-12"></div>
-
+                        <div class="d-none username">{{Auth::user()->name}}</div>
 
                     </div>
 
@@ -189,6 +189,7 @@
         let arr = Array.from(Array(100).keys(), n => n + 1);
         let DiscountPercentage = 0;
         let final_fee = 0;
+        let username = $(".username").text();
 
         set_patient();
         make_receipt();
@@ -203,19 +204,22 @@
 
             $( ".save_btn" ).click(function() {
                 let Receipt_styles = "<style>"
-                Receipt_styles+=".receipt_con{font-family: Arial; width:300px; padding: 10px; background-color: #eee;}"
-                Receipt_styles+=".receipt_con h2{text-align: center;}"
+                Receipt_styles+=".receipt_con{font-family: Arial; width:300px; margin: 0 auto; border-radius: 5px; margin-bottom: 10px; border: 1px solid black; padding: 20px;}"
+                Receipt_styles+=".receipt_con h2{text-align: center; margin-top:0;}"
                 Receipt_styles+=".receipt_con table{text-align: left; width: 100%}"
                 Receipt_styles+="</style>"
 
                 let d = Date.now();
                 d = new Date(d);
-                d = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()+' '+(d.getHours() > 12 ? d.getHours() - 12 : d.getHours())+':'+d.getMinutes()+' '+(d.getHours() >= 12 ? "PM" : "AM");
+                let date = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+                let t = (d.getHours() > 12 ? d.getHours() - 12 : d.getHours())+':'+d.getMinutes()+' '+(d.getHours() >= 12 ? "PM" : "AM");
 
                 let Receipt_html = Receipt_styles+"<div class='receipt_con'><h2>Usama Laboratory</h2>";
-                Receipt_html+="<table><tr><td>Patient name</td><td>"+$('#patient_id option:selected').attr('patientName').trim()+"</td></tr>"
+                Receipt_html+="<table class='table'><tr><td>Patient's name</td><td>"+$('#patient_id option:selected').attr('patientName').trim()+"</td></tr>"
                 Receipt_html+="<tr><td>MR ID</td><td>"+$("#patient_id").val()+"</td></tr>"
-                Receipt_html+="<tr><td>Time</td><td>"+d+"</td></tr></table><br />"
+                Receipt_html+="<tr><td>Date</td><td>"+date+"</td></tr>"
+                Receipt_html+="<tr><td>Time</td><td>"+t+"</td></tr>"
+                Receipt_html+="<tr><td>Lab attendant</td><td>"+username+"</td></tr></table><hr />"
                 Receipt_html+="<table><tr><th>Test</th><th>Fee</th></tr>"
 
                 $( ".parent" ).each(function() {

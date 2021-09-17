@@ -32,6 +32,7 @@
                                 <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
                                     <option value="admin">Admin</option>
                                     <option value="manager">Manager</option>
+                                    <option value="technician">Technician</option>
                                     <option value="receptionist">Receptionist</option>
                                 </select>
 

@@ -20,11 +20,11 @@
 }
 </style>
 <div class="card-body">
-    <div class="card-body">
+    
         <div class="row dont-break-inside">
             <div class="offset-0 col-md-6" style="display: flex; align-items: center;">
-                <img style="width: 7rem;" class="" src="{{ asset('images/logo_print.jpg') }}"/>
-                <span style="justify-content: center; display: flex;  flex-direction: column; padding-left: 15px;">
+                <img style="width: 7rem;" class="d-none" src="{{ asset('images/logo_print.jpg') }}"/>
+                <span class="d-none" style="justify-content: center; display: flex;  flex-direction: column; padding-left: 15px;">
                     <!-- <div style="margin-bottom: 4px; color: #283583;" class="fas  fa-3x" >اسامہ لیبارٹری</div> -->
                     <div style="font-size:24px; margin-top:4px; line-height: 1.9rem; font-weight: bold">
                         <span style=" font-size:35px;">Usama</span> PCR and<br /> Clinical Laboratory
@@ -78,5 +78,5 @@
                 </div> 
             </div>
         </div>
-    </div>
+    
 </div>

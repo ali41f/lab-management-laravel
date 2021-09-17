@@ -145,7 +145,8 @@ class TestsPerformedController extends Controller
 
     public function edit($id)
     {
-        $performed = TestPerformed::findOrFail($id);
+        $performed = TestPerformed::with('AvailableTest')->get()->find($id);
+        //dd($performed);
         $getNameFromAvailbles = AvailableTest::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
         $patientNames = Patient::all()->pluck('Pname', 'id')->prepend(trans('global.pleaseSelect'), '');
         $allAvailableTests = AvailableTest::all();
@@ -158,20 +159,12 @@ class TestsPerformedController extends Controller
         //        dd($request->all());
         $test_performed = TestPerformed::findOrFail($id);
         $available_test = AvailableTest::findorfail($request->available_test_id);
-        $patient = Patient::findorfail($request->patient_id);
-        if (!$patient || !$available_test || !$test_performed)
+        //$patient = Patient::findorfail($request->patient_id);
+        if ( !$available_test || !$test_performed)
             return abort(503, "Invalid Request");
-        //fee
-        $fee = $request->type == "urgent" ? $available_test->urgentFee : $available_test->testFee;
-        if ($patient->category && $patient->category->discount)
-            $fee = $fee - ($fee * $patient->category->discount / 100);
         //        store
         $test_performed->update([
-            'available_test_id' => $request->available_test_id,
-            'patient_id' => $request->patient_id,
             'status' => $request->status,
-            'type' => $request->type,
-            "fee" => $fee,
             "comments" => $request->comments,
         ]);
 
