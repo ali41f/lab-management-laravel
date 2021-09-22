@@ -42,7 +42,7 @@
                             Looks good!
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-2 mb-3">
                         <div class="form-group">
                             <label class="" for="testCode">Test Code</label>
                             <input class="form-control {{ $errors->has('testCode') ? 'is-invalid' : '' }}" type="text" name="testCode" id="testCode" value="{{ old('testCode', '') }}" required>
@@ -75,20 +75,20 @@
                             <input class="form-control {{ $errors->has('urgentFee') ? 'is-invalid' : '' }}" type="number" name="urgentFee" id="urgentFee" value="{{ old('urgentFee', '') }}" step="1" required>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="timehour">Standard Completed time</label>
                         <div class="input-group">
                             <input type="text" name="stander_timehour" class="form-control" id="duration"required>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="urgent_timehour">Urgent Completed time</label>
                         <div class="input-group">
                             <input type="text" name="urgent_timehour" class="form-control" id="duration2"required>
                         </div>
                     </div>
                     {{--type--}}
-                    <div class="col-md-6 mb-6">
+                    <div class="col-md-4 mb-6">
                         <label for="">Test Type</label>
                         <br>
                         <div class="form-check form-check-inline my-1">
@@ -154,8 +154,8 @@
                                 </div>
                                 <div class="col-md-12 mb-0">
                                     <div class="form-group">
-                                        <label>Normal Range</label>
-                                        <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange[]" rows="0" placeholder="Enter Normal Range of Test As This Format 60-120"></textarea>
+                                        <label>Reference Range</label>
+                                        <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange[]" rows="0" placeholder="Enter Reference Range of Test As This Format 60-120"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -187,8 +187,7 @@
                                 <label>Quantity</label>
                                 <input class="form-control {{ $errors->has('inventory_quantity') ? 'is-invalid' : '' }}" type="number" name="inventory_quantity[]" value="" step="1">
                             </div>
-                            <hr class="hr1">
-
+                            <hr style="border: 1px dotted #333" />
                         </div>
                     </div>
 
@@ -197,7 +196,7 @@
                         <button type="button" onclick="remove_inventory()" class="btn btn-xs btn-danger">Remove Inventory</button>
                     </div>
                 </div>
-
+                <hr />
                 <button class="btn btn-primary" type="submit">Submit</button>
             </form>
         </div>
@@ -246,8 +245,8 @@
                     </div>
                     <div class="col-md-12 mb-0">
                         <div class="form-group">
-                            <label>Normal Range</label>
-                            <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange2[]" rows="0" placeholder="Enter Normal Range of Test As This Format 60-120"></textarea>
+                            <label>Reference Range</label>
+                            <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange2[]" rows="0" placeholder="Enter Reference Range of Test As This Format 60-120"></textarea>
                         </div>
                     </div>
                     <div class="col-md-12">

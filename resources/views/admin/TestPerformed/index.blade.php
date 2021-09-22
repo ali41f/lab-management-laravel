@@ -20,22 +20,22 @@
                             <th width="10">
                             </th>
                             <th>
-                            Id
+                            Test ID
                             </th>
                             <th>
-                            Test Catagory
+                            Catagory
                             </th>
                             <th>
                             Test Name
                             </th>
                             <th>
-                            Patient Name
+                            Patient (MR ID)
                             </th>
                             <th>
                             Specimen
                             </th>
                             <th>
-                            Referred By
+                            Ref By
                             </th>
                             <th>
                             Test Created
@@ -64,7 +64,7 @@
                                 {{ $testPerformed->name }}
                                 </td>
                                 <td>
-                                {{ $testPerformed->Pname }}
+                                {{ $testPerformed->Pname }} ({{ $testPerformed->patient->id }})
                                 </td>
                                 <td>
                                     {{ $testPerformed->specimen }}
@@ -145,9 +145,15 @@
             $('#performedTable thead tr').clone(true).appendTo( '#performedTable thead' );
 
             $('#performedTable thead tr:eq(1) th').each( function (i) {
-                if(i==1 || i==2 || i==3 || i==4){
+                if( i==2 || i==3 || i==4|| i==5){
                     var title = $(this).text();
-                    $(this).html( '<input type="text" style="width:100%;" placeholder="Search" />' );
+                    if(i==5){
+                        $(this).html( '<input type="text" style="width:90px;" placeholder="Search" />' );
+                    }else if(i==2){
+                        $(this).html( '<input type="text" style="width:100px;" placeholder="Search" />' );
+                    }else{
+                        $(this).html( '<input type="text" style="width:100%;" placeholder="Search" />' );
+                    }
                     $( 'input', this ).on( 'keyup change', function () {
                         if ( table.column(i).search() !== this.value ) {
                             table.column(i).search( this.value ).draw();

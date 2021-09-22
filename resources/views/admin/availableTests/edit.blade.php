@@ -73,19 +73,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3 mb-3">
-                        <label for="timehour">Standard Completion time</label>
-                        <div class="input-group">
-                            <input type="text" name="stander_timehour" class="form-control" id="duration" value="{{ old('testFee', $availableTest->stander_timehour) }}">
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label for="urgent_timehour">Urgent Completion time</label>
-                        <div class="input-group">
-                            <input type="text" name="urgent_timehour" class="form-control" id="duration2" value="{{ old('testFee', $availableTest->urgent_timehour) }}">
-                        </div>
-                    </div>
+                    
 
                     <div class="col-md-2 mb-3">
                         <div class="form-group">
@@ -112,8 +100,22 @@
                             <span class="help-block"></span>
                         </div>
                     </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="timehour">Standard Completion time</label>
+                        <div class="input-group">
+                            <input type="text" name="stander_timehour" class="form-control" id="duration" value="{{ old('testFee', $availableTest->stander_timehour) }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="urgent_timehour">Urgent Completion time</label>
+                        <div class="input-group">
+                            <input type="text" name="urgent_timehour" class="form-control" id="duration2" value="{{ old('testFee', $availableTest->urgent_timehour) }}">
+                        </div>
+                    </div>
                     {{--type--}}
-                    <div class="col-md-5 mb-5">
+                    <div class="col-md-4 mb-5">
                         <label for="">Test Type</label>
                         <br>
                         <div class="form-check form-check-inline my-1">
@@ -218,7 +220,7 @@
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <div class="form-group">
-                                                <label>Normal Range</label>
+                                                <label>Reference Range</label>
                                                 <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange[]">{{ $TestReportItem->normalRange }}</textarea>
                                                 @if($errors->has('normalRange'))
                                                     <div class="invalid-feedback">
@@ -313,7 +315,7 @@
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <div class="form-group">
-                                                <label>Normal Range</label>
+                                                <label>Reference Range</label>
                                                 <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange[]"></textarea>
                                                 @if($errors->has('normalRange'))
                                                     <div class="invalid-feedback">
@@ -417,7 +419,7 @@
                                             </div>
                                             <div class="col-md-12 mb-3">
                                                 <div class="form-group">
-                                                    <label>Normal Range</label>
+                                                    <label>Reference Range</label>
                                                     <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange2[]">{{ $TestReportItem->normalRange }}</textarea>
                                                     @if($errors->has('normalRange'))
                                                         <div class="invalid-feedback">
@@ -512,7 +514,7 @@
                                             </div>
                                             <div class="col-md-12 mb-3">
                                                 <div class="form-group">
-                                                    <label>Normal Range</label>
+                                                    <label>Reference Range</label>
                                                     <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange2[]"></textarea>
                                                     @if($errors->has('normalRange'))
                                                         <div class="invalid-feedback">
@@ -655,7 +657,7 @@
 
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label>Normal Range</label>
+                            <label>Reference Range</label>
                             <textarea class="form-control ckeditor" name="normalRange2[]"></textarea>
                         </div>
                     </div>
@@ -705,7 +707,7 @@
 
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label>Normal Range</label>
+                            <label>Reference Range</label>
                             <textarea class="form-control ckeditor" name="normalRange[]"></textarea>
                         </div>
                     </div>

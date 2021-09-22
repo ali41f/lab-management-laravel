@@ -48,7 +48,7 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col">
-                        <b><label>Normal Range</label></b>
+                        <b><label>Reference Range</label></b>
                         <p>@php echo $TestReportItem->normalRange @endphp</p>
                     </div>
                     <div class="col">

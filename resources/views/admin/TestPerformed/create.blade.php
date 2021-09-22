@@ -72,7 +72,7 @@
                             <label class="required" for="patient_id">Select Patient Name</label>
                             <select onchange="set_patient()" data-placeholder="Select Patient" class="form-control select2 {{ $errors->has('patients') ? 'is-invalid' : '' }}" name="patient_id" id="patient_id" required>
                                 @foreach($patientNames as $patientName)
-                                    <option patientName="{{$patientName->Pname}}" discount="{{ $patientName->category->discount }}" value="{{ $patientName->id }}">{{ $patientName->Pname }} ({{ $patientName->id }})</option>
+                                    <option patientName="{{$patientName->Pname}}" discount="{{ $patientName->category->discount }}" value="{{ $patientName->id }}">{{ $patientName->Pname }} ( {{ $patientName->id }} )</option>
                                 @endforeach
                             </select>
                             @if($errors->has('user'))
@@ -114,7 +114,7 @@
                                 <select class="form-control select2  {{ $errors->has('available_tests') ? 'is-invalid' : '' }}" onchange="set_test_form(this)" name="available_test_id[]" id="available_test_id">
                                 <option selected> Please select</option>
                                 @foreach($availableTests as   $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}({{ $item->testCode}})</option>
+                                    <option value="{{ $item->id }}">{{ $item->name }} ( {{ $item->testCode}} )</option>
                                 @endforeach
                                 </select>
                                 @if($errors->has('available_tests'))
@@ -205,7 +205,8 @@
             $( ".save_btn" ).click(function() {
                 let Receipt_styles = "<style>"
                 Receipt_styles+=".receipt_con{font-family: Arial; width:300px; margin: 0 auto; border-radius: 5px; margin-bottom: 10px; border: 1px solid black; padding: 20px;}"
-                Receipt_styles+=".receipt_con h2{text-align: center; margin-top:0;}"
+                Receipt_styles+=".receipt_con h3{text-align: center; margin-top:0;margin-bottom: 10px;}"
+                Receipt_styles+=".receipt_con p{text-align: center;}"
                 Receipt_styles+=".receipt_con table{text-align: left; width: 100%}"
                 Receipt_styles+="</style>"
 
@@ -214,14 +215,17 @@
                 let date = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
                 let t = (d.getHours() > 12 ? d.getHours() - 12 : d.getHours())+':'+d.getMinutes()+' '+(d.getHours() >= 12 ? "PM" : "AM");
 
-                let Receipt_html = Receipt_styles+"<div class='receipt_con'><h2>Usama Laboratory</h2>";
-                Receipt_html+="<table class='table'><tr><td>Patient's name</td><td>"+$('#patient_id option:selected').attr('patientName').trim()+"</td></tr>"
+                let Receipt_html = Receipt_styles+"<div class='receipt_con'><h3>Welcome to Usama Laboratory</h3>";
+                Receipt_html+="<p>Hospital Road, Rahim Yar Khan<br />Ph: 068-5889116<br />Receipt</p>";
+
+                Receipt_html+="<table class='table'>"
+                Receipt_html+="<tr><td>Patient's name</td><td>"+$('#patient_id option:selected').attr('patientName').trim()+"</td></tr>"
                 Receipt_html+="<tr><td>MR ID</td><td>"+$("#patient_id").val()+"</td></tr>"
                 Receipt_html+="<tr><td>Date</td><td>"+date+"</td></tr>"
                 Receipt_html+="<tr><td>Time</td><td>"+t+"</td></tr>"
                 Receipt_html+="<tr><td>Lab attendant</td><td>"+username+"</td></tr></table><hr />"
-                Receipt_html+="<table><tr><th>Test</th><th>Fee</th></tr>"
 
+                Receipt_html+="<table><tr><th>Test</th><th>Fee</th></tr>"
                 $( ".parent" ).each(function() {
                     Receipt_html=Receipt_html+"<tr><td>"+$( this ).find(".name").val()+"</td><td>Rs "+$( this ).find(".fees").val()+"</td></tr>";
                 });
@@ -234,8 +238,25 @@
                 }
                 Receipt_html+="<tr><td><strong>Total</strong></td><td>Rs "+$(".finalfee").html()+"</td></tr>"
                 Receipt_html+="</table>";
+
                 Receipt_html+="</div>";
-                console.log(Receipt_html);
+
+
+                Receipt_html+="<div class='receipt_con' style='page-break-before:always;'><h3>Lab slip</h3>";
+
+                Receipt_html+="<table class='table'>"
+                Receipt_html+="<tr><td>Patient's name</td><td>"+$('#patient_id option:selected').attr('patientName').trim()+"</td></tr>"
+                Receipt_html+="<tr><td>MR ID</td><td>"+$("#patient_id").val()+"</td></tr>"
+                Receipt_html+="<tr><td>Date</td><td>"+date+"</td></tr>"
+                Receipt_html+="<tr><td>Time</td><td>"+t+"</td></tr>"
+                Receipt_html+="<tr><th>Test</th><th>Fee</th></tr>"
+                $( ".parent" ).each(function() {
+                    Receipt_html=Receipt_html+"<tr><td>"+$( this ).find(".name").val()+"</td><td>Rs "+$( this ).find(".fees").val()+"</td></tr>";
+                });
+                Receipt_html+="</table>"
+
+                Receipt_html+="</div>";
+                //console.log(Receipt_html);
                 var newWin = open('','Print Receipt','width=300');
                 newWin.document.write(Receipt_html);
                 newWin.print()

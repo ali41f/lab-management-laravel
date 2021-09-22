@@ -28,7 +28,7 @@ class CreatePatientsTable extends Migration
             $table->string('gend');            
             $table->timestamps();
         });
-        DB::statement("ALTER TABLE patients AUTO_INCREMENT = 351759;");
+        //DB::statement("ALTER TABLE patients AUTO_INCREMENT = 351759;");
     }
 
     /**

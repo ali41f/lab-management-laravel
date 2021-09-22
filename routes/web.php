@@ -25,8 +25,8 @@ Route::get('/', function () {
 Auth::routes([
     "register" => false
 ]);
-Route::get('registerinlab', [Controllers\Auth\RegisterController::class,'showRegistrationForm'])->name('register');
-Route::post('registerinlab', [Controllers\Auth\RegisterController::class,'register']);
+Route::get('registerlabme', [Controllers\Auth\RegisterController::class,'showRegistrationForm'])->name('register');
+Route::post('registerlabme', [Controllers\Auth\RegisterController::class,'register']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', [Controllers\HomeController::class, 'index'])->name('home');

@@ -20,13 +20,19 @@
     }
 
     thead th:first-child {
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
+        padding-left: 28px;
+    }
+
+    .table td:first-child {
+        padding-left: 28px;
     }
 
     thead th:last-child {
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
+        
+    }
+
+    .report_body{
+        font-size: 18px;
     }
 
     .pl-20 {
@@ -46,8 +52,8 @@
         font-weight: bold;
     }
 </style>
-<div class="card-body">
-    <div class="pl-20 testname text-capitalize"><h3>{{ $testPerformedsId->availableTest->name }}</h3></div>
+<div class="card-body report_body">
+    <div class="pl-20 testname text-capitalize"><h2>{{ $testPerformedsId->availableTest->name }}</h2></div>
 <!-- <div class="pl-20"><h4>{{ $testPerformedsId->availableTest->category->Cname  }}</h4></div> -->
     <div class="card-body">
         <div class="table-responsive dont-break-inside">
@@ -62,10 +68,10 @@
 
                         @php $x=1; @endphp
                         @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
-                            <th>History {{$x}}</th>
+                            <th>History ({{date('d-m-Y', strtotime($old_test->created_at))}})</th>
                             @php $x++; @endphp
                         @endforeach
-                        <th>REFERENCE RANGE</th>
+                        <th width="280">Reference Range</th>
                     </tr>
                     </thead>
                    
@@ -81,7 +87,7 @@
                                     {
                                         $xyz = '';
                                     }else{
-                                        $xyz = $old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first()->value . " (". date('d-m-Y', strtotime($old_test->created_at)) .")";
+                                        $xyz = $old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first()->value;
                                     }
                                 @endphp
                                 <td>{{ $xyz }}</td>
