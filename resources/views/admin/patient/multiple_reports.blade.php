@@ -19,20 +19,20 @@
                 $verified = false;
             }
             $i = $testPerformedsId->resultValueCount + $i;
-            $nextpage = ($testPerformedsId->category_id!=$previous_category_id && $previous_category_id!='' || $i > 6)
+            $nextpage = ($testPerformedsId->category_id!=$previous_category_id && $previous_category_id!='' || $i > 5)
         @endphp
         <div style="{{$nextpage ? 'page-break-before: always':''}}" class="card {{ $nextpage ? 'beforeClass' : '' }}">
 
         <!-- <div style="page-break-after: always;" class="card {{($testPerformedsId->category_id!=$previous_category_id && $previous_category_id!="") ? "page-break-before":""}}"> -->
 
-            @if($iteration == 0)
+            @if($iteration == 0 || $nextpage)
                 @include("admin.TestPerformed.partial_patient")
             @endif
             @include("admin.TestPerformed.partial_report")
         </div>
         @php
             if($nextpage){
-            $i= $testPerformedsId->resultValueCount;
+                $i= $testPerformedsId->resultValueCount;
             }
             $previous_category_id=$testPerformedsId->category_id;
             $iteration++;
@@ -54,7 +54,8 @@
         //     pagebreak: { before: '.beforeClass' },
         //     image: {type: 'jpeg', quality: 1}
         // };
-
+        // let timestamp = + new Date();
+        // console.log(timestamp)
         // let pdfReturned = html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
         //     var totalPages = pdf.internal.getNumberOfPages();
         //     console.log(pdf)
@@ -65,11 +66,14 @@
         //         pdf.setTextColor(150);
         //         pdf.text('Page ' + i + ' of ' + totalPages, pdf.internal.pageSize.getWidth() - 30, pdf.internal.pageSize.getHeight() - 10);
         //     }
-        // }).save('abc.pdf').then(function (pdf) {
-        //     fetch('abc.pdf  ')
+        // }).save(timestamp+'.pdf')
+
+
+        // setTimeout(function(){ 
+        //     fetch(timestamp+'.pdf')
         //     .then(response => response.text())
         //     .then(text => console.log(text))
-        // })
+        //  }, 3000);
 
 
 
