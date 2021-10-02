@@ -36,7 +36,7 @@ class AvailableTestController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:available_tests|min:5',
+            'name' => 'required|unique:available_tests|min:2',
         ]);
 
         $data_report_items = [];

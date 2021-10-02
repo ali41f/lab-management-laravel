@@ -33,6 +33,7 @@
 
     .report_body{
         font-size: 18px;
+        padding: .5rem 2.5rem;
     }
 
     .pl-20 {
@@ -52,10 +53,10 @@
         font-weight: bold;
     }
 </style>
-<div class="card-body report_body">
-    <div class="pl-20 testname text-capitalize"><h2>{{ $testPerformedsId->availableTest->name }}</h2></div>
+<div class="report_body">
+    <div class="pl-20 testname text-capitalize"><h2>{{$testPerformedsId->testReport->count() == 1 ? '' : $testPerformedsId->availableTest->name}}</h2></div>
 <!-- <div class="pl-20"><h4>{{ $testPerformedsId->availableTest->category->Cname  }}</h4></div> -->
-    <div class="card-body">
+    <div>
         <div class="table-responsive dont-break-inside">
 
             @if($testPerformedsId->availableTest->type==1 || $testPerformedsId->availableTest->type==5)

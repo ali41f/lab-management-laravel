@@ -48,33 +48,56 @@
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
 
     <script>
+        /*
+        (async () => {
 
-        // var element = document.getElementById('canvas_div_pdf');
-        // var opt = {
-        //     pagebreak: { before: '.beforeClass' },
-        //     image: {type: 'jpeg', quality: 1}
-        // };
-        // let timestamp = + new Date();
-        // console.log(timestamp)
-        // let pdfReturned = html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-        //     var totalPages = pdf.internal.getNumberOfPages();
-        //     console.log(pdf)
-        //     // page numbers
-        //     for (i = 1; i <= totalPages; i++) {
-        //         pdf.setPage(i);
-        //         pdf.setFontSize(10);
-        //         pdf.setTextColor(150);
-        //         pdf.text('Page ' + i + ' of ' + totalPages, pdf.internal.pageSize.getWidth() - 30, pdf.internal.pageSize.getHeight() - 10);
-        //     }
-        // }).save(timestamp+'.pdf')
+            var element = document.getElementById('canvas_div_pdf');
+            var opt = {
+                pagebreak: { before: '.beforeClass' },
+                image: {type: 'jpeg', quality: 1}
+            };
+            let pdfData;
+            let timestamp = + new Date();
+            
+            // await html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+            //     var totalPages = pdf.internal.getNumberOfPages();
+            //     // page numbers
+            //     for (i = 1; i <= totalPages; i++) {
+            //         pdf.setPage(i);
+            //         pdf.setFontSize(10);
+            //         pdf.setTextColor(150);
+            //         pdf.text('Page ' + i + ' of ' + totalPages, pdf.internal.pageSize.getWidth() - 30, pdf.internal.pageSize.getHeight() - 10);
+            //     }
+            // }).save(timestamp+'.pdf')
+
+            const pdf = await html2pdf().set(opt).from(element).toPdf().get('pdf').output('blob')
+
+            const text = await (new Response(pdf)).text();
+            //console.log(text)
 
 
-        // setTimeout(function(){ 
-        //     fetch(timestamp+'.pdf')
-        //     .then(response => response.text())
-        //     .then(text => console.log(text))
-        //  }, 3000);
+            // await fetch(timestamp+'.pdf')
+            //     .then(response => response.text())
+            //     .then(text => {
+            //         console.log(text)
+            //         pdfData = text
+            //     })
+            
 
+         
+            const rawResponse = await fetch('api/pdf', {
+                method: 'POST',
+                headers: {
+                'Accept': 'application/pdf',
+                'Content-Type': 'application/pdf'
+                },
+                body: pdf
+            });
+            //const content = await rawResponse.json();
+            console.log(rawResponse)
+        })();
+
+        */
 
 
     </script>
