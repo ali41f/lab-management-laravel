@@ -51,13 +51,14 @@
                 <span class="help-block"></span>
           </div>
         </div>
+
       </div>
   
       <div class="form-row">
       <div class="col-md-4 mb-3">
        <div class="form-group">
-                <label class="required" for="dob">Birthday</label>
-                <input class="form-control {{ $errors->has('dob') ? 'is-invalid' : '' }}" type="date" name="dob" id="dob" value="{{ old('dob', '') }}"required>
+                <label for="dob">Birthday</label>
+                <input class="form-control {{ $errors->has('dob') ? 'is-invalid' : '' }}" type="date" name="dob" id="dob" value="{{ old('dob', '') }}">
                 @if($errors->has('dob'))
                     <div class="invalid-feedback">
                         {{ $errors->first('dob') }}
@@ -68,6 +69,19 @@
           <div class="invalid-feedback">
             Please provide a valid city.
           </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <div class="form-group">
+                <label class="" for="age">Age</label>
+                <input class="form-control {{ $errors->has('age') ? 'is-invalid' : '' }}" type="number" name="age" id="age" value="{{ old('age', '') }}" step="1">
+                @if($errors->has('phone'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('phone') }}
+                    </div>
+                @endif
+                <span class="help-block"></span>
+        </div>
       </div>
 
       <div class="col-md-4 mb-3">
@@ -93,11 +107,11 @@
       <div class="form-group">
           <label for="gend" class= "col-md-4 col-form-label text-md-right">{{ __('Gender') }}</label>
           <div class="form-check form-check-inline" >
-            <input class="form-check-input" type="radio" name="gend" value="male" checked>
+            <input class="form-check-input" type="radio" id="male" name="gend" value="male" checked>
             <label class="form-check-label" for="male">Male</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="gend" value="female">
+            <input class="form-check-input" type="radio" id="female" name="gend" value="female">
             <label class="form-check-label" for="female">Female</label>
           </div>
         </div>

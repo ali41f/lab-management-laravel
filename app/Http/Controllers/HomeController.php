@@ -34,7 +34,6 @@ class HomeController extends Controller
         $ids_added_as_critical = array();
         $criticalTestToday = array();
         foreach ($allPerformedToday as $performed) {
-
             if (trim($performed->value, '1234567890.')=="" && ($performed->value <= $performed->firstCriticalValue || $performed->value >= $performed->finalCriticalValue) && ($performed->created_at > Carbon::today()->subHours(24) || $performed->updated_at > Carbon::today()->subHours(24)) && $performed->status == 'verified') {
                 if (!in_array($performed->id, $ids_added_as_critical)) {
                     array_push($ids_added_as_critical, $performed->id);

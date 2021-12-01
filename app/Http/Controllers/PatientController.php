@@ -26,16 +26,19 @@ class PatientController extends Controller
     {
         $this->validate($request,[
             'Pname' => 'required|max:120',
-            'email' => 'email|nullable|unique:patients',
-            'phone' => 'min:11|nullable|numeric',
+            'phone' => 'min:10|nullable|numeric',
             ]);
         $patient = new Patient();
         $patient->Pname = $request->Pname;
         $patient->patient_category_id  = $request->patient_category_id;
         $patient->gend = $request->gend;
         $patient->start_time = date('Y:m:d:H:i:s');
-        $patient->dob = $request->dob;
 
+        if (!empty($request->age)) {
+            $patient->dob = date("Y") - $request->age . "-01-01";
+        } else if(!empty($request->dob)) {
+            $patient->dob = $patient->dob = $request->dob;
+        }
 
         if (!empty($request->email)) {
             $patient->email = $request->email;

@@ -38,7 +38,7 @@
                 <hr/>
                
                 <div class="form-row">
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label for="available_test_id"><h4>{{$performed->availableTest->name}}</h4></label>
                             <select onchange="set_test_form()" class="form-control d-none" name="available_test_id" id="available_test_id" required>
@@ -57,7 +57,7 @@
                             Looks good!
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-6 mb-3">
                         <div class="form-group">
                             <label class="required" for="status ">Select Status</label>
                             <select class="form-control" name="status" id="status" required>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3 mb-3 d-none">
+                    <div class="col-md-6 mb-3 d-none">
                         <div class="form-group">
                             <p class="required">Test Type</p>
                             <label for="urgent">Urgent</label>
@@ -119,13 +119,13 @@
                                     @endforeach
 
                                 @elseif($test->type==5)
-{{--@dd($performed->testReport->pluck("test_report_item_id")->all())--}}
+                                
                                     @if($performed->availableTest->id==$test->id)
                                         @php  $foreach_variable=$test->TestReportItems->whereIn("id",$performed->testReport->pluck("test_report_item_id")->all()); @endphp
                                     @else
                                         @php  $foreach_variable=$test->TestReportItems->where("status","active"); @endphp
                                     @endif
-{{--                                @dd($foreach_variable)--}}
+                                    
                                     @foreach($foreach_variable->where("table_num",1)->sortBy("item_index") as $report_item)
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group">
@@ -145,6 +145,67 @@
                                     </div>
 
                                     @foreach($foreach_variable->where("table_num",2)->sortBy("item_index") as $report_item)
+                                        <div class="col-md-4 mb-3">
+                                            <div class="form-group">
+                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}}</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{{$report_item->unit}}</span>
+                                                    </div>
+                                                    <input class="form-control" type="text" name="testResult{{$report_item->id}}" id="testResult{{$report_item->id}}" value="{{$performed->availableTest->id==$test->id ? $performed->testReport->where("test_report_item_id",$report_item->id)->first()->value:""}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                @elseif($test->type==6)
+                                    @if($performed->availableTest->id==$test->id)
+                                        @php  $foreach_variable=$test->TestReportItems->whereIn("id",$performed->testReport->pluck("test_report_item_id")->all()); @endphp
+                                    @else
+                                        @php  $foreach_variable=$test->TestReportItems->where("status","active"); @endphp
+                                    @endif
+
+                                    <div class="col-12">
+                                        <input type="text" name="heading0" value="{{($performed->heading0 && $performed->heading0->value) ? $performed->heading0->value : 'Physical Examination'}}" placeholder="Table one heading" class="font-2xl form-control my-2 text-center">
+                                    </div>
+                                    
+                                    @foreach($foreach_variable->where("table_num",1)->sortBy("item_index") as $report_item)
+                                        <div class="col-md-4 mb-3">
+                                            <div class="form-group">
+                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}}</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{{$report_item->unit}}</span>
+                                                    </div>
+                                                    <input class="form-control" type="text" name="testResult{{$report_item->id}}" id="testResult{{$report_item->id}}" value="{{$performed->availableTest->id==$test->id ? $performed->testReport->where("test_report_item_id",$report_item->id)->first()->value:""}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    
+                                    <div class="col-12">
+                                        <input type="text" name="heading" value="{{($performed->heading && $performed->heading->value) ? $performed->heading->value : 'Biochemical Examination'}}" placeholder="Table two heading" class="font-2xl form-control my-2 text-center">
+                                    </div>
+
+                                    @foreach($foreach_variable->where("table_num",2)->sortBy("item_index") as $report_item)
+                                        <div class="col-md-4 mb-3">
+                                            <div class="form-group">
+                                                <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}}</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">{{$report_item->unit}}</span>
+                                                    </div>
+                                                    <input class="form-control" type="text" name="testResult{{$report_item->id}}" id="testResult{{$report_item->id}}" value="{{$performed->availableTest->id==$test->id ? $performed->testReport->where("test_report_item_id",$report_item->id)->first()->value:""}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    <div class="col-12">
+                                        <input type="text" name="heading2" value="{{($performed->heading2 && $performed->heading2->value) ? $performed->heading2->value : 'Microscopic Examination'}}" placeholder="Table three heading" class="font-2xl form-control my-2 text-center">
+                                    </div>
+
+                                    @foreach($foreach_variable->where("table_num",3)->sortBy("item_index") as $report_item)
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group">
                                                 <label class="required text-capitalize" for="testResult{{$report_item->id}}">{{$report_item->title}}</label>
@@ -206,7 +267,7 @@
 
                                     {{-- widal--}}
                                 @elseif($test->type==4)
-                                    {{--                                    @dd($performed->widal,$performed->widal->where("type","to_1")->first())--}}
+                                
                                     <div class="col-md-8 mb-8 offset-2">
                                         <table border="1" class="w-100">
                                             <tr>
@@ -282,7 +343,7 @@
 
                     <div class="form-group shadow-textarea col-md-12">
                         <label>Comment</label>
-                        <textarea class="form-control z-depth-1" name="comments" rows="3">{{ $performed->comments}}</textarea>
+                        <textarea class="form-control z-depth-1" name="comments" rows="3">@php echo $performed->comments @endphp</textarea>
                     </div>
                     <button class="btn btn-primary mt-3 ml-1" type="submit">Update</button>
                 </div>
@@ -298,9 +359,17 @@
             else
                 document.getElementById("test_form").innerHTML = "";
 
+            
             if (document.getElementsByName("ckeditor").length) {
                 CKEDITOR.replace("ckeditor", {
                     width: '100%',
+                    extraPlugins: 'pastefromword,pagebreak,justify,font',
+                });
+            }
+            if (document.getElementsByName("comments").length) {
+                CKEDITOR.replace("comments", {
+                    width: '100%',
+                    extraPlugins: 'justify,font',
                 });
             }
             document.getElementById("test_form").classList.remove("d-none");

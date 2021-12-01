@@ -57,7 +57,7 @@
                                 {{ $patient->email ?? '' }}
                                 </td>
                                 <td>
-                                {{ \Carbon\Carbon::parse($patient->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}
+                                {{ \Carbon\Carbon::parse($patient->dob)->diff(\Carbon\Carbon::now())->format('%y years %m months %d days') }}
                                 </td>
                                 <td>
                                 {{ date('d-m-Y H:m:s', strtotime($patient->start_time ?? '')) }}

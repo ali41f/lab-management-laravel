@@ -32,8 +32,24 @@
     }
 
     .report_body{
-        font-size: 18px;
-        padding: .5rem 2.5rem;
+        font-size: 23px;
+        padding: .3rem 1rem;
+    }
+
+    .normalrangetd{
+        font-size: 20px;
+    }
+
+    .table th {
+        padding: .35rem;
+    }
+
+    .table td {
+        padding: .35rem;
+    }
+
+    .table th.refrangeth{
+        width:280px;
     }
 
     .pl-20 {
@@ -54,25 +70,28 @@
     }
 </style>
 <div class="report_body">
-    <div class="pl-20 testname text-capitalize"><h2>{{$testPerformedsId->testReport->count() == 1 ? '' : $testPerformedsId->availableTest->name}}</h2></div>
+    <div class="pl-20 mb-4 testname text-capitalize"><h2>{{$testPerformedsId->testReport->count() == 1 ? '' : str_replace("*", "", $testPerformedsId->availableTest->name)}}</h2></div>
 <!-- <div class="pl-20"><h4>{{ $testPerformedsId->availableTest->category->Cname  }}</h4></div> -->
     <div>
         <div class="table-responsive dont-break-inside">
 
-            @if($testPerformedsId->availableTest->type==1 || $testPerformedsId->availableTest->type==5)
-                <table class="table">
+            @if($testPerformedsId->availableTest->type==1 || $testPerformedsId->availableTest->type==5 || $testPerformedsId->availableTest->type==6)
+                @if($testPerformedsId->availableTest->type==6)
+                    <h4 class="text-capitalize text-center">{{$testPerformedsId->heading0->value}}</h4>
+                @endif
+                <table class="table table-borderless">
                     <thead>
                     <tr>
-                        <th>Test</th>
+                        <th width="270">Test</th>
                         <th>Unit</th>
                         <th>Result</th>
 
                         @php $x=1; @endphp
                         @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
-                            <th>History ({{date('d-m-Y', strtotime($old_test->created_at))}})</th>
+                            <th><span style="font-size: 15px; display: block;">({{date('d-m-Y', strtotime($old_test->created_at))}}) </span>History </th>
                             @php $x++; @endphp
                         @endforeach
-                        <th width="280">Reference Range</th>
+                        <th class="refrangeth">Reference Range</th>
                     </tr>
                     </thead>
                    
@@ -93,27 +112,27 @@
                                 @endphp
                                 <td>{{ $xyz }}</td>
                             @endforeach
-                            <td>@php echo $testReport->report_item->normalRange @endphp</td>
+                            <td class="normalrangetd">@php echo $testReport->report_item->normalRange @endphp</td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
 
-                @if($testPerformedsId->availableTest->type==5)
+                @if($testPerformedsId->availableTest->type==5 || $testPerformedsId->availableTest->type==6)
                     <h4 class="text-capitalize text-center">{{$testPerformedsId->heading->value}}</h4>
                     <table class="table table-borderless">
                         <thead>
                         <tr>
-                            <th>Test</th>
+                            <th width="270">Test</th>
                             <th>Unit</th>
                             <th>Result</th>
 
                             @php $x=1; @endphp
                             @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
-                                <th>History {{$x}}</th>
+                                <th>History  <br /><span style="font-size: 15px">({{date('d-m-Y', strtotime($old_test->created_at))}})</span></th>
                                 @php $x++; @endphp
                             @endforeach
-                            <th>REFERENCE RANGE</th>
+                            <th class="refrangeth">REFERENCE RANGE</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -128,12 +147,54 @@
                                         {
                                             $xyz = '';
                                         }else{
-                                            $xyz = $old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first()->value . " (". date('d-m-Y', strtotime($old_test->created_at)) .")";
+                                            $xyz = $old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first()->value;
                                         }
                                     @endphp
                                     <td>{{ $xyz }}</td>
                                 @endforeach
-                                <td>@php echo $testReport->report_item->normalRange @endphp</td>
+                                <td class="normalrangetd">@php echo $testReport->report_item->normalRange @endphp</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                @endif
+                
+                @if($testPerformedsId->availableTest->type==6)
+                
+                    <h4 class="text-capitalize text-center">{{$testPerformedsId->heading2->value}}</h4>
+                    <table class="table table-borderless">
+                        <thead>
+                        <tr>
+                            <th width="270">Test</th>
+                            <th>Unit</th>
+                            <th>Result</th>
+
+                            @php $x=1; @endphp
+                            @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
+                                <th>History <br /><span style="font-size: 15px">({{date('d-m-Y', strtotime($old_test->created_at))}})</span></th>
+                                @php $x++; @endphp
+                            @endforeach
+                            <th class="refrangeth">REFERENCE RANGE</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($testPerformedsId->testReport->where("table_num",3)->sortBy("order") as $testReport)
+                            <tr>
+                                <td class="text-capitalize">{{$testReport->report_item->title}}</td>
+                                <td class="">{{$testReport->report_item->unit}}</td>
+                                <td>{{ $testReport->value }}</td>
+                                @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
+                                    @php
+                                        if(!$old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first())
+                                        {
+                                            $xyz = '';
+                                        }else{
+                                            $xyz = $old_test->testReport->where("test_report_item_id",$testReport->test_report_item_id)->first()->value;
+                                        }
+                                    @endphp
+                                    <td>{{ $xyz }}</td>
+                                @endforeach
+                                <td class="normalrangetd">@php echo $testReport->report_item->normalRange @endphp</td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -246,7 +307,7 @@
                 </div>
             @endif
             @if($testPerformedsId->comments != '')
-                <div class="col-md-12 mt-4"><h6 style="text-align: center;">{{ $testPerformedsId->comments }}</h6></div>
+                <div class="col-md-12 mt-4"><h6>@php echo $testPerformedsId->comments @endphp</h6></div>
             @endif
 
         </div>

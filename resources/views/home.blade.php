@@ -123,7 +123,7 @@
                                                     <a class="" href="{{ route('test-performed-edit', $todayDelayed->id) }}">{{ $todayDelayed->availableTest->name ?? '' }}</a>
                                                     </td>
                                                     <td>
-                                                    <a class="" href="{{ route('patient-show', $testPerformed->patient->id) }}">{{ $todayDelayed->patient->Pname  ?? '' }}</a>
+                                                    <a class="" href="{{ route('patient-show', $todayDelayed->patient->id) }}">{{ $todayDelayed->patient->Pname  ?? '' }}</a>
                                                     </td>
                                                     <td>
                                                         {{ \Carbon\Carbon::parse($todayDelayed->created_at)->isoFormat('MMM Do YYYY H:m:s')}}

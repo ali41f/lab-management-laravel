@@ -130,6 +130,8 @@
             table = $('.datatable').DataTable({
                 orderCellsTop: true,
                 fixedHeader: true,
+                "order": [[ 0, "desc" ]],
+                "pageLength": 50,
             });
 
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {

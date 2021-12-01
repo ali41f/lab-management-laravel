@@ -72,7 +72,7 @@
                             <label class="required" for="patient_id">Select Patient Name</label>
                             <select onchange="set_patient()" data-placeholder="Select Patient" class="form-control select2 {{ $errors->has('patients') ? 'is-invalid' : '' }}" name="patient_id" id="patient_id" required>
                                 @foreach($patientNames as $patientName)
-                                    <option patientName="{{$patientName->Pname}}" discount="{{ $patientName->category->discount }}" value="{{ $patientName->id }}">{{ $patientName->Pname }} ( {{ $patientName->id }} )</option>
+                                    <option patientName="{{$patientName->Pname}}" gender="{{$patientName->gend}}" dob="{{ $patientName->dob }}" discount="{{ $patientName->category->discount }}" value="{{ $patientName->id }}">{{ $patientName->Pname }} ( {{ $patientName->id }} )</option>
                                 @endforeach
                             </select>
                             @if($errors->has('user'))
@@ -184,17 +184,48 @@
         </div>
     </div>
 
+    <script src="/js/moment.min.js"></script>
+
     <script>
 
         let arr = Array.from(Array(100).keys(), n => n + 1);
         let DiscountPercentage = 0;
         let final_fee = 0;
         let username = $(".username").text();
+        let dob = '';
+        let years = 0;
+        let months = 0;
+        let days = 0;
+        let agetoDisplay = '';
+        
+        const getAge = birthDate => Math.floor((new Date() - new Date(birthDate).getTime()) / 3.15576e+10)
 
         set_patient();
         make_receipt();
 
+
         function set_patient() {
+            years = 0;
+            months = 0;
+            days = 0;
+            dob = $('#patient_id option:selected').attr('dob');
+            gender = $('#patient_id option:selected').attr('gender');
+            //console.log(moment().diff(moment(dob, 'YYYY-MM-DD'), 'years'));
+
+            years = moment().diff(moment(dob, 'YYYY-MM-DD'), 'years');
+            if(years != 0 ) agetoDisplay = years + " years"
+
+            if(years == 0) {
+                months = moment().diff(moment(dob, 'YYYY-MM-DD'), 'months')
+                agetoDisplay = months + " months"
+            }
+            if(months == 0 && years == 0){
+                days = moment().diff(moment(dob, 'YYYY-MM-DD'), 'days')
+                agetoDisplay = days + " days"
+            } 
+
+            //console.log(years, months, days)
+
             DiscountPercentage = Number($('#patient_id option:selected').attr('discount'))
             updateFee()
         }
@@ -221,6 +252,8 @@
                 Receipt_html+="<table class='table'>"
                 Receipt_html+="<tr><td>Patient's name</td><td>"+$('#patient_id option:selected').attr('patientName').trim()+"</td></tr>"
                 Receipt_html+="<tr><td>MR ID</td><td>"+$("#patient_id").val()+"</td></tr>"
+                Receipt_html+="<tr><td>Age</td><td>"+ agetoDisplay +"</td></tr>"
+                Receipt_html+="<tr><td>Gender</td><td>"+ gender +"</td></tr>"
                 Receipt_html+="<tr><td>Date</td><td>"+date+"</td></tr>"
                 Receipt_html+="<tr><td>Time</td><td>"+t+"</td></tr>"
                 Receipt_html+="<tr><td>Lab attendant</td><td>"+username+"</td></tr></table><hr />"
@@ -247,13 +280,25 @@
                 Receipt_html+="<table class='table'>"
                 Receipt_html+="<tr><td>Patient's name</td><td>"+$('#patient_id option:selected').attr('patientName').trim()+"</td></tr>"
                 Receipt_html+="<tr><td>MR ID</td><td>"+$("#patient_id").val()+"</td></tr>"
+                Receipt_html+="<tr><td>Age</td><td>"+ agetoDisplay +"</td></tr>"
+                Receipt_html+="<tr><td>Gender</td><td>"+ gender +"</td></tr>"
                 Receipt_html+="<tr><td>Date</td><td>"+date+"</td></tr>"
                 Receipt_html+="<tr><td>Time</td><td>"+t+"</td></tr>"
-                Receipt_html+="<tr><th>Test</th><th>Fee</th></tr>"
+                Receipt_html+="<tr><td>Lab attendant</td><td>"+username+"</td></tr></table><hr />"
+
+                Receipt_html+="<table><tr><th>Test</th><th>Fee</th></tr>"
                 $( ".parent" ).each(function() {
                     Receipt_html=Receipt_html+"<tr><td>"+$( this ).find(".name").val()+"</td><td>Rs "+$( this ).find(".fees").val()+"</td></tr>";
                 });
-                Receipt_html+="</table>"
+                Receipt_html+="<tr><td> </td><td> </td></tr>"
+
+                Receipt_html+="<tr><td> </td><td> </td></tr>"
+                //let concessionVal = $(".concession").val();
+                if(Number(concessionVal) > 0){
+                    Receipt_html+="<tr><td>Discount</td><td>Rs "+Number(concessionVal)+"</td></tr>"
+                }
+                Receipt_html+="<tr><td><strong>Total</strong></td><td>Rs "+$(".finalfee").html()+"</td></tr>"
+                Receipt_html+="</table>";
 
                 Receipt_html+="</div>";
                 //console.log(Receipt_html);
@@ -288,6 +333,7 @@
             if (select.parentElement.parentElement.parentElement.getElementsByClassName("ckeditor")[0]) {
                 CKEDITOR.replace(select.parentElement.parentElement.parentElement.getElementsByClassName("ckeditor")[0], {
                     width: '100%',
+                    extraPlugins: 'pastefromword,justify,font',
                 });
             }
 

@@ -32,7 +32,7 @@ class TestsPerformedController extends Controller
 
     public function create()
     { 
-        $patientNames = Patient::with('category')->get();
+        $patientNames = Patient::orderBy('created_at', 'DESC')->with('category')->get();
         $availableTests = AvailableTest::get(['name', 'testCode', 'id']);
         //dd($patientNames);
         // $availableTests = AvailableTest::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
@@ -103,7 +103,7 @@ class TestsPerformedController extends Controller
                 $test_performed->comments = '';
             }
             if (!empty($request->referred[$key])) {
-                $test_performed->referred = $request->referred[$key];
+                $test_performed->referred = $request->referred;
             } else {
                 $test_performed->referred = '';
             }
@@ -112,7 +112,7 @@ class TestsPerformedController extends Controller
             $test_performed->save();
             //dd($test_performed);
 
-            if ($available_test->type == 1 || $available_test->type == 5) {
+            if ($available_test->type == 1 || $available_test->type == 5 || $available_test->type == 6) {
                 //test_report store
                 foreach ($available_test->TestReportItems->where("status", "active")->pluck("id") as $value) {
                     $field_name = "testResult" . $value;
@@ -129,6 +129,23 @@ class TestsPerformedController extends Controller
                     TestperformedWidal::create([
                         "test_performed_id" => $test_performed->id,
                         "type"=>"test_performed_heading",
+                        "value"=>""
+                    ]);
+                }
+                if ($available_test->type==6){
+                    TestperformedWidal::create([
+                        "test_performed_id" => $test_performed->id,
+                        "type"=>"test_performed_heading",
+                        "value"=>""
+                    ]);
+                    TestperformedWidal::create([
+                        "test_performed_id" => $test_performed->id,
+                        "type"=>"test_performed_heading2",
+                        "value"=>""
+                    ]);
+                    TestperformedWidal::create([
+                        "test_performed_id" => $test_performed->id,
+                        "type"=>"test_performed_heading0",
                         "value"=>""
                     ]);
                 }
@@ -168,7 +185,7 @@ class TestsPerformedController extends Controller
             "comments" => $request->comments,
         ]);
 
-        if ($test_performed->availableTest->type == 1 || $test_performed->availableTest->type == 5) {
+        if ($test_performed->availableTest->type == 1 || $test_performed->availableTest->type == 5 || $test_performed->availableTest->type == 6) {
             //test_report store
             $delete_items = $test_performed->testReport->pluck("id")->all();
 
@@ -194,10 +211,20 @@ class TestsPerformedController extends Controller
                     $item->delete();
                 });
             }
+            if (isset($request->heading0))
+            TestperformedWidal::where("test_performed_id",$test_performed->id)->where("type","test_performed_heading0")->update([
+                "value"=>$request->heading0
+            ]);
+
 //            for test type 5 two tables
             if (isset($request->heading))
             TestperformedWidal::where("test_performed_id",$test_performed->id)->where("type","test_performed_heading")->update([
                 "value"=>$request->heading
+            ]);
+
+            if (isset($request->heading2))
+            TestperformedWidal::where("test_performed_id",$test_performed->id)->where("type","test_performed_heading2")->update([
+                "value"=>$request->heading2
             ]);
         } elseif ($test_performed->availableTest->type == 2) {
             $test_performed->testPerformedEditor->update([
@@ -250,7 +277,7 @@ class TestsPerformedController extends Controller
             }
             TestperformedWidal::insert($data);
         }
-        return redirect()->route('tests-performed');
+        return redirect()->route('patient-show', ['id' => $test_performed->patient_id]);
     }
 
     public function show($id)

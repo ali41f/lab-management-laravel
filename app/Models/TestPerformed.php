@@ -52,4 +52,10 @@ class TestPerformed extends Model
     public function heading(){
         return $this->hasOne(TestperformedWidal::class)->where("type","test_performed_heading");
     }
+    public function heading2(){
+        return $this->hasOne(TestperformedWidal::class)->where("type","test_performed_heading2");
+    }
+    public function heading0(){
+        return $this->hasOne(TestperformedWidal::class)->where("type","test_performed_heading0");
+    }
 }

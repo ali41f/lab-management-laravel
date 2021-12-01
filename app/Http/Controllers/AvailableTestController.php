@@ -22,7 +22,7 @@ class AvailableTestController extends Controller
 {
     public function index()
     {
-        $availableTests = AvailableTest::all();
+        $availableTests = AvailableTest::all()->sortByDesc("id");
         return view('admin.availableTests.index', compact('availableTests'));
     }
 
@@ -71,6 +71,25 @@ class AvailableTestController extends Controller
                 ]);
             }
 
+        
+        //for type 6 (three tables)
+        if (isset($request->title3))
+            foreach ($request->title3 as $key => $value) {
+                if ($value == null  || $value == "")
+                    continue;
+                $data_report_items[] = new TestReportItem([
+                    "title" => $value,
+                    'item_index' => $request->order3[$key],
+                    "table_num"=>3,
+                    'normalRange' => $request->normalRange3[$key],
+                    // 'finalNormalValue' => $request->finalNormalValue[$key],
+                    'firstCriticalValue' => $request->firstCriticalValue3[$key],
+                    'finalCriticalValue' => $request->finalCriticalValue3[$key],
+                    'unit' => $request->units3[$key],
+                ]);
+            }
+
+        
         $a = count($data_report_items);
         $availableTestId = AvailableTest::create([
             'category_id' => $request->category_id,
@@ -97,23 +116,9 @@ class AvailableTestController extends Controller
                 $availableTestId->available_test_inventories()->saveMany($data);
             }
         }
-        //        $data = [];
-//        if (isset($request->heading)) {
-            //            foreach ($request->title as $key => $value) {
-            //                $data[] = new TestReportItem([
-            //                    "title" => $value,
-            //                    'normalRange' => $request->normalRange[$key],
-            //                    // 'finalNormalValue' => $request->finalNormalValue[$key],
-            //                    'firstCriticalValue' => $request->firstCriticalValue[$key],
-            //                    'finalCriticalValue' => $request->finalCriticalValue[$key],
-            //                    'unit' => $request->units[$key],
-            //                ]);
-            //            }
-            //            $a = count($data);
-            //            AvailableTest::where('id', $availableTestId)->update(array('resultValueCount' => $a));
-            if (!empty($data_report_items)) {
-                $availableTestId->TestReportItems()->saveMany($data_report_items);
-//            }
+        
+        if (!empty($data_report_items)) {
+            $availableTestId->TestReportItems()->saveMany($data_report_items);
         }
         return redirect()->route('available-tests');
     }
@@ -167,8 +172,8 @@ class AvailableTestController extends Controller
         }
 
 
-//        dd($task->TestReportItems,$request->all());
-        //TestReportItems
+        // dd($task->TestReportItems,$request->all());
+        // TestReportItems
         $data_report_items = [];
         if (isset($request->title)) {
             $task->TestReportItems()->where("table_num",1)->where("test_id",$task->id)->whereNotIn("title",$request->title)->whereNotIn("status", ["inactive", "deleted"])->update([
@@ -184,7 +189,6 @@ class AvailableTestController extends Controller
                         'normalRange' => $request->normalRange[$key],
                         'item_index' => $request->order[$key],
                         "table_num"=>1,
-                        // 'finalNormalValue' => $request->finalNormalValue[$key],
                         'firstCriticalValue' => $request->firstCriticalValue[$key],
                         'finalCriticalValue' => $request->finalCriticalValue[$key],
                         'unit' => $request->units[$key],
@@ -197,7 +201,6 @@ class AvailableTestController extends Controller
                         'item_index' => $request->order[$key],
                         "table_num"=>1,
                         'normalRange' => $request->normalRange[$key],
-                        // 'finalNormalValue' => $request->finalNormalValue[$key],
                         'firstCriticalValue' => $request->firstCriticalValue[$key],
                         'finalCriticalValue' => $request->finalCriticalValue[$key],
                         'unit' => $request->units[$key],
@@ -206,7 +209,7 @@ class AvailableTestController extends Controller
             }
 
         }
-        //fot type 5 test two tables
+        //for type 5 test two tables
         if (isset($request->title2)) {
             $task->TestReportItems()->where("table_num",2)->where("test_id",$task->id)->whereNotIn("title",$request->title2)->whereNotIn("status", ["inactive", "deleted"])->update([
                 "status" => "inactive"
@@ -240,6 +243,42 @@ class AvailableTestController extends Controller
                 }
             }
         }
+
+        //for type 6 test three tables
+        if (isset($request->title3)) {
+            $task->TestReportItems()->where("table_num",3)->where("test_id",$task->id)->whereNotIn("title",$request->title3)->whereNotIn("status", ["inactive", "deleted"])->update([
+                "status" => "inactive"
+            ]);
+            foreach ($request->title3 as $key => $value) {
+                if ($value == null)
+                    continue;
+                $title_exist=$task->TestReportItems()->where("table_num",3)->where("test_id",$task->id)->where("title",$value)->whereNotIn("status", ["inactive", "deleted"])->first();
+
+                if ($title_exist){
+                    $title_exist->update([
+                        'normalRange' => $request->normalRange3[$key],
+                        'item_index' => $request->order3[$key],
+                        "table_num"=>3,
+                        'firstCriticalValue' => $request->firstCriticalValue3[$key],
+                        'finalCriticalValue' => $request->finalCriticalValue3[$key],
+                        'unit' => $request->units3[$key],
+                    ]);
+                    continue;
+                }
+                else{
+                    $data_report_items[] = new TestReportItem([
+                        "title" => $value,
+                        'item_index' => $request->order3[$key],
+                        "table_num"=>3,
+                        'normalRange' => $request->normalRange3[$key],
+                        'firstCriticalValue' => $request->firstCriticalValue3[$key],
+                        'finalCriticalValue' => $request->finalCriticalValue3[$key],
+                        'unit' => $request->units3[$key],
+                    ]);
+                }
+            }
+        }
+
         if (count($data_report_items)){
             $task->TestReportItems()->saveMany($data_report_items);
         }

@@ -10,17 +10,17 @@
   /* border: solid gray; */
 }
 .report_detail{
-    font-size: 17px;
-    max-width: 850px;
+    font-size: 20px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 15px;
     border: 1px solid #888;
     border-radius: 5px;
-    margin-top: 85px;
+    margin-top: 135px;
 }
+
 .hr {
     border-top: 2px solid red;
-
 }
 .h12 {
   background-color: #ddd;
@@ -43,7 +43,7 @@
                     </tr>
                     <tr>
                         <td width="140">Age / Gender</td>
-                        <td><strong>{{ \Carbon\Carbon::parse($getpatient->dob)->diff(\Carbon\Carbon::now())->format('%y years') }} / <span class="capitalize">{{ $getpatient->gend }}</span></strong></td>
+                        <td><strong>{{ \Carbon\Carbon::parse($getpatient->dob)->diff(\Carbon\Carbon::now())->format('%y') ? \Carbon\Carbon::parse($getpatient->dob)->diff(\Carbon\Carbon::now())->format('%y years') : \Carbon\Carbon::parse($getpatient->dob)->diff(\Carbon\Carbon::now())->format('%m months %d days') }} / <span class="capitalize">{{ $getpatient->gend }}</span></strong></td>
                     </tr>
                     <tr>
                         <td width="140">Cell #</td>

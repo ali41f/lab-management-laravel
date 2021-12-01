@@ -135,13 +135,17 @@
                             <input id="two-table" class="form-check-input" type="radio" disabled name="type" value="5" {{$availableTest->type==5 ? "checked":""}}>
                             <label class="form-check-label text-capitalize" for="two-table">Two Table</label>
                         </div>
+                        <div class="form-check form-check-inline my-1">
+                            <input id="two-table" class="form-check-input" type="radio" disabled name="type" value="6" {{$availableTest->type==6 ? "checked":""}}>
+                            <label class="form-check-label text-capitalize" for="two-table">Three Table</label>
+                        </div>
                     </div>
 
                 </div>
                 <hr class="hr1">
 
                 <div class="form-row">
-                    @if($availableTest->type==1 || $availableTest->type==5)
+                    @if($availableTest->type==1 || $availableTest->type==5 || $availableTest->type==6)
                         <div class="col-md-12 mb-12"><h4>Report Items</h4></div>
                         <div class="col-md-12" id="report_item_form">
                             @php $y=1; @endphp
@@ -190,7 +194,7 @@
                                         <div class="col-md-2 mb-3">
                                             <div class="form-group">
                                                 <label for="firstCriticalValue">First Critical Range</label>
-                                                <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue[]" id="firstCriticalValue" value="{{ $TestReportItem->firstCriticalValue}}" step="0.01">
+                                                <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="text" name="firstCriticalValue[]" id="firstCriticalValue" value="{{ $TestReportItem->firstCriticalValue}}" step="0.01">
                                                 @if($errors->has('firstCriticalValue'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('firstCriticalValue') }}
@@ -206,7 +210,7 @@
                                         <div class="col-md-2 mb-3">
                                             <div class="form-group">
                                                 <label for="finalCriticalValue">Final Critical Range</label>
-                                                <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue[]" id="finalCriticalValue" value="{{ $TestReportItem->finalCriticalValue }}" step="1">
+                                                <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="text" name="finalCriticalValue[]" id="finalCriticalValue" value="{{ $TestReportItem->finalCriticalValue }}" step="1">
                                                 @if($errors->has('finalCriticalValue'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('finalCriticalValue') }}
@@ -285,7 +289,7 @@
                                         <div class="col-md-2 mb-3">
                                             <div class="form-group">
                                                 <label for="firstCriticalValue">First Critical Range</label>
-                                                <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue[]" id="firstCriticalValue" value="" step="0.01">
+                                                <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="text" name="firstCriticalValue[]" id="firstCriticalValue" value="" step="0.01">
                                                 @if($errors->has('firstCriticalValue'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('firstCriticalValue') }}
@@ -301,7 +305,7 @@
                                         <div class="col-md-2 mb-3">
                                             <div class="form-group">
                                                 <label for="finalCriticalValue">Final Critical Range</label>
-                                                <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue[]" id="finalCriticalValue" value="" step="1">
+                                                <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="text" name="finalCriticalValue[]" id="finalCriticalValue" value="" step="1">
                                                 @if($errors->has('finalCriticalValue'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('finalCriticalValue') }}
@@ -340,7 +344,7 @@
                             <button type="button" onclick="remove_item('report_item_class')" class="btn btn-xs btn-danger">Remove Item</button>
                         </div>
 
-                        @if($availableTest->type==5)
+                        @if($availableTest->type==5 || $availableTest->type==6)
                             <div class="col-md-12 mb-12"><h4>Report Items 2</h4></div>
                             <div class="col-md-12" id="report_item_form2">
                                 @php $y=1; @endphp
@@ -389,7 +393,7 @@
                                             <div class="col-md-2 mb-3">
                                                 <div class="form-group">
                                                     <label for="firstCriticalValue">First Critical Range</label>
-                                                    <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue2[]" id="firstCriticalValue" value="{{ $TestReportItem->firstCriticalValue}}" step="0.01">
+                                                    <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="text" name="firstCriticalValue2[]" id="firstCriticalValue" value="{{ $TestReportItem->firstCriticalValue}}" step="0.01">
                                                     @if($errors->has('firstCriticalValue'))
                                                         <div class="invalid-feedback">
                                                             {{ $errors->first('firstCriticalValue') }}
@@ -405,7 +409,7 @@
                                             <div class="col-md-2 mb-3">
                                                 <div class="form-group">
                                                     <label for="finalCriticalValue">Final Critical Range</label>
-                                                    <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue2[]" id="finalCriticalValue" value="{{ $TestReportItem->finalCriticalValue }}" step="1">
+                                                    <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="text" name="finalCriticalValue2[]" id="finalCriticalValue" value="{{ $TestReportItem->finalCriticalValue }}" step="1">
                                                     @if($errors->has('finalCriticalValue'))
                                                         <div class="invalid-feedback">
                                                             {{ $errors->first('finalCriticalValue') }}
@@ -477,14 +481,120 @@
                                                     <span class="help-block"></span>
                                                 </div>
                                                 <div class="invalid-feedback">
-                                                    Please provide a valid state.
+                                                    Please provide a valid unit.
                                                 </div>
                                             </div>
 
                                             <div class="col-md-2 mb-3">
                                                 <div class="form-group">
                                                     <label for="firstCriticalValue">First Critical Range</label>
-                                                    <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="number" name="firstCriticalValue2[]" id="firstCriticalValue" value="" step="0.01">
+                                                    <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="text" name="firstCriticalValue2[]" id="firstCriticalValue" value="" step="0.01">
+                                                    @if($errors->has('firstCriticalValue'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('firstCriticalValue') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid first critical value.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 mb-3">
+                                                <div class="form-group">
+                                                    <label for="finalCriticalValue">Final Critical Range</label>
+                                                    <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="text" name="finalCriticalValue2[]" id="finalCriticalValue" value="" step="1">
+                                                    @if($errors->has('finalCriticalValue'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('finalCriticalValue') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid final Critical Value.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <div class="form-group">
+                                                    <label>Reference Range</label>
+                                                    <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange2[]"></textarea>
+                                                    @if($errors->has('normalRange'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('normalRange') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid normal range.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <hr class="hr1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <button type="button" onclick="add_item('report_item_form2')" class="btn btn-xs btn-success">Add Item</button>
+                                <button type="button" onclick="remove_item('report_item_class2')" class="btn btn-xs btn-danger">Remove Item</button>
+                            </div>
+                        @endif
+
+
+                        @if($availableTest->type==6)
+                            <div class="col-md-12 mb-12"><h4>Report Items 3</h4></div>
+                            <div class="col-md-12" id="report_item_form3">
+                                @php $y=1; @endphp
+                                @foreach($availableTest->TestReportItems->where("status","active")->where("table_num",3) as $TestReportItem)
+                                    <div class="col-md-12 report_item_class3">
+                                        <div class="row">
+
+                                            <div class="col-md-4 mb-3">
+                                                <label for="">Order</label>
+                                                <input class="form-control {{ $errors->has('order') ? 'is-invalid' : '' }}" type="number" step="1" min="1" name="order3[]" value="{{$TestReportItem->item_index}}">
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <div class="form-group">
+                                                    <label class="" for="title">Title</label>
+                                                    <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title3[]" id="title" value="{{$TestReportItem->title}}">
+                                                    @if($errors->has('title'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('title') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="valid-feedback">
+                                                    Looks good!
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <div class="form-group">
+                                                    <label for="units">Test Unit</label>
+                                                    <input class="form-control {{ $errors->has('units') ? 'is-invalid' : '' }}" type="text" name="units3[]" id="units" value="{{ $TestReportItem->unit }}">
+                                                    @if($errors->has('units'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('units') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid state.
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-2 mb-3">
+                                                <div class="form-group">
+                                                    <label for="firstCriticalValue">First Critical Range</label>
+                                                    <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="text" name="firstCriticalValue3[]" id="firstCriticalValue" value="{{ $TestReportItem->firstCriticalValue}}" step="0.01">
                                                     @if($errors->has('firstCriticalValue'))
                                                         <div class="invalid-feedback">
                                                             {{ $errors->first('firstCriticalValue') }}
@@ -500,7 +610,7 @@
                                             <div class="col-md-2 mb-3">
                                                 <div class="form-group">
                                                     <label for="finalCriticalValue">Final Critical Range</label>
-                                                    <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="number" name="finalCriticalValue2[]" id="finalCriticalValue" value="" step="1">
+                                                    <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="text" name="finalCriticalValue3[]" id="finalCriticalValue" value="{{ $TestReportItem->finalCriticalValue }}" step="1">
                                                     @if($errors->has('finalCriticalValue'))
                                                         <div class="invalid-feedback">
                                                             {{ $errors->first('finalCriticalValue') }}
@@ -515,7 +625,7 @@
                                             <div class="col-md-12 mb-3">
                                                 <div class="form-group">
                                                     <label>Reference Range</label>
-                                                    <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange2[]"></textarea>
+                                                    <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange3[]">{{ $TestReportItem->normalRange }}</textarea>
                                                     @if($errors->has('normalRange'))
                                                         <div class="invalid-feedback">
                                                             {{ $errors->first('normalRange') }}
@@ -532,13 +642,109 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @php $y++; @endphp
+                                @endforeach
+                                {{--to handle null values--}}
+                                @if($y==1)
+                                    <div class="col-md-12 report_item_class">
+                                        <div class="row">
+
+                                            <div class="col-md-4 mb-3">
+                                                <label for="">Order</label>
+                                                <input class="form-control {{ $errors->has('order') ? 'is-invalid' : '' }}" type="number" step="1" min="1" name="order3[]" value="1">
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <div class="form-group">
+                                                    <label class="" for="title">Title</label>
+                                                    <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title3[]" id="title" value="">
+                                                    @if($errors->has('title'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('title') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="valid-feedback">
+                                                    Looks good!
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <div class="form-group">
+                                                    <label for="units">Test Unit</label>
+                                                    <input class="form-control {{ $errors->has('units') ? 'is-invalid' : '' }}" type="text" name="units3[]" id="units" value="">
+                                                    @if($errors->has('units'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('units') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid unit.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 mb-3">
+                                                <div class="form-group">
+                                                    <label for="firstCriticalValue">First Critical Range</label>
+                                                    <input class="form-control {{ $errors->has('firstCriticalValue') ? 'is-invalid' : '' }}" type="text" name="firstCriticalValue3[]" id="firstCriticalValue" value="" step="0.01">
+                                                    @if($errors->has('firstCriticalValue'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('firstCriticalValue') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid first critical value.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 mb-3">
+                                                <div class="form-group">
+                                                    <label for="finalCriticalValue">Final Critical Range</label>
+                                                    <input class="form-control {{ $errors->has('finalCriticalValue') ? 'is-invalid' : '' }}" type="text" name="finalCriticalValue3[]" id="finalCriticalValue" value="" step="1">
+                                                    @if($errors->has('finalCriticalValue'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('finalCriticalValue') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid final Critical Value.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <div class="form-group">
+                                                    <label>Reference Range</label>
+                                                    <textarea class="form-control ckeditor {{ $errors->has('normalRange') ? 'is-invalid' : '' }}" name="normalRange3[]"></textarea>
+                                                    @if($errors->has('normalRange'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('normalRange') }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid normal range.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <hr class="hr1">
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
                             </div>
                             <div class="col-md-12 text-center">
-                                <button type="button" onclick="add_item('report_item_form2')" class="btn btn-xs btn-success">Add Item</button>
-                                <button type="button" onclick="remove_item('report_item_class2')" class="btn btn-xs btn-danger">Remove Item</button>
+                                <button type="button" onclick="add_item('report_item_form3')" class="btn btn-xs btn-success">Add Item</button>
+                                <button type="button" onclick="remove_item('report_item_class3')" class="btn btn-xs btn-danger">Remove Item</button>
                             </div>
                         @endif
+
                     @endif
                 </div>
 
@@ -617,6 +823,56 @@
 
     {{--    for js--}}
     <div class="d-none">
+    {{--    first table js--}}
+        <div id="report_item_class_js">
+            <div class="col-md-12 report_item_class">
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+                        <label for="">Order</label>
+                        <input class="form-control" type="number" step="1" min="1" name="order[]" value="1">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                            <label class="">Title</label>
+                            <input class="form-control " type="text" name="title[]" value="">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                            <label>Test Unit</label>
+                            <input class="form-control" type="text" name="units[]" value="">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <div class="form-group">
+                            <label>First Critical Range</label>
+                            <input class="form-control" type="text" name="firstCriticalValue[]" value="" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <div class="form-group">
+                            <label>Final Critical Range</label>
+                            <input class="form-control" type="text" name="finalCriticalValue[]" value="" step="1">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label>Reference Range</label>
+                            <textarea class="form-control ckeditor" name="normalRange[]"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <hr class="hr1">
+                    </div>
+                </div>
+            </div>
+        </div>
         {{--    2nd table js--}}
         <div id="report_item_class2_js">
             <div class="col-md-12 report_item_class2">
@@ -644,14 +900,14 @@
                     <div class="col-md-2 mb-3">
                         <div class="form-group">
                             <label>First Critical Range</label>
-                            <input class="form-control" type="number" name="firstCriticalValue2[]" value="" step="0.01">
+                            <input class="form-control" type="text" name="firstCriticalValue2[]" value="" step="0.01">
                         </div>
                     </div>
 
                     <div class="col-md-2 mb-3">
                         <div class="form-group">
                             <label>Final Critical Range</label>
-                            <input class="form-control" type="number" name="finalCriticalValue2[]" value="" step="1">
+                            <input class="form-control" type="text" name="finalCriticalValue2[]" value="" step="1">
                         </div>
                     </div>
 
@@ -667,48 +923,48 @@
                 </div>
             </div>
         </div>
-        {{--    first table js--}}
-        <div id="report_item_class_js">
-            <div class="col-md-12 report_item_class">
+        {{--    3rd table js--}}
+        <div id="report_item_class3_js">
+            <div class="col-md-12 report_item_class3">
                 <div class="row">
 
                     <div class="col-md-4 mb-3">
                         <label for="">Order</label>
-                        <input class="form-control" type="number" step="1" min="1" name="order[]" value="1">
+                        <input class="form-control" type="number" step="1" min="1" name="order3[]" value="1">
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <div class="form-group">
                             <label class="">Title</label>
-                            <input class="form-control " type="text" name="title[]" value="">
+                            <input class="form-control " type="text" name="title3[]" value="">
                         </div>
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <div class="form-group">
                             <label>Test Unit</label>
-                            <input class="form-control" type="text" name="units[]" value="">
+                            <input class="form-control" type="text" name="units3[]" value="">
                         </div>
                     </div>
 
                     <div class="col-md-2 mb-3">
                         <div class="form-group">
                             <label>First Critical Range</label>
-                            <input class="form-control" type="number" name="firstCriticalValue[]" value="" step="0.01">
+                            <input class="form-control" type="text" name="firstCriticalValue3[]" value="" step="0.01">
                         </div>
                     </div>
 
                     <div class="col-md-2 mb-3">
                         <div class="form-group">
                             <label>Final Critical Range</label>
-                            <input class="form-control" type="number" name="finalCriticalValue[]" value="" step="1">
+                            <input class="form-control" type="text" name="finalCriticalValue3[]" value="" step="1">
                         </div>
                     </div>
 
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label>Reference Range</label>
-                            <textarea class="form-control ckeditor" name="normalRange[]"></textarea>
+                            <textarea class="form-control ckeditor" name="normalRange3[]"></textarea>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -723,8 +979,10 @@
         var
             items = {{count($availableTest->TestReportItems->where("status","active")->where("table_num",1))}},
             items2 = {{count($availableTest->TestReportItems->where("status","active")->where("table_num",2))}},
+            items3 = {{count($availableTest->TestReportItems->where("status","active")->where("table_num",3))}},
             item_block = document.getElementById("report_item_class_js").innerHTML,
             item_block2 = document.getElementById("report_item_class2_js").innerHTML,
+            item_block3 = document.getElementById("report_item_class3_js").innerHTML,
             inventory_block = 0,
             inventories = {{count($availableTest->available_test_inventories)}};
 
@@ -733,6 +991,9 @@
         }
         if (!items2) {
             items2 = 1;
+        }
+        if (!items3) {
+            items3 = 1;
         }
         if (!inventories) {
             inventories = 1;
@@ -745,24 +1006,34 @@
             } else if (id === "report_item_form2" && items2 >= 0) {
                 $("#" + id).append(item_block2);
                 items2++;
+            } else if (id === "report_item_form3" && items3 >= 0) {
+                $("#" + id).append(item_block3);
+                items3++;
             } else {
                 console.log(id, items, items2);
             }
+            console.log(id, items, items2, items3);
             editor_check();
         }
 
         function remove_item(class_name = "report_item_class") {
             var index_remove;
-            console.log(items);
-            if (class_name === "report_item_class" && items >= 1) {
-                index_remove = document.getElementsByClassName(class_name).length - 1;
+           
+            if (class_name === "report_item_class" && items > 1) {
+                index_remove = document.getElementsByClassName(class_name).length - 2;
                 document.getElementsByClassName(class_name)[index_remove].outerHTML = "";
                 items--;
-            } else if (class_name === "report_item_class2" && items2 >=  1) {
-                index_remove = document.getElementsByClassName(class_name).length - 1;
+            } else if (class_name === "report_item_class2" && items2 >  1) {
+                index_remove = document.getElementsByClassName(class_name).length - 2;
                 document.getElementsByClassName(class_name)[index_remove].outerHTML = "";
-                items--;
+                items2--;
+            } else if (class_name === "report_item_class3" && items3 >  1) {
+                index_remove = document.getElementsByClassName(class_name).length - 2;
+                document.getElementsByClassName(class_name)[index_remove].outerHTML = "";
+                items3--;
             }
+            console.log(index_remove);
+            console.log(items, items2, items3);
         }
 
         function add_inventory() {
@@ -790,6 +1061,7 @@
                 Array.from(document.getElementsByClassName("ckeditor")).forEach(function (currentValue, index, arr) {
                     CKEDITOR.replace(currentValue, {
                         width: '100%',
+                        extraPlugins: 'pastefromword,justify,font',
                     });
                     currentValue.classList.remove("ckeditor");
                     // console.log(currentValue, index, arr);
