@@ -14,20 +14,126 @@ use Carbon\Carbon;
 use DB;
 use Session;
 use Gate;
+use Auth;
 use Illuminate\Http\Request;
 
 class TestsPerformedController extends Controller
 {
     public function index()
     {
-        $testPerformeds = TestPerformed::join('patients', 'test_performeds.patient_id', '=', 'patients.id')
+        
+        return view('admin.TestPerformed.index');
+    }
+
+    /* Process ajax request */
+    public function getTests(Request $request)
+    {
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // total number of rows per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+
+        // Total records
+        $totalRecords = TestPerformed::select('count(*) as allcount')->count();
+        $totalRecordswithFilter = TestPerformed::join('patients', 'test_performeds.patient_id', '=', 'patients.id')
+        ->join('available_tests', 'test_performeds.available_test_id', '=', 'available_tests.id')
+        ->join('categories', 'available_tests.category_id', '=', 'categories.id')
+        ->select('count(*) as allcount')
+        ->where('patients.Pname', 'like', '%' . $searchValue . '%')
+        ->orWhere('available_tests.name', 'like', '%' . $searchValue . '%')
+        ->orWhere('patients.id', 'like', '%' . $searchValue . '%')
+        ->count();
+
+        // Get records, also we have included search filter as well
+
+        $records = TestPerformed::join('patients', 'test_performeds.patient_id', '=', 'patients.id')
             ->join('available_tests', 'test_performeds.available_test_id', '=', 'available_tests.id')
-            ->join('categories', '.available_tests.category_id', '=', 'categories.id')
-            ->select('test_performeds.*', 'patients.Pname', 'patients.dob', 'available_tests.name', 'available_tests.stander_timehour', 'available_tests.urgent_timehour',
+            ->join('categories', 'available_tests.category_id', '=', 'categories.id')
+            ->select('test_performeds.*', 'patients.Pname', 'patients.dob', 'patients.id as Pid', 'available_tests.name', 'available_tests.stander_timehour', 'available_tests.urgent_timehour',
                 'available_tests.testFee', 'categories.Cname', 'test_performeds.created_at', 'test_performeds.specimen')
-            ->orderBy('patient_id', 'DESC')
+            ->where('patients.Pname', 'like', '%' . $searchValue . '%')
+            ->orWhere('available_tests.name', 'like', '%' . $searchValue . '%')
+            ->orWhere('patients.id', 'like', '%' . $searchValue . '%')
+            ->orWhere('patients.Pname', 'like', '%' . $searchValue . '%')
+            ->orWhere('categories.Cname', 'like', '%' . $searchValue . '%')
+            ->orderBy($columnName, $columnSortOrder)
+            ->skip($start)
+            ->take($rowperpage)
             ->get();
-        return view('admin.TestPerformed.index', compact('testPerformeds'));
+
+            //return $records;
+
+        $data_arr = array();
+
+        function actionView($id) {
+            $str = '<a class="btn btn-xs btn-primary mr-1" href="'. route("test-performed-show", $id) .'">Report</a>';
+            if(Auth::user()->role != 'receptionist'){
+                $str = $str . '<a class="btn btn-xs btn-info" href="'. route("test-performed-edit", $id) .'">Edit</a>';
+            }         
+            if(Auth::user()->role == 'admin'){
+            $str = $str.'
+            <form  method="POST" action="'. route("performed-test-delete", [$id]) .'" style="display: inline-block;">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_token" value="'. csrf_token() .'">
+                <input type="submit" class="btn btn-xs btn-danger show_confirm" value="'. trans('global.delete') .'">
+            </form>
+            ';
+            }
+            return $str;
+        }
+
+        function statusView($id, $status, $urgent, $standard, $type, $timestamp) {
+            if($type === "urgent") 
+                $timehour = $urgent;
+            elseif($type === "standard")
+                $timehour = $standard;
+
+            if ($status =='verified')
+                $str = '<button class="btn btn-xs btn-success">Verified</button>';
+            elseif ((\Carbon\Carbon::now()->timestamp > $timehour + $timestamp) && $status == "process")
+                $str = '<button class="btn btn-xs btn-danger">Delayed</button>';
+            elseif ( $status == "process" )
+                $str = '<button class="btn btn-xs btn-info">In Process</button>';
+            elseif ( $status == "cancelled" )
+                $str = '<button class="btn btn-xs btn-info">Cancelled</button>';
+            else
+                $str = '<button class="btn btn-xs btn-danger">No status</button>';
+
+            return $str;
+        }
+
+        foreach ($records as $record) {
+            
+            $data_arr[] = array(
+                "id" => $record->id,
+                "Name" => $record->name,
+                "Cname" => $record->Cname,
+                "patient_id" => $record->Pname ." (". $record->Pid.")",
+                "Specimen" => $record->specimen,
+                "referred" => $record->referred,
+                "created_at" =>  date('d-m-Y H:m:s', strtotime($record->created_at)),
+                "Status" => statusView($record->id, $record->status, $record->urgent_timehour, $record->stander_timehour, $record->type, $record->created_at->timestamp),
+                "Action" => actionView($record->id),
+            );
+        }
+
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordswithFilter,
+            "aaData" => $data_arr,
+        );
+
+        echo json_encode($response);
     }
 
     public function create()

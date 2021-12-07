@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('test-performed-table/{id}',[Controllers\TestsPerformedController::class,'showDataOfTestPerformedTable'])->name('test-performed-table');
 
     Route::get('tests-performed',[Controllers\TestsPerformedController::class,'index'])->name('tests-performed');
+    Route::get('testperformeds/getTests', [Controllers\TestsPerformedController::class,'getTests'])->name('testperformeds.getTests');
     Route::get('test-performed-back',[Controllers\TestsPerformedController::class,'index'])->name('test-performed-back');
 
     Route::get('create',[Controllers\TestsPerformedController::class,'create'])->name('create');
@@ -69,6 +70,7 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('patient-list', [Controllers\PatientController::class,'index'])->name('patient-list');
+    Route::get('patients/getPatients', [Controllers\PatientController::class,'getPatients'])->name('patients.getPatients');
     Route::get('patient-create',[Controllers\PatientController::class,'create'])->name('patient-create');
     Route::post('patient-store',[Controllers\PatientController::class,'store'])->name('patient-store');
     Route::post('patient-view-multiple-report',[Controllers\PatientController::class,'view_multiple_report'])->name('patient-view-multiple-report');

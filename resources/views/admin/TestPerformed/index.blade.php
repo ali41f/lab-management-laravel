@@ -17,108 +17,18 @@
                     <table id="performedTable" class="table table-bordered table-striped table-hover datatable datatable-Event">
                     <thead>
                         <tr>
-                            <th width="10">
-                            </th>
-                            <th>
-                            Test ID
-                            </th>
-                            <th>
-                            Catagory
-                            </th>
-                            <th>
-                            Test Name
-                            </th>
-                            <th>
-                            Patient (MR ID)
-                            </th>
-                            <th>
-                            Specimen
-                            </th>
-                            <th>
-                            Ref By
-                            </th>
-                            <th>
-                            Test Created
-                            </th>
-                            <th>
-                            Status
-                            </th>
-                            <th>
-                            Action
-                            </th>
+                            <th>Test ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Patient</th>
+                            <th>Specimen</th>
+                            <th>Ref by</th>
+                            <th>Testcreated</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($testPerformeds as $key => $testPerformed)
-                            <tr data-entry-id="{{ $testPerformed->id }}">
-                                <td id="{{$testPerformed->id}}">
-
-                                </td>
-                                <td>
-                                {{ $testPerformed->id ?? '' }}
-                                </td>
-                                <td>
-                                {{ $testPerformed->Cname }}
-                                </td>
-                                <td>
-                                {{ $testPerformed->name }}
-                                </td>
-                                <td>
-                                {{ $testPerformed->Pname }} ({{ $testPerformed->patient->id }})
-                                </td>
-                                <td>
-                                    {{ $testPerformed->specimen }}
-                                </td>
-                                <td>
-                                {{ $testPerformed->referred }}
-                                </td>
-                                <td>
-                                {{ date('d-m-Y H:m:s', strtotime($testPerformed->created_at)) }}
-                                </td>
-                                <td>
-                                @php
-                                    if($testPerformed->type === "urgent") 
-                                        $timehour = $testPerformed->availableTest->urgent_timehour;
-                                        elseif($testPerformed->type === "standard")
-                                        $timehour = $testPerformed->availableTest->stander_timehour;
-                                @endphp
-                                @if ($testPerformed->status =='verified')
-                                    <button class="btn btn-xs btn-success">Verified</button>
-                                    @elseif ((\Carbon\Carbon::now()->timestamp > $timehour + $testPerformed->created_at->timestamp) && $testPerformed->status == "process")
-                                    <button class="btn btn-xs btn-danger">Delayed</button>
-                                    @elseif ( $testPerformed->status == "process" )
-                                    <button class="btn btn-xs btn-info">In Process</button>
-                                    @elseif ( $testPerformed->status == "cancelled" )
-                                    <button class="btn btn-xs btn-info">Cancelled</button>
-                                    @else
-                                    <button class="btn btn-xs btn-danger">No status</button>
-                                @endif
-                                </td>
-                                <td>
-                                    <a class="btn btn-xs btn-primary" href="{{ route('test-performed-show', $testPerformed->id) }}">
-                                        Report
-                                    </a>
-                                    <a class="btn btn-xs btn-primary" href="{{ route('test-performed-table', $testPerformed->id) }}">
-                                        {{ trans('global.view') }}
-                                    </a>
-                                    @if(auth::check() && Auth::user()->role == 'admin' || Auth::user()->role == 'manager' || Auth::user()->role == 'technician')
-
-                                    <a class="btn btn-xs btn-info" href="{{ route('test-performed-edit', $testPerformed->id) }}">
-                                        {{ trans('global.edit') }}
-                                    </a>
-                                    @endif
-                                    @if(Auth::user()->role != 'receptionist')
-                                    <form  method="POST" action="{{ route("performed-test-delete", [$testPerformed->id]) }}" onsubmit="return confirm('{{ trans('global.areYouSure') }}');"  style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                                    </form>
-                                    @endif
-                                </td>
-
-                            </tr>
-                        @endforeach
-                    </tbody>
+                    
                 </table>
                 <form class="d-none" id="report" method="post" action="{{route("patient-view-multiple-report")}}">
                     @csrf
@@ -132,12 +42,7 @@
 
 
 
-
-@endsection
-
-@section('scripts')
-    @parent
-    <script>
+<script type="text/javascript">
 
         function searchTable()
         {
@@ -167,58 +72,41 @@
         }
 
         $(function () {
-            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons);
-                    
-            let reportBtn = {
-                text: "Report",
-                url: "{{ route('patient-view-multiple-report') }}",
-                className: 'btn-primary',
-                action: function (e, dt, node, config) {
-                    document.getElementById("form_block").innerHTML = "";
-                    var ids = $.map(dt.rows({selected: true}).nodes(), function (entry) {
-                        console.log(entry);
-                        $(document.getElementById("form_block")).append("<input type=\"text\" name=\"report_ids[]\" value=\"" + $(entry)[0].cells[0].id + "\">");
-                        return $(entry)[0].cells[0].id;
-                    });
-
-                    var pnames = $.map(dt.rows({selected: true}).nodes(), function (entry) {
-                        return $(entry)[0].cells[4].innerHTML.replace(/\s/g, '');
-                    });
-
-                    //checking if patient names are different. Leter check for MRID
-                    if(!pnames.every( (val, i, arr) => val === arr[0] )){
-                        alert('Different patients selected');
-                        return
-                    }
-
-
-                    if (ids.length === 0) {
-                        alert('No record selected');
-                        return
-                    }
-                    document.getElementById("report").submit();
-                }
-            };
-            dtButtons.push(reportBtn);
             
 
-            $.extend(true, $.fn.dataTable.defaults, {
-                order: [[1, 'desc']],
+            //searchTable();
+
+            $('#performedTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{route('testperformeds.getTests')}}",
                 pageLength: 100,
+                "order": [[ 0, "desc" ]],
+                columns: [
+                    { data: 'id' },
+                    { data: 'Name' },
+                    { data: 'Cname' },
+                    { data: 'patient_id' },
+                    { data: 'Specimen' },
+                    { data: 'referred' },
+                    { data: 'created_at' },
+                    { data: 'Status' },
+                    { data: 'Action' },
+                ]
             });
+        
 
-            searchTable();
+            $(document).on('click','.show_confirm',function() {
+                var url = $(this).attr('rel');
+                if(confirm("Are you sure you want to delete this?")){
+                window.location.href = url
+                }
+                else{
+                    return false;
+                }
+            })
 
-            table = $('#performedTable').DataTable({
-                orderCellsTop: true,
-                fixedHeader: true,
-                buttons: dtButtons
-            });
-
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                $($.fn.dataTable.tables(true)).DataTable()
-                    .columns.adjust();
-            });
+        
         })
 
     </script>

@@ -17,81 +17,15 @@
                 <table id="patientTable"class=" table table-bordered table-striped table-hover datatable datatable-Event">
                     <thead>
                         <tr>
-                            <th>
-                            MR Id
-                            </th>
-                            <th>
-                            Patient Name
-                            </th>
-                            <th>
-                            Phone
-                            </th>
-                            <th>
-                            Email
-                            </th>
-                            <th>
-                            Age
-                            </th>
-                            <th>
-                            Registration
-                            </th>   
-                            <th>
-                            Action
-                            </th>
+                            <th>MR ID</th>
+                            <th>Name</th>
+                            <th>phone</th>
+                            <th>email</th>
+                            <th>Age</th>
+                            <th>Registration</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($patients as $key => $patient)
-                            <tr data-entry-id="{{ $patient->id }}">
-                                
-                                <td>
-                                {{ $patient->id ?? '' }}
-                                </td>
-                                <td>
-                                {{ $patient->Pname  ?? '' }}
-                                </td>
-                                <td>
-                                {{ $patient->phone ?? '' }}
-                                </td>
-                                <td>
-                                {{ $patient->email ?? '' }}
-                                </td>
-                                <td>
-                                {{ \Carbon\Carbon::parse($patient->dob)->diff(\Carbon\Carbon::now())->format('%y years %m months %d days') }}
-                                </td>
-                                <td>
-                                {{ date('d-m-Y H:m:s', strtotime($patient->start_time ?? '')) }}
-                                </td>
-                                <td>
-                                    <a class="btn btn-xs btn-primary" href="{{ route('patient-show', $patient->id) }}">
-                                        {{ trans('global.view') }}
-                                    </a>
-
-                                    <a class="btn btn-xs btn-info" href="{{ route('patient-edit', $patient->id) }}">
-                                        {{ trans('global.edit') }}
-                                    </a>
-                                    @if(Auth::user()->role != 'receptionist')
-                                    <form  method="POST" action="{{ route("patient-delete", [$patient->id]) }}" onsubmit="return confirm('{{ trans('Are You Sure to Deleted  ?') }}');"  style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                                    </form>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
@@ -130,7 +64,35 @@
     }
 
     $( document ).ready(function() {
-        searchTable()
+        
+        // DataTable
+        $('#patientTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{route('patients.getPatients')}}",
+            pageLength: 100,
+            "order": [[ 0, "desc" ]],
+            columns: [
+                { data: 'id' },
+                { data: 'Pname' },
+                { data: 'phone' },
+                { data: 'email' },
+                { data: 'dob' },
+                { data: 'registration' },
+                { data: 'action' },
+            ]
+        });
+      
+
+        $(document).on('click','.show_confirm',function() {
+            var url = $(this).attr('rel');
+            if(confirm("Are you sure you want to delete this?")){
+            window.location.href = url
+            }
+            else{
+                return false;
+            }
+        })
     });
 </script>
 
