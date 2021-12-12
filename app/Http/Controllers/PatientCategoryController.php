@@ -28,7 +28,7 @@ class PatientCategoryController extends Controller
     public function show($id)
     { 
         $patientCategory = PatientCategory::findOrFail($id);
-         $getAllPatientsInCategorys = $patientCategory->getAllPatients;
+        $getAllPatientsInCategorys = $patientCategory->getAllPatients;
         //  dd($a);
         return view('admin.patient.pcshow', compact('patientCategory','getAllPatientsInCategorys'));
     }

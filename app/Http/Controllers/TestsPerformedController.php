@@ -76,9 +76,9 @@ class TestsPerformedController extends Controller
 
         function actionView($id) {
             $str = '<a class="btn btn-xs btn-primary mr-1" href="'. route("test-performed-show", $id) .'">Report</a>';
-            if(Auth::user()->role != 'receptionist'){
-                $str = $str . '<a class="btn btn-xs btn-info" href="'. route("test-performed-edit", $id) .'">Edit</a>';
-            }         
+            
+            $str = $str . '<a class="btn btn-xs btn-info" href="'. route("test-performed-edit", $id) .'">Edit</a>';
+                     
             if(Auth::user()->role == 'admin'){
             $str = $str.'
             <form  method="POST" action="'. route("performed-test-delete", [$id]) .'" style="display: inline-block;">
@@ -120,7 +120,7 @@ class TestsPerformedController extends Controller
                 "patient_id" => $record->Pname ." (". $record->Pid.")",
                 "Specimen" => $record->specimen,
                 "referred" => $record->referred,
-                "created_at" =>  date('d-m-Y H:m:s', strtotime($record->created_at)),
+                "created_at" =>  $record->created_at->format('d-m-Y H:i:s'),
                 "Status" => statusView($record->id, $record->status, $record->urgent_timehour, $record->stander_timehour, $record->type, $record->created_at->timestamp),
                 "Action" => actionView($record->id),
             );

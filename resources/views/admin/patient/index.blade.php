@@ -63,13 +63,22 @@
         
     }
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $( document ).ready(function() {
         
         // DataTable
         $('#patientTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{route('patients.getPatients')}}",
+            ajax: {
+                url: "{{route('patients.getPatients')}}",
+                method: 'POST'
+            },
             pageLength: 100,
             "order": [[ 0, "desc" ]],
             columns: [

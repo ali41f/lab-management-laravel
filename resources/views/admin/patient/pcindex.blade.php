@@ -51,16 +51,18 @@
                                     <a class="btn btn-xs btn-primary" href="{{ route('patient-category-show', $patientCategory->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
-
+                                    @if(Auth::user()->role != 'receptionist') 
                                     <a class="btn btn-xs btn-info" href="{{ route('patient-category-edit', $patientCategory->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
+                                    @endif
+                                    @if(Auth::user()->role == 'admin') 
                                     <form  method="POST" action="{{ route("patient-category-delete", [$patientCategory->id]) }}" onsubmit="return confirm('{{ trans('Are You Sure to Deleted  ?') }}');"  style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
-
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

@@ -76,10 +76,19 @@
 
             //searchTable();
 
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             $('#performedTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{route('testperformeds.getTests')}}",
+                ajax: {
+                    url: "{{route('testperformeds.getTests')}}",
+                    method: 'POST'
+                },
                 pageLength: 100,
                 "order": [[ 0, "desc" ]],
                 columns: [
