@@ -40,7 +40,7 @@
                 <div class="form-row">
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label for="available_test_id"><h4>{{$performed->availableTest->name}}</h4></label>
+                            <label for="available_test_id"><h4 class="testnameh4">{{$performed->availableTest->name}}</h4></label>
                             <select onchange="set_test_form()" class="form-control d-none" name="available_test_id" id="available_test_id" required>
                                 @foreach($getNameFromAvailbles as $id => $getNameFromAvailble)
                                     <option value="{{ $id }}" {{ $performed->available_test_id   == $id ? 'selected' : '' }}>{{ $getNameFromAvailble }}</option>
@@ -373,6 +373,13 @@
                 });
             }
             document.getElementById("test_form").classList.remove("d-none");
+            console.log($('.testnameh4').text());
+            if($('.testnameh4').text() == 'Semen Analysis'){
+                if (!$("[name=comments]").val()) {
+                    $("[name=comments]").val("Gel Liquified Within 30 mins.");
+                }
+            }
+            
         }
 
         set_test_form();

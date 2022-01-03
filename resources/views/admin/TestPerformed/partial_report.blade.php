@@ -73,8 +73,18 @@
     }
     
     .editordiv p{
-        line-height: 1.2;
-        margin-bottom: 0.3rem;
+        line-height: 1.0;
+        margin-bottom: 0.2rem;
+    }
+    .editordiv table td{
+        padding: 0px 5px;
+    }
+    .editordiv table{
+        margin: 0 auto;
+    }
+    .commentdiv p{
+        font-size: 21px;
+        line-height: 1.1;
     }
 </style>
 <div class="report_body">
@@ -317,7 +327,7 @@
                 </div>
             @endif
             @if($testPerformedsId->comments != '')
-                <div class="col-md-12 mt-4"><h6>@php echo $testPerformedsId->comments @endphp</h6></div>
+                <div class="col-md-12 mt-4 commentdiv"><h6>@php echo $testPerformedsId->comments @endphp</h6></div>
             @endif
 
         </div>
