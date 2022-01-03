@@ -13,10 +13,11 @@
     font-size: 20px;
     max-width: 900px;
     margin: 0 auto;
-    padding: 15px;
+    padding:5px 10px;
     border: 1px solid #888;
-    border-radius: 5px;
-    margin-top: 135px;
+    border-radius: 10px;
+    margin-top: 153px;
+    margin-bottom: 15px;
 }
 
 .hr {
@@ -31,7 +32,7 @@
     text-transform: capitalize;
 }
 </style>
-<div class="card-body">
+<div>
     
     <div class="report_detail">
         <div class="row">
@@ -39,7 +40,7 @@
                 <table class="table-borderless">
                     <tr>
                         <td width="140">Patient's Name</td>
-                        <td><strong>{{ $getpatient->Pname }}</strong></td>
+                        <td><strong class="patientname" patientname="{{ $getpatient->Pname }}">{{ $getpatient->Pname }}</strong></td>
                     </tr>
                     <tr>
                         <td width="140">Age / Gender</td>
@@ -47,7 +48,7 @@
                     </tr>
                     <tr>
                         <td width="140">Cell #</td>
-                        <td><strong>{{ $getpatient->phone }}</strong></td>
+                        <td><strong class="phonenum" phone="{{$getpatient->phone}}">{{ $getpatient->phone }}</strong></td>
                     </tr>
                     <tr>
                         <td width="140">Ref by</td>
@@ -60,7 +61,7 @@
                 <table class="table-borderless">
                     <tr>
                         <td width="140">MR ID</td>
-                        <td><strong>{{ $getpatient->id }}</strong></td>
+                        <td><strong class="patientmrid" mrid="{{$getpatient->id}}">{{ $getpatient->id }}</strong></td>
                     </tr>
                     <tr>
                         <td width="140">LAB No.</td>

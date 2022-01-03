@@ -204,7 +204,6 @@
             
 
             $.extend(true, $.fn.dataTable.defaults, {
-                order: [[1, 'desc']],
                 pageLength: 100,
             });
 

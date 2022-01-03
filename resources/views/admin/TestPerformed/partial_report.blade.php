@@ -10,6 +10,7 @@
     thead th {
         background-color: #ddd;
         -webkit-print-color-adjust: exact;
+        line-height: 25px;
     }
 
     .table td {
@@ -19,12 +20,14 @@
         border-bottom: 1px solid #c8ced3;
     }
 
-    thead th:first-child {
-        padding-left: 28px;
+    thead th:nth-child(2n - 1) {
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
-    .table td:first-child {
-        padding-left: 28px;
+    .table td:nth-child(2n - 1) {
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     thead th:last-child {
@@ -41,15 +44,15 @@
     }
 
     .table th {
-        padding: .35rem;
+        padding: .35rem .15rem;
     }
 
     .table td {
-        padding: .35rem;
+        padding: .15rem;
     }
 
     .table th.refrangeth{
-        width:280px;
+        width:260px;
     }
 
     .pl-20 {
@@ -68,9 +71,14 @@
         text-align: center;
         font-weight: bold;
     }
+    
+    .editordiv p{
+        line-height: 1.2;
+        margin-bottom: 0.3rem;
+    }
 </style>
 <div class="report_body">
-    <div class="pl-20 mb-4 testname text-capitalize"><h2>{{$testPerformedsId->testReport->count() == 1 ? '' : str_replace("*", "", $testPerformedsId->availableTest->name)}}</h2></div>
+    <div class="pl-20 mb-3 testname text-capitalize"><h2>{{$testPerformedsId->testReport->count() == 1 ? '' : str_replace("*", "", $testPerformedsId->availableTest->name)}}</h2></div>
 <!-- <div class="pl-20"><h4>{{ $testPerformedsId->availableTest->category->Cname  }}</h4></div> -->
     <div>
         <div class="table-responsive dont-break-inside">
@@ -98,7 +106,7 @@
                     <tbody>
                     @foreach($testPerformedsId->testReport->where("table_num",1)->sortBy("order") as $testReport)
                         <tr>
-                            <td class="text-capitalize">{{$testReport->report_item->title}}</td>
+                            <td>{{$testReport->report_item->title}}</td>
                             <td class="">{{$testReport->report_item->unit}}</td>
                             <td>{{ $testReport->value }}</td>
                             @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
@@ -129,7 +137,7 @@
 
                             @php $x=1; @endphp
                             @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
-                                <th>History  <br /><span style="font-size: 15px">({{date('d-m-Y', strtotime($old_test->created_at))}})</span></th>
+                                <th><span style="font-size: 15px">({{date('d-m-Y', strtotime($old_test->created_at))}})</span>  <br />History</th>
                                 @php $x++; @endphp
                             @endforeach
                             <th class="refrangeth">REFERENCE RANGE</th>
@@ -138,7 +146,7 @@
                         <tbody>
                         @foreach($testPerformedsId->testReport->where("table_num",2)->sortBy("order") as $testReport)
                             <tr>
-                                <td class="text-capitalize">{{$testReport->report_item->title}}</td>
+                                <td>{{$testReport->report_item->title}}</td>
                                 <td class="">{{$testReport->report_item->unit}}</td>
                                 <td>{{ $testReport->value }}</td>
                                 @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
@@ -171,7 +179,7 @@
 
                             @php $x=1; @endphp
                             @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
-                                <th>History <br /><span style="font-size: 15px">({{date('d-m-Y', strtotime($old_test->created_at))}})</span></th>
+                                <th><span style="font-size: 15px">({{date('d-m-Y', strtotime($old_test->created_at))}})</span> <br />History</th>
                                 @php $x++; @endphp
                             @endforeach
                             <th class="refrangeth">REFERENCE RANGE</th>
@@ -180,7 +188,7 @@
                         <tbody>
                         @foreach($testPerformedsId->testReport->where("table_num",3)->sortBy("order") as $testReport)
                             <tr>
-                                <td class="text-capitalize">{{$testReport->report_item->title}}</td>
+                                <td>{{$testReport->report_item->title}}</td>
                                 <td class="">{{$testReport->report_item->unit}}</td>
                                 <td>{{ $testReport->value }}</td>
                                 @foreach($getpatient->testPerformed->where("available_test_id",$testPerformedsId->availableTest->id)->where("id","<",$testPerformedsId->id)->sortByDesc('id')->take(2) as $old_test)
@@ -203,7 +211,9 @@
 
 
             @elseif($testPerformedsId->availableTest->type==2)
-                @php echo $testPerformedsId->editor; @endphp
+                <div class="editordiv">
+                    @php echo $testPerformedsId->editor; @endphp
+                </div>
             @elseif($testPerformedsId->availableTest->type==3)
                 <div class="row col-12">
 
@@ -303,7 +313,7 @@
                     </table>
                 </div>
                 <div class="col-12 mt-3">
-                    <p class="text-capitalize" style="text-align: center;"><b>Result : </b> {{(isset($testPerformedsId->widal) && $testPerformedsId->widal->where("type", "widal_result")->first()) ? $testPerformedsId->widal->where("type", "widal_result")->first()->value : ""}}</p>
+                    <p style="text-align: center;"><b>Result : </b> {{(isset($testPerformedsId->widal) && $testPerformedsId->widal->where("type", "widal_result")->first()) ? $testPerformedsId->widal->where("type", "widal_result")->first()->value : ""}}</p>
                 </div>
             @endif
             @if($testPerformedsId->comments != '')

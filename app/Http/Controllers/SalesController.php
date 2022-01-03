@@ -31,10 +31,8 @@ class SalesController extends Controller
         $thisMongthSales = TestPerformed::whereDate('created_at', '>=',$cuentMonth)->pluck('fee')->sum();
         $thisYearSales = TestPerformed::whereDate('created_at', '>=',$currentYear)->pluck('fee')->sum();
 
-        $salesForSenvenDays = AvailableTest::withSum('testPerformed','fee')->whereDate('created_at', '>',
-        Carbon::now()->subDays(7))->latest()->get();
-        $salesForThirtyDays = AvailableTest::withSum('testPerformed','fee')->whereDate('created_at', '>=',
-        $cuentMonth)->take(30)->latest()->get();
+        $salesForSenvenDays = AvailableTest::withSum('testPerformed','fee')->whereDate('created_at', '>', Carbon::now()->subDays(7))->latest()->get();
+        $salesForThirtyDays = AvailableTest::withSum('testPerformed','fee')->whereDate('created_at', '>=', $cuentMonth)->take(30)->latest()->get();
 
         return view('sales', compact('todaySales','thisWeekSeles','thisMongthSales','thisYearSales',
         'todaySalesForTable','todayDate','yesterDaySum','yesterDay','salesForSenvenDays','salesForThirtyDays',

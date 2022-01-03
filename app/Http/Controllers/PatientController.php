@@ -41,8 +41,8 @@ class PatientController extends Controller
         // Get records, also we have included search filter as well
         $records = Patient::orderBy($columnName, $columnSortOrder)
             ->where('patients.Pname', 'like', '%' . $searchValue . '%')
-            ->orWhere('patients.id', 'like', '%' . $searchValue . '%')
-            ->orWhere('patients.phone', 'like', '%' . $searchValue . '%')
+            ->orWhere('patients.id', '=', $searchValue)
+            ->orWhere('patients.phone', '=', $searchValue)
             ->select('patients.*')
             ->skip($start)
             ->take($rowperpage)
