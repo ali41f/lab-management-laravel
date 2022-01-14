@@ -108,7 +108,6 @@
                                                         <form method="POST" action="{{ route('performed-test-delete', [$todayDelayed->id]) }}" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                                             <input type="hidden" name="_method" value="DELETE">
                                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                            <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -138,7 +137,6 @@
                                                         <form method="POST" action="{{ route('performed-test-delete', [$todayDelayed->id]) }}" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                                             <input type="hidden" name="_method" value="DELETE">
                                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                            <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -147,80 +145,6 @@
                                     @endforeach
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                                <h2>Today's test</h2>
-                                <table class="table table-bordered table-striped table-hover datatable datatable-Event">
-                                    <thead>
-                                    <tr>
-                                        <th>Test Name</th>
-                                        <th>Patient Name</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($testPerformeds as $key => $testPerformed)
-                                        <tr>
-                                            <td><a class="" href="{{ route('test-performed-edit', $testPerformed->id) }}">{{ $testPerformed->availableTest->name ?? '' }}</a></td>
-                                            <td><a class="" href="{{ route('patient-show', $testPerformed->patient->id) }}">{{ $testPerformed->patient->Pname  ?? '' }}</a></td>
-                                            <td>
-                                                @php
-                                                    if($testPerformed->type === "urgent") 
-                                                        $timehour = $testPerformed->availableTest->urgent_timehour;
-                                                    elseif($testPerformed->type === "standard")
-                                                        $timehour = $testPerformed->availableTest->stander_timehour;
-                                                @endphp
-                                                @if ($testPerformed->status =='verified')
-                                                    <button class="btn btn-xs btn-success">Verified</button>
-                                                @elseif ((\Carbon\Carbon::now()->timestamp > $timehour + $testPerformed->created_at->timestamp) && $testPerformed->status == "process")
-                                                    <button class="btn btn-xs btn-danger">Delayed</button>
-                                                @elseif ( $testPerformed->status == "process" )
-                                                    <button class="btn btn-xs btn-info">In Process</button>
-                                                @elseif ( $testPerformed->status == "cancelled" )
-                                                    <button class="btn btn-xs btn-info">Cancelled</button>
-                                                @else
-                                                    <button class="btn btn-xs btn-danger">No status</button>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-xs btn-info" href="{{ route('test-performed-edit', $testPerformed->id) }}">
-                                                    {{ trans('global.edit') }}
-                                                </a>
-                                                <form method="POST" action="{{ route("performed-test-delete", [$testPerformed->id]) }}" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                    <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-striped table-hover datatable datatable-Event">
-                                        <h2>Top Tests</h2>
-                                        <thead>
-                                        <tr>
-                                            <th>Test Name</th>
-                                            <th>No Of Tests Today</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($availableTestNameAndCountTests as $key => $availableTestNameAndCountTest)
-                                            <tr>
-                                                <td><a class="" href="{{ route('test-performed-edit', $availableTestNameAndCountTest->id) }}">{{ $availableTestNameAndCountTest->name }}</a></td>
-                                                <td>{{ $availableTestNameAndCountTest->test_performed_count }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
                             </div>
                         </div>
                         

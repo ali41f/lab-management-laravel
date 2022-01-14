@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\TestPerformed;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::post('/smsstatus', function(Request $request) {
+    $testslist = $request->testslist;
+
+    TestPerformed::whereIn('id', $testslist)
+        ->update([
+            'sms' => 'sent',
+        ]);
+
+    return 'done';
+
 });

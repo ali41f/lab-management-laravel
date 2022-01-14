@@ -178,7 +178,7 @@ class PatientController extends Controller
         ->join('categories', '.available_tests.category_id', '=', 'categories.id')
         ->select('available_tests.name','available_tests.urgent_timehour','available_tests.stander_timehour',
         'test_performeds.created_at',"test_performeds.id",'categories.Cname',
-        'test_performeds.status','test_performeds.fee','test_performeds.created_at','test_performeds.type')
+        'test_performeds.status','test_performeds.sms','test_performeds.fee','test_performeds.created_at','test_performeds.type')
         ->orderBy('id', 'DESC')
         ->get(); 
          $tests = $allTests->pluck('name');    

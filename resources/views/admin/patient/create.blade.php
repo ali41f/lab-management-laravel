@@ -87,7 +87,7 @@
       <div class="col-md-4 mb-3">
         <div class="form-group">
                 <label class="required" for="patient_category_id">Patient Catagory</label>
-                <select class="form-control select2 {{ $errors->has('patient_category_id') ? 'is-invalid' : '' }}" name="patient_category_id" id="patient_category_id" required>
+                <select class="form-control {{ $errors->has('patient_category_id') ? 'is-invalid' : '' }}" name="patient_category_id" id="patient_category_id" required>
                     @foreach($patientCategorys as $id => $patientCategory)
                         <option value="{{ $id }}">{{ $patientCategory }}</option>
                     @endforeach

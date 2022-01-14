@@ -89,7 +89,7 @@
             </div>
 
         </div>
-
+        <div class="testscommalist d-none">{{$testPerformedsId->id}}</div>
 
         @if($testPerformedsId->status == 'verified')
         <div style="background: white" class="col-md-12 mb-12 noprint text-center py-3">
@@ -111,9 +111,12 @@
 
     $(function () {
         
+        let tests_arr;
 
        $(".btnsave").click(function() { 
             $(".btnsave").text('Sending ...');
+
+            tests_arr = [$('.testscommalist').text()];
 
             let phonenum = $('.phonenum').attr('phone');
             if(!/^\d+$/.test(phonenum)) return;
@@ -131,18 +134,41 @@
                 var dataURL = canvas.toDataURL();
                 $.ajax({
                     url: 'http://usamalab.com/api/ali',
-                    type: 'post',
+                    type: 'POST',
                     data: {
                         image: dataURL,
                         patientname: $('.patientname').attr('patientname'),
                         phone: phonenum,
-                        mrid: $('.patientmrid').attr('mrid')
+                        mrid: $('.patientmrid').attr('mrid'),
+                        _token: _token,
+                        _method: "POST",
                     },
                     success: function(response) {
                         $(".btnsave").text('Send message');
                         if(response == "success"){
-                            console.log('andar');
-                            $('.alert-success').fadeIn(300).delay(5000).fadeOut(1000);
+                            $.ajax({
+                                url: '/api/smsstatus',
+                                type: 'POST',
+                                data: {
+                                    testslist: tests_arr,
+                                },
+                                success: function(response) {
+                                    $(".btnsave").text('Send message');
+                                    if(response == "done"){
+                                        console.log(response)
+                                        $('.alert-success').fadeIn(300).delay(5000).fadeOut(1000);
+                                    }else if(response == "notdone"){
+                                        $('.alert-danger').text("Done but status not changed");
+                                        $('.alert-danger').fadeIn(300).delay(5000).fadeOut(1000);
+                                    }
+                                },
+                                error: function() {
+                                    $(".btnsave").text('Send message');
+                                    $('.alert-danger').text("An error has occurred in changing status.");
+                                    $('.alert-danger').fadeIn(300).delay(5000).fadeOut(1000);
+                                }
+                            });
+                             //$('.alert-success').fadeIn(300).delay(5000).fadeOut(1000);
                         }else if(response == "notsaved"){
                             $('.alert-danger').text("File is not uploaded.");
                             $('.alert-danger').fadeIn(300).delay(5000).fadeOut(1000);

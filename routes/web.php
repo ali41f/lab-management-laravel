@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 
+use App\Models\TestPerformed;
+use App\Models\Patient;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +35,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', [Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/select', [Controllers\HomeController::class, 'postShow'])->name('select');
     Route::POST('/postData', [Controllers\HomeController::class, 'postData'])->name('postData');
+
+    Route::get('emptypatients', function () {
+        $emptypatients = Patient::has('testPerformed', '=', 0)->get();
+        foreach($emptypatients as $ep){
+            echo $ep->id;
+            echo "<br />";
+        }
+    });
 });
 
 

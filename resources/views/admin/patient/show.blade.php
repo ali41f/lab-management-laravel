@@ -73,6 +73,9 @@
                             Status
                         </th>
                         <th>
+                            SMS
+                        </th>
+                        <th>
                             Action
                         </th>
                     </tr>
@@ -112,6 +115,14 @@
                                     <button class="btn btn-xs btn-info">Cancelled</button>
                                     @else
                                     <button class="btn btn-xs btn-danger">No status</button>
+                                @endif
+                            </td>
+                            </td>
+                            <td>
+                                @if ($test->sms != null)
+                                    <button class="btn btn-xs btn-success">Sent</button>
+                                    @else
+                                    <button class="btn btn-xs btn-danger">Not sent</button>
                                 @endif
                             </td>
                             <td>

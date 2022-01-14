@@ -19,12 +19,12 @@
                         <tr>
                             <th>Test ID</th>
                             <th>Name</th>
-                            <th>Category</th>
                             <th>Patient</th>
                             <th>Specimen</th>
                             <th>Ref by</th>
                             <th>Testcreated</th>
                             <th>Status</th>
+                            <th>SMS</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -94,12 +94,12 @@
                 columns: [
                     { data: 'id' },
                     { data: 'Name' },
-                    { data: 'Cname' },
                     { data: 'patient_id' },
                     { data: 'Specimen' },
                     { data: 'referred' },
                     { data: 'created_at' },
                     { data: 'Status' },
+                    { data: 'sms' },
                     { data: 'Action' },
                 ]
             });

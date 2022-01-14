@@ -74,10 +74,13 @@
     
     .editordiv p{
         line-height: 1.0;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.3rem;
     }
     .editordiv table td{
-        padding: 0px 5px;
+        padding: 8px 12px 2px 12px;
+        border: 1px solid black;
+        font-size: 25px;
+        text-align: center;
     }
     .editordiv table{
         margin: 0 auto;
@@ -85,6 +88,7 @@
     .commentdiv p{
         font-size: 21px;
         line-height: 1.1;
+        margin-bottom: 0;
     }
 </style>
 <div class="report_body">

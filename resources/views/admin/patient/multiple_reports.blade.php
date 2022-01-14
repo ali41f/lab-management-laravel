@@ -76,6 +76,7 @@
     $i = 0;
     $iteration = 0;
     $verified = true;
+    $testsarray = '';
     @endphp
     <div class="card" style="background: white; font-size: 16px;">
         <div id="widgetreport">
@@ -85,8 +86,11 @@
                 <img style="opacity: .04; border-radius: 50%; top: 0px; position: absolute; left:0;" class="card-img-top card d-flex" src="{{ asset('images/lablogo.png') }}"/>
             </div>
             
+            
             @foreach($tests as $testPerformedsId)
+                
                 @php
+                    $testsarray = $testsarray.",".$testPerformedsId->id;
                     if($testPerformedsId->status != "verified"){
                         $verified = false;
                     }
@@ -111,6 +115,7 @@
                     $iteration++;
                 @endphp
             @endforeach
+            <div class="testscommalist d-none">{{$testsarray}}</div>
             <div class="webfooter noprint">
                 <div class="webfooter-item abu"><strong class="drname">Dr. Usama Rehman</strong><br />Assistant Professor<br />MBBS, FCPS (Histopathology)<br />Consultant Histopathology</div>
                 <div class="webfooter-item bhai"><strong class="drname">Prof. Dr. Abdul Hakeem Ch.</strong><br />MBBS, DCP<br />M.Phil (Microbiology)<br />Consultant Pathology</div>
@@ -134,15 +139,18 @@
     <script>
 
 $(function () {
-        
+    let tests_arr = $('.testscommalist').text().split(',').filter(item => item);
+    
 
-        $(".btnsave").click(function() { 
+        $(".btnsave").click(function() { // send message
              $(".btnsave").text('Sending ...');
+
+             tests_arr = $('.testscommalist').text().split(',').filter(item => item);
  
              let phonenum = $('.phonenum').attr('phone');
              if(!/^\d+$/.test(phonenum)) return;
              if(phonenum[0] == '0') phonenum = phonenum.replace('0', '92');
-             console.log(phonenum);
+             //console.log(phonenum);
              if(phonenum.length != 12){
                  $('.alert-danger').text("Phone number is incorrect.");
                  $('.alert-danger').fadeIn(300).delay(5000).fadeOut(1000);
@@ -150,23 +158,44 @@ $(function () {
                  return;
              }
              
- 
+             
              html2canvas($("#widgetreport")[0]).then((canvas) => {
                  var dataURL = canvas.toDataURL();
                  $.ajax({
                      url: 'http://usamalab.com/api/ali',
-                     type: 'post',
+                     type: 'POST',
                      data: {
-                         image: dataURL,
-                         patientname: $('.patientname').attr('patientname'),
-                         phone: phonenum,
-                         mrid: $('.patientmrid').attr('mrid')
+                        image: dataURL,
+                        patientname: $('.patientname').attr('patientname'),
+                        phone: phonenum,
+                        mrid: $('.patientmrid').attr('mrid')
                      },
                      success: function(response) {
                          $(".btnsave").text('Send message');
                          if(response == "success"){
-                             console.log('andar');
-                             $('.alert-success').fadeIn(300).delay(5000).fadeOut(1000);
+                            
+                            $.ajax({
+                                url: '/api/smsstatus',
+                                type: 'post',
+                                data: {
+                                    testslist: tests_arr,
+                                },
+                                success: function(response) {
+                                    $(".btnsave").text('Send message');
+                                    if(response == "done"){
+                                        $('.alert-success').fadeIn(300).delay(5000).fadeOut(1000);
+                                    }else if(response == "notdone"){
+                                        $('.alert-danger').text("Done but status not changed");
+                                        $('.alert-danger').fadeIn(300).delay(5000).fadeOut(1000);
+                                    }
+                                },
+                                error: function() {
+                                    $(".btnsave").text('Send message');
+                                    $('.alert-danger').text("An error has occurred in changing status.");
+                                    $('.alert-danger').fadeIn(300).delay(5000).fadeOut(1000);
+                                }
+                            });
+                             //$('.alert-success').fadeIn(300).delay(5000).fadeOut(1000);
                          }else if(response == "notsaved"){
                              $('.alert-danger').text("File is not uploaded.");
                              $('.alert-danger').fadeIn(300).delay(5000).fadeOut(1000);

@@ -111,6 +111,15 @@ class TestsPerformedController extends Controller
             return $str;
         }
 
+        function smsView($sms) {
+            
+            if ($sms != null)
+                $str = '<button class="btn btn-xs btn-success">Sent</button>';
+            else
+                $str = '<button class="btn btn-xs btn-danger">Not sent</button>';
+            return $str;
+        }
+
         foreach ($records as $record) {
             
             $data_arr[] = array(
@@ -122,6 +131,7 @@ class TestsPerformedController extends Controller
                 "referred" => $record->referred,
                 "created_at" =>  $record->created_at->format('d-m-Y H:i:s'),
                 "Status" => statusView($record->id, $record->status, $record->urgent_timehour, $record->stander_timehour, $record->type, $record->created_at->timestamp),
+                "sms" => smsView($record->sms),
                 "Action" => actionView($record->id),
             );
         }
